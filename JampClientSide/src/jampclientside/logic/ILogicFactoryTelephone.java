@@ -20,7 +20,7 @@ public class ILogicFactoryTelephone {
      *
      * @return getIlogic
      */
-    public static ILogic getILogic() {
+    public static ILogicTelephone getILogicTelephone() {
 
         return new ILogicImplementationTelephone();
     }

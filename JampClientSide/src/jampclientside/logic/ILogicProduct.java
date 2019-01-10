@@ -6,22 +6,67 @@
 package jampclientside.logic;
 
 import jampclientside.entity.Product;
+import jampclientside.entity.Telephone;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
+import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
+import java.util.List;
 
 
 /**
- * Es la interfaz de lógica. Si hay que hacer una llamada entre dos objetos de
+ * Es la interfaz de lógica de los productos. Si hay que hacer una llamada entre dos objetos de
  * diferentes clases, se necesita una interfaz.
  *
- * @author Paula
+ * @author Julen
  */
 public interface ILogicProduct {
 
-    public void deleteProduct(Product phone) throws DeleteException;
-    public void updateProduct(Product phone) throws UpdateException;
-    public void createProduct(Product phone) throws CreateException;
+    /**
+     * 
+     * @param phone
+     * @throws DeleteException 
+     */
+    public void deleteProduct(Product product) throws DeleteException;
+    
+    /**
+     * 
+     * @param phone
+     * @throws UpdateException 
+     */
+    public void updateProduct(Product product) throws UpdateException;
+    
+    /**
+     * 
+     * @param phone
+     * @throws CreateException 
+     */
+    public void createProduct(Product product) throws CreateException;
+    
+    /**
+     * 
+     * @param idProduct
+     * @return
+     * @throws ReadException 
+     */
+    public List<Telephone> findProductById(Integer idProduct) throws ReadException;
+    
+    /**
+     * 
+     * @param name
+     * @param idTxoko
+     * @return
+     * @throws ReadException 
+     */
+    public List<Telephone> findProductByName(String name, Integer idTxoko) throws ReadException;
+    
+    /**
+     * 
+     * @return
+     * @throws ReadException 
+     */
+    public List<Telephone> findAllProducts () throws ReadException;
+
    
     
 }

@@ -20,7 +20,7 @@ public class ILogicFactoryProduct {
      *
      * @return getIlogic
      */
-    public static ILogic getILogic() {
+    public static ILogicProduct getILogicProduct() {
 
         return new ILogicImplementationProduct();
     }

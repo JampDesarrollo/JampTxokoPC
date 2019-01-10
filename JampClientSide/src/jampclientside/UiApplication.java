@@ -1,8 +1,9 @@
-package jampclientside.pc;
+package jampclientside;
 
-import jampclientside.pc.logic.ILogic;
-import jampclientside.pc.logic.ILogicFactory;
-import jampclientside.pc.ui.controller.PC01LoginController;
+
+import jampclientside.logic.ILogic;
+import jampclientside.logic.ILogicFactory;
+import jampclientside.ui.controller.PC01LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
