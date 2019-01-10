@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jamp.pc.ui.controller.PC03PrincipalController">
+<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.GestionProductosController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -164,7 +164,7 @@
             </HBox>
          </top>
          <center>
-            <TableView fx:id="prductTable" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="productTable" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="productName" prefWidth="123.0" text="Nombre del producto" />
                 <TableColumn fx:id="productDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del producto" />
