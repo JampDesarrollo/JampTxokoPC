@@ -19,9 +19,9 @@ import jampclientside.exceptions.UpdateException;
  */
 public interface ILogicProduct {
 
-    public void deleteProduct(Product phone) throws DeleteException;
-    public void updateProduct(Product phone) throws UpdateException;
-    public void createProduct(Product phone) throws CreateException;
+    public void deleteProduct(Product product) throws DeleteException;
+    public void updateProduct(Product product) throws UpdateException;
+    public void createProduct(Product product) throws CreateException;
    
     
 }
