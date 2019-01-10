@@ -7,8 +7,8 @@
 package jampclientside.pc.ui.controller;
 
 import jampclientside.pc.logic.ILogic;
-import jampclientside.pc.logic.PasswordNotOkException;
-import jampclientside.pc.logic.UserNotExistException;
+import jampclientside.exceptions.PasswordNotOkException;
+import jampclientside.exceptions.UserNotExistException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -40,7 +40,7 @@ import messageuserbean.UserBean;
  *
  * @author Julen
  */
-public class GestionProductosController{
+public class PC07ProductsController{
 
     /**
      * Log out menu item

@@ -6,7 +6,7 @@
 package jampclientside.pc.ui.controller;
 
 import jampclientside.pc.logic.ILogic;
-import jampclientside.pc.logic.UserLoginExistException;
+import jampclientside.exceptions.UserLoginExistException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.logging.Level;

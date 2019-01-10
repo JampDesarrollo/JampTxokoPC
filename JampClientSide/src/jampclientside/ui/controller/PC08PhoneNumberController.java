@@ -40,7 +40,7 @@ import messageuserbean.UserBean;
  *
  * @author Julen
  */
-public class GestionTelefonosController{
+public class PC08PhoneNumberController{
 
 
     /**

@@ -6,9 +6,9 @@
  */
 package jampclientside.pc.logic.socketClient;
 
-import jampclientside.pc.logic.PasswordNotOkException;
-import jampclientside.pc.logic.UserLoginExistException;
-import jampclientside.pc.logic.UserNotExistException;
+import jampclientside.exceptions.PasswordNotOkException;
+import jampclientside.exceptions.UserLoginExistException;
+import jampclientside.exceptions.UserNotExistException;
 import messageuserbean.UserBean;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,9 +47,9 @@ public class SocketClient {
      *
      * @param user The user tipped in
      * @return UserBean Whole information of the user who has logged in
-     * @throws jampclientside.pc.logic.PasswordNotOkException Exception thrown when
+     * @throws jampclientside.exceptions.PasswordNotOkException Exception thrown when
      * password not ok
-     * @throws jampclientside.pc.logic.UserNotExistException Exception thrown when user
+     * @throws jampclientside.exceptions.UserNotExistException Exception thrown when user
      * doesn't exist
      */
     public UserBean logIn(UserBean user) throws PasswordNotOkException, UserNotExistException, Exception {
@@ -110,7 +110,7 @@ public class SocketClient {
      * Method for signing up a user
      *
      * @param user The user tipped in
-     * @throws jampclientside.pc.logic.UserLoginExistException User login Already Exists
+     * @throws jampclientside.exceptions.UserLoginExistException User login Already Exists
      * @throws Exception Something happened
      */
     public void signUp(UserBean user) throws UserLoginExistException, Exception {

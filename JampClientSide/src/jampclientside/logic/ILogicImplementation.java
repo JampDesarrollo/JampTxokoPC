@@ -5,6 +5,9 @@
  */
 package jampclientside.pc.logic;
 
+import jampclientside.exceptions.UserNotExistException;
+import jampclientside.exceptions.PasswordNotOkException;
+import jampclientside.exceptions.UserLoginExistException;
 import jampclientside.pc.logic.socketClient.SocketClient;
 import java.util.logging.Logger;
 import messageuserbean.UserBean;
