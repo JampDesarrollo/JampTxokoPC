@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.logic;
+package jampclientside.exceptions;
 
 /**
  * Clase de excepcion para cuando la contraseña no esta bien Excepction class

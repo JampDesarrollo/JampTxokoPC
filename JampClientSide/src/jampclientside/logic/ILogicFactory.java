@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.logic;
+package jampclientside.logic;
 
 /**
  * Clase que devuelve objetos que implementan la interfaz. Si yo necesito un

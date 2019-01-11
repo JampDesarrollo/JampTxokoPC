@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.logic;
+package jampclientside.logic;
 
+import jampclientside.exceptions.UserNotExistException;
+import jampclientside.exceptions.PasswordNotOkException;
+import jampclientside.exceptions.UserLoginExistException;
 import jampclientside.pc.logic.socketClient.SocketClient;
 import java.util.logging.Logger;
 import messageuserbean.UserBean;

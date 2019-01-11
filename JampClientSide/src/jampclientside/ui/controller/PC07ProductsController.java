@@ -5,11 +5,17 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
+import jampclientside.entity.Product;
+import jampclientside.logic.ILogic;
+import jampclientside.logic.ILogicProduct;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.Logger;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -25,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -40,8 +47,7 @@ import messageuserbean.UserBean;
  *
  * @author Julen
  */
-public class GestionTelefonosController{
-
+public class PC07ProductsController{
 
     /**
      * Log out menu item
@@ -87,57 +93,62 @@ public class GestionTelefonosController{
      * 
      */
     @FXML
-    private ComboBox<?> cbSearchTel;
+    private ComboBox<?> cbSearch;
     /**
      * 
      */
     @FXML
-    private TextField txtSearchTel;
+    private TextField txtSearch;
     /**
      * 
      */
     @FXML
-    private ImageView btnSearchTel;
+    private ImageView btnSearch;
     /**
      * 
      */
     @FXML
-    private Label requiredTel;
+    private Button addProduct;
     /**
      * 
      */
     @FXML
-    private Button addTelephone;
-    /**
-     * 
-     */
-    @FXML
-    private Button delTelephone;
+    private Button delProduct;
     /**
      * 
      */
     @FXML
     private Button btnLogOut2;
+    
     /**
      * 
      */
     @FXML
-    private TableView<?> telephoneTable;
+    private TableView tbProducts;
     /**
-     * 
-     */
+    * User's login data table column.
+    */
     @FXML
-    private TableColumn<?, ?> telName;
+    private TableColumn tbcolName;
     /**
-     * 
-     */
+    * User's name data table column.
+    */
     @FXML
-    private TableColumn<?, ?> telDescription;
+    private TableColumn tbcolDescription;
     /**
-     * 
-     */
+    * User's profile data table column.
+    */
     @FXML
-    private TableColumn<?, ?> telNumber;
+    private TableColumn tbcolPrice;
+    /**
+    * User's department data table column.
+    */
+    @FXML
+    private TableColumn tbcolStock;
+    /**
+     * User's table data model.
+     */
+    private ObservableList<Product> productData;
 
     /**
      * To close app or session
@@ -147,7 +158,7 @@ public class GestionTelefonosController{
     /**
      * The business logic object containing all business methods.
      */
-    private ILogic ilogic;
+    private ILogicProduct iLogicProduct;
 
     /**
      * UserBean object
@@ -189,8 +200,8 @@ public class GestionTelefonosController{
      *
      * @param ILogic ilogic
      */
-    public void setILogic(ILogic ILogic) {
-        this.ilogic = ILogic;
+    public void setILogicProduct(ILogicProduct iLogicProduct) {
+        this.iLogicProduct = iLogicProduct;
     }
 
     /**
@@ -202,6 +213,7 @@ public class GestionTelefonosController{
         this.user = user;
 
     }
+    
 
     /**
      * Initializes the controller class.
@@ -225,6 +237,32 @@ public class GestionTelefonosController{
         
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
+        //TABLE
+       
+            // tbProducts.getSelectionModel().selectedItemProperty()
+            //             .addListener(() -> this.handleProductsTableSelectionChanged());
+ 
+            //Set department combo data model.
+            //ObservableList<DepartmentBean> departments=
+            //        FXCollections.observableArrayList(usersManager.getAllDepartments());
+            //cbDepartamentos.setItems(departments);
+            //Add focus event handler.
+            //tfLogin.focusedProperty().addListener(this::focusChanged);
+            //Set factories for cell values in users table columns.
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("productName"));
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("productDescription"));
+            tbcolPrice.setCellValueFactory(
+                    new PropertyValueFactory<>("productPrice"));
+            tbcolStock.setCellValueFactory(
+                    new PropertyValueFactory<>("productStock"));
+            //Create an obsrvable list for users table.
+            
+            //productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            
+            //Set table model.
+            tbProducts.setItems(productData);
         //Show primary window
         stage.show();
         
@@ -299,6 +337,12 @@ public class GestionTelefonosController{
             }
   
         }
+    }
+
+    private InvalidationListener handleProductsTableSelectionChanged(ObservableValue observable,
+             Object oldValue,
+             Object newValue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
