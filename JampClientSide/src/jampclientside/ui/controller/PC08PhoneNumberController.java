@@ -5,11 +5,15 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
+import jampclientside.entity.Product;
+import jampclientside.entity.Telephone;
+import jampclientside.logic.ILogicTelephone;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -25,6 +29,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -122,23 +127,27 @@ public class PC08PhoneNumberController{
      * 
      */
     @FXML
-    private TableView<?> telephoneTable;
+    private TableView tbTelephone;
     /**
      * 
      */
     @FXML
-    private TableColumn<?, ?> telName;
+    private TableColumn tbcolName;
     /**
      * 
      */
     @FXML
-    private TableColumn<?, ?> telDescription;
+    private TableColumn tbcolDescription;
     /**
      * 
      */
     @FXML
-    private TableColumn<?, ?> telNumber;
-
+    private TableColumn tbcolNumber;
+    /**
+     * User's table data model.
+     */
+    private ObservableList<Product> telephoneData;
+    
     /**
      * To close app or session
      */
@@ -147,13 +156,19 @@ public class PC08PhoneNumberController{
     /**
      * The business logic object containing all business methods.
      */
-    private ILogic ilogic;
+    private ILogicTelephone iLogicTelephone;
+
+    /**
+     * Telephone object
+     */
+    private Telephone telephone;
 
     /**
      * UserBean object
      */
+    
     private UserBean user;
-
+    
     /**
      * Logger object used to log messages for application.
      */
@@ -167,39 +182,35 @@ public class PC08PhoneNumberController{
     protected Stage stage;
 
     /**
-     * Gets the Stage object related to this controller.
-     *
-     * @return The Stage object initialized by this controller.
+     * 
+     * @return 
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * Sets the Stage object related to this controller.
-     *
-     * @param stage The Stage object to be initialized.
+     * 
+     * @param stage 
      */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
     /**
-     * Set logic for this view controller
-     *
-     * @param ILogic ilogic
+     * 
+     * @param iLogicTelephone 
      */
-    public void setILogic(ILogic ILogic) {
-        this.ilogic = ILogic;
+    public void setILogic(ILogicTelephone iLogicTelephone) {
+        this.iLogicTelephone = iLogicTelephone;
     }
 
     /**
-     * Set the user received in Login view for this view.
-     *
-     * @param user Userbean user
+     * 
+     * @param telephone 
      */
-    public void setUser(UserBean user) {
-        this.user = user;
+    public void setUser(Telephone telephone) {
+        this.telephone = telephone;
 
     }
 
@@ -225,6 +236,29 @@ public class PC08PhoneNumberController{
         
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
+        //TABLE
+        //tbTelephone.getSelectionModel().selectedItemProperty()
+        //            .addListener(() -> this.handleTelephoneTableSelectionChanged());
+
+        //Set department combo data model.
+        //ObservableList<DepartmentBean> departments=
+        //        FXCollections.observableArrayList(usersManager.getAllDepartments());
+        //cbDepartamentos.setItems(departments);
+        //Add focus event handler.
+        //tfLogin.focusedProperty().addListener(this::focusChanged);
+        //Set factories for cell values in users table columns.
+        tbcolDescription.setCellValueFactory(
+                new PropertyValueFactory<>("productDescription"));
+        tbcolName.setCellValueFactory(
+                new PropertyValueFactory<>("telephoneName"));
+        tbcolNumber.setCellValueFactory(
+                new PropertyValueFactory<>("telephoneNumber"));
+        //Create an obsrvable list for users table.
+        
+        //telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+        
+        //Set table model.
+        tbTelephone.setItems(telephoneData);
         //Show primary window
         stage.show();
         

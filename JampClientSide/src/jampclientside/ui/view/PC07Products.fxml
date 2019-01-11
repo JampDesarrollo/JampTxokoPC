@@ -168,8 +168,8 @@
               <columns>
                 <TableColumn fx:id="productName" prefWidth="123.0" text="Nombre del producto" />
                 <TableColumn fx:id="productDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del producto" />
-                  <TableColumn fx:id="productPrice" prefWidth="152.0" text="Precio" />
-                  <TableColumn fx:id="productStock" prefWidth="206.0" text="Stock" />
+                <TableColumn fx:id="productPrice" prefWidth="152.0" text="Precio" />
+                <TableColumn fx:id="productStock" prefWidth="206.0" text="Stock" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

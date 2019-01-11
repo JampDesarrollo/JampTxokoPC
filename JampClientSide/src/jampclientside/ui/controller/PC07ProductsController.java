@@ -5,11 +5,17 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
+import jampclientside.entity.Product;
+import jampclientside.logic.ILogic;
+import jampclientside.logic.ILogicProduct;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.Logger;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -25,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -112,31 +119,36 @@ public class PC07ProductsController{
      */
     @FXML
     private Button btnLogOut2;
+    
     /**
      * 
      */
     @FXML
-    private TableView<?> productTable;
+    private TableView tbProducts;
     /**
-     * 
-     */
+    * User's login data table column.
+    */
     @FXML
-    private TableColumn<?, ?> productName;
+    private TableColumn tbcolName;
     /**
-     * 
-     */
+    * User's name data table column.
+    */
     @FXML
-    private TableColumn<?, ?> productDescription;
+    private TableColumn tbcolDescription;
     /**
-     * 
-     */
+    * User's profile data table column.
+    */
     @FXML
-    private TableColumn<?, ?> productPrice;
+    private TableColumn tbcolPrice;
     /**
-     * 
-     */
+    * User's department data table column.
+    */
     @FXML
-    private TableColumn<?, ?> productStock;
+    private TableColumn tbcolStock;
+    /**
+     * User's table data model.
+     */
+    private ObservableList<Product> productData;
 
     /**
      * To close app or session
@@ -146,7 +158,7 @@ public class PC07ProductsController{
     /**
      * The business logic object containing all business methods.
      */
-    private ILogic ilogic;
+    private ILogicProduct iLogicProduct;
 
     /**
      * UserBean object
@@ -188,8 +200,8 @@ public class PC07ProductsController{
      *
      * @param ILogic ilogic
      */
-    public void setILogic(ILogic ILogic) {
-        this.ilogic = ILogic;
+    public void setILogicProduct(ILogicProduct iLogicProduct) {
+        this.iLogicProduct = iLogicProduct;
     }
 
     /**
@@ -201,6 +213,7 @@ public class PC07ProductsController{
         this.user = user;
 
     }
+    
 
     /**
      * Initializes the controller class.
@@ -224,6 +237,32 @@ public class PC07ProductsController{
         
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
+        //TABLE
+       
+            // tbProducts.getSelectionModel().selectedItemProperty()
+            //             .addListener(() -> this.handleProductsTableSelectionChanged());
+ 
+            //Set department combo data model.
+            //ObservableList<DepartmentBean> departments=
+            //        FXCollections.observableArrayList(usersManager.getAllDepartments());
+            //cbDepartamentos.setItems(departments);
+            //Add focus event handler.
+            //tfLogin.focusedProperty().addListener(this::focusChanged);
+            //Set factories for cell values in users table columns.
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("productName"));
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("productDescription"));
+            tbcolPrice.setCellValueFactory(
+                    new PropertyValueFactory<>("productPrice"));
+            tbcolStock.setCellValueFactory(
+                    new PropertyValueFactory<>("productStock"));
+            //Create an obsrvable list for users table.
+            
+            //productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            
+            //Set table model.
+            tbProducts.setItems(productData);
         //Show primary window
         stage.show();
         
@@ -298,6 +337,12 @@ public class PC07ProductsController{
             }
   
         }
+    }
+
+    private InvalidationListener handleProductsTableSelectionChanged(ObservableValue observable,
+             Object oldValue,
+             Object newValue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
