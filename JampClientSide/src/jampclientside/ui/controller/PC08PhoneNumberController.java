@@ -7,7 +7,6 @@ package jampclientside.ui.controller;
 
 import jampclientside.entity.Product;
 import jampclientside.entity.Telephone;
-import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicTelephone;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -238,8 +237,8 @@ public class PC08PhoneNumberController{
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
         //TABLE
-        tbTelephone.getSelectionModel().selectedItemProperty()
-                    .addListener(() -> this.handleTelephoneTableSelectionChanged());
+        //tbTelephone.getSelectionModel().selectedItemProperty()
+        //            .addListener(() -> this.handleTelephoneTableSelectionChanged());
 
         //Set department combo data model.
         //ObservableList<DepartmentBean> departments=
@@ -255,7 +254,9 @@ public class PC08PhoneNumberController{
         tbcolNumber.setCellValueFactory(
                 new PropertyValueFactory<>("telephoneNumber"));
         //Create an obsrvable list for users table.
-        telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+        
+        //telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+        
         //Set table model.
         tbTelephone.setItems(telephoneData);
         //Show primary window

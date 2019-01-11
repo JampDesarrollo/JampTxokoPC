@@ -238,8 +238,9 @@ public class PC07ProductsController{
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
         //TABLE
-        tbProducts.getSelectionModel().selectedItemProperty()
-                    .addListener(() -> this.handleProductsTableSelectionChanged());
+       
+            // tbProducts.getSelectionModel().selectedItemProperty()
+            //             .addListener(() -> this.handleProductsTableSelectionChanged());
  
             //Set department combo data model.
             //ObservableList<DepartmentBean> departments=
@@ -257,7 +258,9 @@ public class PC07ProductsController{
             tbcolStock.setCellValueFactory(
                     new PropertyValueFactory<>("productStock"));
             //Create an obsrvable list for users table.
-            productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            
+            //productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            
             //Set table model.
             tbProducts.setItems(productData);
         //Show primary window
