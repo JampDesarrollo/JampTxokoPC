@@ -22,6 +22,7 @@ import java.util.List;
  */
 public interface ILogicProduct {
 
+
     /**
      * 
      * @param phone
