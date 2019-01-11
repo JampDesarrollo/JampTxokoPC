@@ -4,11 +4,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.ui.controller;
+package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
-import jampclientside.pc.logic.PasswordNotOkException;
-import jampclientside.pc.logic.UserNotExistException;
+import jampclientside.logic.ILogic;
+import jampclientside.exceptions.PasswordNotOkException;
+import jampclientside.exceptions.UserNotExistException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

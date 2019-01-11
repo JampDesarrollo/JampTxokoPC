@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.logic;
+package jampclientside.exceptions;
 
 /**
  * Exception thrown when the user login exist on database
