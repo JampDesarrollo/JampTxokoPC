@@ -3,7 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.logic;
+package jampclientside.logic;
+
+import jampclientside.logic.ILogic;
+import jampclientside.logic.ILogicImplementation;
+
+
 
 /**
  * Clase que devuelve objetos que implementan la interfaz. Si yo necesito un
@@ -20,9 +25,25 @@ public class ILogicFactory {
      *
      * @return getIlogic
      */
-    public static ILogic getILogic() {
-
+    
+    public static ILogic getlogic() {
         return new ILogicImplementation();
     }
+    /*
+     public static UserLogic getUserLogic() {
+        return new UserLogicController();
+    }
+    */
+    public static EventLogic getEventLogic() {
+        return new EventLogicController();
+    }
+    /*
+     public static ProductLogic getProductLogic() {
+        return new ProductLogicController();
+    }
+     public static ExpenseLogic getExpenseLogic() {
+        return new ExpenseLogicController();
+    }
+    */
 
 }
