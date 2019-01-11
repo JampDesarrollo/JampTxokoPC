@@ -95,7 +95,7 @@ public class PC03PrincipalController {
     /**
      * Logger object used to log messages for application.
      */
-    protected static final Logger LOGGER = Logger.getLogger("jamp.pc.ui.controller");
+    protected static final Logger LOGGER = Logger.getLogger("jampclientside.ui.controller");
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the

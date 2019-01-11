@@ -1,6 +1,5 @@
 package jampclientside;
 
-
 import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicFactory;
 import jampclientside.ui.controller.PC01LoginController;
@@ -19,6 +18,7 @@ public class UiApplication extends Application {
 
     /**
      * Method that throws the first stage and receives the stage.
+     * @param stage
      * @throws Exception throws Exception
      */
     @Override
