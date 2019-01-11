@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.ui.controller;
+package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
-import jampclientside.pc.logic.UserLoginExistException;
+import jampclientside.logic.ILogic;
+import jampclientside.exceptions.UserLoginExistException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.logging.Level;
@@ -22,7 +22,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -36,7 +38,7 @@ import messageuserbean.UserBean;
  *
  * @author ander
  */
-public class PC02RegistroController {
+public class PC02SignUpController {
 
     /**
      * Users Login text field
@@ -106,6 +108,21 @@ public class PC02RegistroController {
     @FXML
     private Label lblRpasswW;
     /**
+     * 
+     */
+    @FXML
+    private Label lblidtxokoW;
+    /**
+     * 
+     */
+    @FXML
+    private RadioButton rbUser;
+    /**
+     * 
+     */
+    @FXML
+    private RadioButton rbAdmin;
+    /**
      * Go back to Login view button
      */
     @FXML
@@ -156,7 +173,7 @@ public class PC02RegistroController {
      * Logger object used to log messages of this controller.
      */
     private static final Logger LOGGER
-            = Logger.getLogger("jamp.pc.ui.controller");
+            = Logger.getLogger("jampclientside.pc.ui.controller");
 
     /**
      * Method for initializing PC02Registro Stage.
@@ -196,7 +213,7 @@ public class PC02RegistroController {
         LOGGER.info("ventana de registro");
         btnBack.setDisable(false);
         btnEye.setDisable(false);
-        btnSignUp.setDisable(false);
+        btnSignUp.setDisable(true);
         tfLogin.requestFocus();
         tfLogin.selectAll();
         tfLogin.setTooltip(new Tooltip("Login"));
@@ -208,6 +225,7 @@ public class PC02RegistroController {
         lblEmailW.setVisible(false);
         lblPasswW.setVisible(false);
         lblRpasswW.setVisible(false);
+        lblidtxokoW.setVisible(false);
         imgLoading.setVisible(false);
         tfPassw.setVisible(false);
         tfRpassw.setVisible(false);
@@ -218,6 +236,10 @@ public class PC02RegistroController {
                         + "combinación de letras, números y símbolos"));
         btnSignUp.setMnemonicParsing(true);
         btnSignUp.setText("_Registrarse");
+        ToggleGroup group = new ToggleGroup();
+        rbUser.setToggleGroup(group);
+        rbUser.setSelected(true);
+        rbAdmin.setToggleGroup(group);
 
     }
 
@@ -308,14 +330,14 @@ public class PC02RegistroController {
 
                 this.stage.hide();
                 FXMLLoader loader = new FXMLLoader(getClass()
-                        .getResource("/jamp/pc/ui/view/PC03Principal.fxml"));
+                        .getResource("/jamp/pc/ui/view/PC03User.fxml"));
                 //lo cargo en el root que es de tipo parent
                 Parent root = (Parent) loader.load();
                 //tengo que crear un nuevo escenario
                 stage = new Stage();
                 //obtener el controlador
-                PC03PrincipalController controller
-                        = (PC03PrincipalController) loader.getController();
+                PC03UserController controller
+                        = (PC03UserController) loader.getController();
                 controller.setILogic(iLogic);
                 controller.setStage(stage);
                 controller.setUser(user);

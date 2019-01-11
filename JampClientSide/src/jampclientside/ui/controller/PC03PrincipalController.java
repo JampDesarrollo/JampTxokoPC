@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jampclientside.pc.ui.controller;
+package jampclientside.ui.controller;
 
-import jampclientside.pc.logic.ILogic;
+import jampclientside.logic.ILogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -95,7 +95,7 @@ public class PC03PrincipalController {
     /**
      * Logger object used to log messages for application.
      */
-    protected static final Logger LOGGER = Logger.getLogger("jamp.pc.ui.controller");
+    protected static final Logger LOGGER = Logger.getLogger("jampclientside.ui.controller");
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
