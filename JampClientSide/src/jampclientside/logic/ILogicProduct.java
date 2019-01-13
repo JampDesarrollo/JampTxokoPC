@@ -9,6 +9,7 @@ import jampclientside.entity.Product;
 import jampclientside.entity.Telephone;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
+import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import java.util.List;
@@ -50,7 +51,7 @@ public interface ILogicProduct {
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findProductById(Integer idProduct) throws ReadException;
+    public List<Product> findProductById(Integer idProduct) throws ReadException;
     
     /**
      * 
@@ -59,14 +60,21 @@ public interface ILogicProduct {
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findProductByName(String name, Integer idTxoko) throws ReadException;
+    public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findAllProducts () throws ReadException;
+    public List<Product> findAllProducts () throws ReadException;
+
+    /**
+     * 
+     * @param id
+     * @throws ProductExist 
+     */
+    public void isProductExist(Integer id) throws ProductExist;
 
    
     

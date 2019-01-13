@@ -6,13 +6,13 @@
 package jampclientside.ui.controller;
 
 import jampclientside.entity.Product;
-import jampclientside.logic.ILogic;
+import jampclientside.exceptions.ReadException;
 import jampclientside.logic.ILogicProduct;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.InvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,7 +43,7 @@ import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
 
 /**
- * FXML Controller class
+ * FXML PC07ProductsController class
  *
  * @author Julen
  */
@@ -198,7 +198,7 @@ public class PC07ProductsController{
     /**
      * Set logic for this view controller
      *
-     * @param ILogic ilogic
+     * @param ILogicProduct iLogicProduct
      */
     public void setILogicProduct(ILogicProduct iLogicProduct) {
         this.iLogicProduct = iLogicProduct;
@@ -214,14 +214,13 @@ public class PC07ProductsController{
 
     }
     
-
     /**
      * Initializes the controller class.
      *
      * @param root root
      * @throws java.io.IOException InputOuput exception
      */
-    public void initStage(Parent root) throws IOException {
+    public void initStage(Parent root) throws IOException, ReadException {
         LOGGER.info("Initializing Principal stage.");
         //Create a scene associated to the node graph root.
         Scene scene = new Scene(root);
@@ -239,30 +238,30 @@ public class PC07ProductsController{
         btnLogOut2.setOnAction(this::logOutAction);
         //TABLE
        
-            // tbProducts.getSelectionModel().selectedItemProperty()
-            //             .addListener(() -> this.handleProductsTableSelectionChanged());
- 
-            //Set department combo data model.
-            //ObservableList<DepartmentBean> departments=
-            //        FXCollections.observableArrayList(usersManager.getAllDepartments());
-            //cbDepartamentos.setItems(departments);
-            //Add focus event handler.
-            //tfLogin.focusedProperty().addListener(this::focusChanged);
-            //Set factories for cell values in users table columns.
-            tbcolName.setCellValueFactory(
-                    new PropertyValueFactory<>("productName"));
-            tbcolDescription.setCellValueFactory(
-                    new PropertyValueFactory<>("productDescription"));
-            tbcolPrice.setCellValueFactory(
-                    new PropertyValueFactory<>("productPrice"));
-            tbcolStock.setCellValueFactory(
-                    new PropertyValueFactory<>("productStock"));
-            //Create an obsrvable list for users table.
-            
-            //productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-            
-            //Set table model.
-            tbProducts.setItems(productData);
+        //tbProducts.getSelectionModel().selectedItemProperty()
+        //            .addListener(() -> this.handleProductsTableSelectionChanged());
+
+        //Set department combo data model.
+        //ObservableList<DepartmentBean> departments=
+        //        FXCollections.observableArrayList(usersManager.getAllDepartments());
+        //cbDepartamentos.setItems(departments);
+        //Add focus event handler.
+        txtSearch.focusedProperty().addListener(this::focusChanged);
+        //Set factories for cell values in users table columns.
+        tbcolName.setCellValueFactory(
+                new PropertyValueFactory<>("productName"));
+        tbcolDescription.setCellValueFactory(
+                new PropertyValueFactory<>("productDescription"));
+        tbcolPrice.setCellValueFactory(
+                new PropertyValueFactory<>("productPrice"));
+        tbcolStock.setCellValueFactory(
+                new PropertyValueFactory<>("productStock"));
+        //Create an observable list for users table.
+
+        productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+
+        //Set table model.
+        tbProducts.setItems(productData);
         //Show primary window
         stage.show();
         
@@ -299,8 +298,128 @@ public class PC07ProductsController{
 
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
-    }
+    }             
+            
+    /**
+     * A focus change event event handler. This is an example that only logs a message.
+     * @param observable the observable focus property.
+     * @param oldValue the old boolean value for the property.
+     * @param newValue the new boolean value for the property.
+     */
+    private void focusChanged(ObservableValue observable,
+             Boolean oldValue,
+             Boolean newValue){
+        if(newValue)
+            LOGGER.info("onFocus");
+        else if(oldValue)
+            LOGGER.info("onBlur");
+    }  
 
+    /**
+     * Action event handler for create button. It validates new user data, send it
+     * to the business logic tier and updates user table view with new user data.
+     * @param event The ActionEvent object for the event.
+     */
+    @FXML
+    private void handleCrearAction(ActionEvent event){
+        try{
+            //Check if the is already a user with the login value defined in 
+            //the window
+            iLogicProduct.isProductExist(12);
+           
+            Product producto=new Product();         
+            //Send user data to business logic tier
+            this.iLogicProduct.createProduct(producto);
+            //Add to user data to TableView model
+            tbProducts.getItems().add(user);
+            //Clean fields
+            txtSearch.setText("");
+            cbSearch.getSelectionModel().clearSelection();
+        }catch(Exception e){
+            //If there is an error in the business logic tier show message and
+            //log it.
+            LOGGER.log(Level.SEVERE,
+                        "PC07ProductsController: Error updating user: {0}",
+                        e.getMessage());           
+        }
+    }
+    
+    /** 
+     * Action event handler for modify button. It validates user data, send it
+     * to the business logic tier and updates user table view with new user data.
+     * @param event The ActionEvent object for the event.
+     */
+    @FXML
+    private void handleModificarAction(ActionEvent event){
+        try{
+            //Get selected user data from table view.
+            Product selectedProduct=((Product)tbProducts.getSelectionModel()
+                                                    .getSelectedItem());
+            //check if loin vaalue for selectedrowin table
+            //is equal to loginfield content
+            if(!selectedProduct.getIdProduct().equals(txtSearch.getText())){
+                //If not, validate login existence.
+                    iLogicProduct.isProductExist(12);
+                    selectedProduct.setName(txtSearch.getText().trim());
+            } 
+            //If login value does not exist: 
+            //send data to modify user data in business tier
+            this.iLogicProduct.updateProduct(selectedProduct);
+            //Clean entry text fields
+            txtSearch.setText("");
+            cbSearch.getSelectionModel().clearSelection();
+            //Deseleccionamos la fila seleccionada en la tabla
+            tbProducts.getSelectionModel().clearSelection();
+            //Refrescamos la tabla para que muestre los nuevos datos
+            tbProducts.refresh();
+        }catch(Exception e){
+            //If there is an error in the business logic tier show message and
+            //log it.
+            LOGGER.log(Level.SEVERE,
+                        "PC07ProductsController: Error updating user: {0}",
+                        e.getMessage());           
+        }
+    }
+    
+    /**
+     * Action event handler for delete button. It asks user for confirmation on delete,
+     * sends delete message to the business logic tier and updates user table view.
+     * @param event The ActionEvent object for the event.
+     */   
+    @FXML
+    private void handleDeleteProduct() {
+        Alert alert=null;
+        try{
+
+            Product selectedProduct = ((Product)tbProducts.getSelectionModel()
+                                                            .getSelectedItem());
+            alert=new Alert(Alert.AlertType.CONFIRMATION,
+                                    "¿Borrar la fila seleccionada?\n"
+                                    + "Esta operación no se puede deshacer.",
+                                    ButtonType.OK,ButtonType.CANCEL);
+            Optional<ButtonType> result = alert.showAndWait(); 
+            //If Botton OK
+            if(result.isPresent() && result.get() == ButtonType.OK){
+               //delete user from server side
+                this.iLogicProduct.deleteProduct(selectedProduct);
+                //removes selected item from table
+                tbProducts.getItems().remove(selectedProduct);
+                tbProducts.refresh();
+                //clears editing fields
+                txtSearch.setText("");
+                //Clear selection and refresh tble view
+                tbProducts.getSelectionModel().clearSelection();
+                tbProducts.refresh();
+            }
+        }catch(Exception e){
+            //If there is an error in the business logic tier show message and
+            //log it.
+            LOGGER.log(Level.SEVERE,
+                        "PC07ProductsController: Error deleting user: {0}",
+                        e.getMessage());           
+        }
+}
+    
     /**
      * Close current view and open Login view method.
      *
@@ -337,12 +456,6 @@ public class PC07ProductsController{
             }
   
         }
-    }
-
-    private InvalidationListener handleProductsTableSelectionChanged(ObservableValue observable,
-             Object oldValue,
-             Object newValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
