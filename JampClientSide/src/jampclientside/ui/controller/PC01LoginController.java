@@ -7,7 +7,6 @@
 package jampclientside.ui.controller;
 
 
-import jampclientside.logic.ILogic;
 import jampclientside.exceptions.PasswordNotOkException;
 import jampclientside.exceptions.UserNotExistException;
 import java.io.IOException;
@@ -28,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.UserLogic;
 
 /**
  *
@@ -54,7 +54,7 @@ public class PC01LoginController {
      * Attribute ilogic to be able to pass the ilogic object to the others
      * class.
      */
-    private ILogic ilogic;
+    private UserLogic ilogic;
 
     /**
      *
@@ -149,7 +149,7 @@ public class PC01LoginController {
      * @param ILogic it receives the logic object that came from the application
      * class
      */
-    public void setILogic(ILogic ILogic) {
+    public void setILogic(UserLogic ILogic) {
         this.ilogic = ILogic;
     }
 

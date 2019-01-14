@@ -1,12 +1,12 @@
 package jampclientside;
 
-import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicFactory;
 import jampclientside.ui.controller.PC01LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import jampclientside.logic.UserLogic;
 
 /**
  * Class that is going to launch the first window of the application, the window of
@@ -24,7 +24,7 @@ public class UiApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-        ILogic iLogic = ILogicFactory.getILogic();
+        UserLogic iLogic = ILogicFactory.getILogic();
         //Instanciamos el cargador
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/view/PC01Login.fxml"));
         //Cargamos el documento en el root

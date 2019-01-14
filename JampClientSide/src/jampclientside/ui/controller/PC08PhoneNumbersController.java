@@ -7,12 +7,12 @@ package jampclientside.ui.controller;
 
 import jampclientside.entity.Product;
 import jampclientside.entity.Telephone;
-import jampclientside.logic.ILogicTelephone;
+import jampclientside.logic.EventLogic;
+import jampclientside.logic.ProductLogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,13 +39,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.TelephoneLogic;
+import jampclientside.logic.UserLogic;
+import java.util.logging.Level;
+import javafx.fxml.FXMLLoader;
 
 /**
  * FXML Controller class
  *
  * @author Julen
  */
-public class PC08PhoneNumberController{
+public class PC08PhoneNumbersController{
 
 
     /**
@@ -156,7 +160,11 @@ public class PC08PhoneNumberController{
     /**
      * The business logic object containing all business methods.
      */
-    private ILogicTelephone iLogicTelephone;
+    private TelephoneLogic iLogicTelephone;
+    private UserLogic iLogicUser;
+    private ProductLogic iLogicProduct;
+    private EventLogic iLogicEvent;
+    private ExpenseLogic iLogicExpense;
 
     /**
      * Telephone object
@@ -172,7 +180,7 @@ public class PC08PhoneNumberController{
     /**
      * Logger object used to log messages for application.
      */
-    protected static final Logger LOGGER = Logger.getLogger("jamp.pc.ui.controller");
+    protected static final Logger LOGGER = Logger.getLogger("jampclientside.ui.controller");
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -201,7 +209,7 @@ public class PC08PhoneNumberController{
      * 
      * @param iLogicTelephone 
      */
-    public void setILogic(ILogicTelephone iLogicTelephone) {
+    public void setILogic(TelephoneLogic iLogicTelephone) {
         this.iLogicTelephone = iLogicTelephone;
     }
 
@@ -332,6 +340,97 @@ public class PC08PhoneNumberController{
                 stage.hide();
             }
   
+        }
+    }
+    
+     //metodo para ir a la ventana de productos
+
+    public void eventWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Products Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC05EventsController controller = (PC05EventsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicEvent);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+
+    }
+
+    //ir a la ventana de los telefonos
+    public void productWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Telephone Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogicProduct(iLogicProduct);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+
+    }
+
+    //ventana de los gastos
+    public void expenseWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Gastos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC04ExpenseController controller = (PC04ExpenseController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicExpense);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+    }
+
+    //ventana de los usuarios
+    public void usersWindow(ActionEvent ev) {
+        LOGGER.info("clickOn User Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC03UserController controller = (PC03UserController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicUser);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Julen
  */
-public interface ILogicTelephone {
+public interface TelephoneLogic {
 
     /**
      * 

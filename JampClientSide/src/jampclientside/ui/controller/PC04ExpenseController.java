@@ -5,7 +5,6 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.logic.ILogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -30,6 +29,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.UserLogic;
 
 /**
  * FXML Controller class
@@ -89,7 +89,7 @@ public class PC04ExpenseController {
     /**
      * The business logic object containing all business methods.
      */
-    private ILogic ilogic;
+    private UserLogic ilogic;
 
     /**
      * UserBean object
@@ -131,7 +131,7 @@ public class PC04ExpenseController {
      *
      * @param ILogic ilogic
      */
-    public void setILogic(ILogic ILogic) {
+    public void setILogic(UserLogic ILogic) {
         this.ilogic = ILogic;
     }
 

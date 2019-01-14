@@ -45,7 +45,7 @@ import jampclientside.ui.controller.PC03UserController;
 import jampclientside.ui.controller.PC04ExpenseController;
 import jampclientside.ui.controller.PC06FTPClientController;
 import jampclientside.ui.controller.PC07ProductsController;
-import jampclientside.ui.controller.PC08PhoneNumberController;
+import jampclientside.ui.controller.PC08PhoneNumbersController;
 import java.util.List;
 import javafx.scene.control.TableColumn;
 

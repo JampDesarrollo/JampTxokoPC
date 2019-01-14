@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author 2dam
  */
-public class ILogicImplementationTest implements ILogic {
+public class ILogicImplementationTest implements UserLogic {
 
     private final ArrayList<UserBean> users = new ArrayList<>();
 

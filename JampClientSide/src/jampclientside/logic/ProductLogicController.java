@@ -8,9 +8,10 @@ package jampclientside.logic;
 import jampclientside.entity.Product;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
+import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
-import jampserverside.rest.ProductREST;
+import jampclientside.rest.ProductRESTClient;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,10 +24,10 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Julen
  */
-public class ILogicImplementationProduct implements ILogicProduct {
+public class ProductLogicController implements ProductLogic {
 
     //REST users web client
-    private ProductREST ProductWebClient;
+    private ProductRESTClient ProductWebClient;
     
     /**
      * Attribute to appear the information text.
@@ -37,8 +38,8 @@ public class ILogicImplementationProduct implements ILogicProduct {
     /**
      * Create a ILogicImplementationroduct.
      */
-    public ILogicImplementationProduct(){
-        ProductWebClient=new ProductREST();
+    public ProductLogicController(){
+        ProductWebClient=new ProductRESTClient();
     }
     /**
      * This method deletes data for an existing product. 
@@ -50,7 +51,7 @@ public class ILogicImplementationProduct implements ILogicProduct {
     public void deleteProduct(Product product) throws DeleteException {
         try{
             LOGGER.log(Level.INFO,"ProductImplementation: Deleting product {0}.",product.getName());
-            ProductWebClient.deleteProduct(product.getIdProduct());
+            ProductWebClient.deleteProduct(product.getIdProduct().toString());
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception deleting product, {0}",
@@ -92,8 +93,10 @@ public class ILogicImplementationProduct implements ILogicProduct {
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception creating user, {0}",
                     ex.getMessage());
-            throw new CreateException("ProductImplementation: Error creating user:\n"+ex.getMessage());
+            throw new CreateException("ProductImplementation: Error creating user:" + ex.getMessage());
+        }
     }
+         
     /**
      * This method returns a collection of products for users.
      * @return A collection of Product.
@@ -112,9 +115,15 @@ public class ILogicImplementationProduct implements ILogicProduct {
                     ex.getMessage());
             throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
         }
+        
         return productos;
     }
-
+    
+    /**
+     * This method returns a collection of products for users.
+     * @return A collection of Product.
+     * @throws ReadExcdeption If there is any error while processing.
+     */
     @Override
     public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException{
             List<Product> productos = null;
@@ -131,9 +140,46 @@ public class ILogicImplementationProduct implements ILogicProduct {
         return productos;
     }
 
+    /**
+     * This method returns a collection of products for users.
+     * @return A collection of Product.
+     * @throws ReadExcdeption If there is any error while processing.
+     */
     @Override
-    public List<Product> findAllProducts() throws ReadException {
+    public Product findProductsByIdByTxoko() throws ReadException {
+            Product productos = null;
+        try{
+            LOGGER.info("ProductImplementation: Finding products by id and txoko from REST service (XML).");
+            //Ask webClient for all departments' data.
+            productos = ProductWebClient.findProductByName(new GenericType<List<Product>>() {});
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding products by id and txoko, {0}",
+                    ex.getMessage());
+            throw new ReadException("ProductImplementation: Error finding products by id and txoko:\n" + ex.getMessage());
+        }
+        return productos;
     }
 
+    @Override
+    public Product findProductsById() throws ReadException {
+            Product productos = null;
+        try{
+            LOGGER.info("ProductImplementation: Finding products by id from REST service (XML).");
+            //Ask webClient for all departments' data.
+            productos = ProductWebClient.findProductByName(new GenericType<List<Product>>() {});
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding products by id, {0}",
+                    ex.getMessage());
+            throw new ReadException("ProductImplementation: Error finding products by id:" + ex.getMessage());
+        }
+        return productos;
+    }
+    
+    @Override
+        public void isProductExist(Integer id) throws ProductExist{
+        
+        }
 
 }
