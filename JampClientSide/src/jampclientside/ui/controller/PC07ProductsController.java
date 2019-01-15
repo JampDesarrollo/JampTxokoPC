@@ -8,6 +8,7 @@ package jampclientside.ui.controller;
 import jampclientside.entity.Product;
 import jampclientside.exceptions.ReadException;
 import jampclientside.logic.EventLogic;
+import jampclientside.logic.ExpenseLogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -51,102 +52,119 @@ import jampclientside.logic.UserLogic;
  *
  * @author Julen
  */
-public class PC07ProductsController{
+public class PC07ProductsController {
 
-    /**
-     * Log out menu item
-     */
-    @FXML
-    private MenuItem btnLogOut;
-    /**
-     * Menu 
-     */
     @FXML
     private Menu menu;
-    /**
-     * 
-     */
     @FXML
-    private VBox principalPane;
-    /**
-     * 
-     */
+    private MenuItem idMenuGastos;
+    @FXML
+    private MenuItem idMenuEventos;
+    @FXML
+    private MenuItem idMenuUsuarios;
+    @FXML
+    private MenuItem idMenuTel;
     @FXML
     private MenuBar menuBar;
+    @FXML
+    private Menu menuMenu;
+    @FXML
+    private MenuItem menuLogOut;
+    @FXML
+    private Menu menuEvent;
+    @FXML
+    private Menu menuGastos;
+    @FXML
+    private Menu menuProductos;
+    @FXML
+    private Menu menuUsuarios;
+    @FXML
+    private Menu menuTelefonos;
+
+    @FXML
+    private VBox principalPane;
+
     /**
-     * 
+     *
      */
     @FXML
     private Label lblDate;
     /**
-     * 
+     *
      */
     @FXML
     private Label lblLogin;
     /**
-     * 
+     *
      */
     @FXML
     private Label lblFullName;
     /**
-     * 
+     *
      */
     @FXML
     private Label lblEmail;
     /**
-     * 
+     *
      */
     @FXML
     private ComboBox<?> cbSearch;
     /**
-     * 
+     *
      */
     @FXML
     private TextField txtSearch;
     /**
-     * 
+     *
      */
     @FXML
     private ImageView btnSearch;
     /**
-     * 
+     *
      */
     @FXML
     private Button addProduct;
     /**
-     * 
+     *
      */
     @FXML
     private Button delProduct;
+
     /**
-     * 
+     *
+     */
+    @FXML
+    private Button btnLogOut;
+
+    /**
+     *
      */
     @FXML
     private Button btnLogOut2;
-    
+
     /**
-     * 
+     *
      */
     @FXML
     private TableView tbProducts;
     /**
-    * User's login data table column.
-    */
+     * User's login data table column.
+     */
     @FXML
     private TableColumn tbcolName;
     /**
-    * User's name data table column.
-    */
+     * User's name data table column.
+     */
     @FXML
     private TableColumn tbcolDescription;
     /**
-    * User's profile data table column.
-    */
+     * User's profile data table column.
+     */
     @FXML
     private TableColumn tbcolPrice;
     /**
-    * User's department data table column.
-    */
+     * User's department data table column.
+     */
     @FXML
     private TableColumn tbcolStock;
     /**
@@ -221,7 +239,7 @@ public class PC07ProductsController{
         this.user = user;
 
     }
-    
+
     /**
      * Initializes the controller class.
      *
@@ -238,17 +256,41 @@ public class PC07ProductsController{
         stage.setScene(scene);
         stage.setResizable(true);
         //Set window properties
-        stage.setTitle("Principal");
+        stage.setTitle("Productos");
         //Set window's events handlers
         stage.setOnShowing(this::windowShow);
-        
-        btnLogOut.setOnAction(this::logOutAction);
+        //menu item de cerrar sesion
+        menuLogOut.setOnAction(this::logOutAction);
+        //boton de cerrar sesion
         btnLogOut2.setOnAction(this::logOutAction);
+        //ir a la ventana de eventos
+        idMenuEventos.setOnAction(this::eventWindow);
+        //gastos
+        idMenuGastos.setOnAction(this::expenseWindow);
+        //ir a la ventana de telefonos
+        idMenuTel.setOnAction(this::telephoneWindow);
+        //ventana de los usuarios
+        // idMenuUsuarios.setOnAction(this::usersWindow);
+
+        //boton añadir producto
+        addProduct.setOnAction(this::handleCrearAction);
+        //boton borrar producto
+        delProduct.setOnAction(this::handleDeleteProduct);
+        //dependiendo la opcion que pulse del combo box
+        cbSearch.setOnAction(this::comboBoxOption);
+
+        //ir a la ventana de eventos
+//        idMenuEventos.setOnAction(this::eventWindow);
+        //ir a la ventana de telefonos
+        idMenuTel.setOnAction(this::telephoneWindow);
+        //gastos
+        idMenuGastos.setOnAction(this::expenseWindow);
+        //ventana de los usuarios
+//        idMenuUsuarios.setOnAction(this::usersWindow);
         //TABLE
-       
+
         //tbProducts.getSelectionModel().selectedItemProperty()
         //            .addListener(() -> this.handleProductsTableSelectionChanged());
-
         //Set department combo data model.
         //ObservableList<DepartmentBean> departments=
         //        FXCollections.observableArrayList(usersManager.getAllDepartments());
@@ -257,22 +299,22 @@ public class PC07ProductsController{
         txtSearch.focusedProperty().addListener(this::focusChanged);
         //Set factories for cell values in users table columns.
         tbcolName.setCellValueFactory(
-                new PropertyValueFactory<>("productName"));
+                new PropertyValueFactory<>("name"));
         tbcolDescription.setCellValueFactory(
-                new PropertyValueFactory<>("productDescription"));
+                new PropertyValueFactory<>("description"));
         tbcolPrice.setCellValueFactory(
-                new PropertyValueFactory<>("productPrice"));
+                new PropertyValueFactory<>("price"));
         tbcolStock.setCellValueFactory(
-                new PropertyValueFactory<>("productStock"));
+                new PropertyValueFactory<>("stock"));
         //Create an observable list for users table.
 
-        productData=FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+        productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
 
         //Set table model.
         tbProducts.setItems(productData);
         //Show primary window
         stage.show();
-        
+
         stage.setOnCloseRequest((WindowEvent e) -> {
             cerrar = 1;
             e.consume();
@@ -288,54 +330,59 @@ public class PC07ProductsController{
      */
     private void windowShow(WindowEvent event) {
         LOGGER.info("Beginning Principal::windowShow");
-        
+
         String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
-        
+
         lblDate.setText("Último acceso: " + date);
         lblEmail.setText("Email: " + user.getEmail());
         lblFullName.setText("Nombre Completo: " + user.getFullname());
         lblLogin.setText("Login: " + user.getLogin());
-        
+
         menu.setMnemonicParsing(true);
         menu.setText("_Menu");
-        
+
         btnLogOut.setMnemonicParsing(true);
         btnLogOut.setText("_Cerrar Sesion");
-        btnLogOut.setAccelerator(
-                new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
+        /* btnLogOut.setAccelerator(
+                new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));*/
 
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
-    }             
-            
+    }
+
     /**
-     * A focus change event event handler. This is an example that only logs a message.
+     * A focus change event event handler. This is an example that only logs a
+     * message.
+     *
      * @param observable the observable focus property.
      * @param oldValue the old boolean value for the property.
      * @param newValue the new boolean value for the property.
      */
     private void focusChanged(ObservableValue observable,
-             Boolean oldValue,
-             Boolean newValue){
-        if(newValue)
+            Boolean oldValue,
+            Boolean newValue) {
+        if (newValue) {
             LOGGER.info("onFocus");
-        else if(oldValue)
+        } else if (oldValue) {
             LOGGER.info("onBlur");
-    }  
+        }
+    }
 
     /**
-     * Action event handler for create button. It validates new user data, send it
-     * to the business logic tier and updates user table view with new user data.
+     * Action event handler for create button. It validates new user data, send
+     * it to the business logic tier and updates user table view with new user
+     * data.
+     *
      * @param event The ActionEvent object for the event.
      */
     @FXML
-    private void handleCrearAction(ActionEvent event){
-        try{
+    private void handleCrearAction(ActionEvent event) {
+        try {
             //Check if the is already a user with the login value defined in 
             //the window
             iLogicProduct.isProductExist(12);
-           
-            Product producto=new Product();         
+
+            Product producto = new Product();
             //Send user data to business logic tier
             this.iLogicProduct.createProduct(producto);
             //Add to user data to TableView model
@@ -343,33 +390,35 @@ public class PC07ProductsController{
             //Clean fields
             txtSearch.setText("");
             cbSearch.getSelectionModel().clearSelection();
-        }catch(Exception e){
+        } catch (Exception e) {
             //If there is an error in the business logic tier show message and
             //log it.
             LOGGER.log(Level.SEVERE,
-                        "PC07ProductsController: Error updating user: {0}",
-                        e.getMessage());           
+                    "PC07ProductsController: Error updating user: {0}",
+                    e.getMessage());
         }
     }
-    
-    /** 
+
+    /**
      * Action event handler for modify button. It validates user data, send it
-     * to the business logic tier and updates user table view with new user data.
+     * to the business logic tier and updates user table view with new user
+     * data.
+     *
      * @param event The ActionEvent object for the event.
      */
     @FXML
-    private void handleModificarAction(ActionEvent event){
-        try{
+    private void handleModificarAction(ActionEvent event) {
+        try {
             //Get selected user data from table view.
-            Product selectedProduct=((Product)tbProducts.getSelectionModel()
-                                                    .getSelectedItem());
+            Product selectedProduct = ((Product) tbProducts.getSelectionModel()
+                    .getSelectedItem());
             //check if loin vaalue for selectedrowin table
             //is equal to loginfield content
-            if(!selectedProduct.getIdProduct().equals(txtSearch.getText())){
+            if (!selectedProduct.getIdProduct().equals(txtSearch.getText())) {
                 //If not, validate login existence.
-                    iLogicProduct.isProductExist(12);
-                    selectedProduct.setName(txtSearch.getText().trim());
-            } 
+                iLogicProduct.isProductExist(12);
+                selectedProduct.setName(txtSearch.getText().trim());
+            }
             //If login value does not exist: 
             //send data to modify user data in business tier
             this.iLogicProduct.updateProduct(selectedProduct);
@@ -380,35 +429,37 @@ public class PC07ProductsController{
             tbProducts.getSelectionModel().clearSelection();
             //Refrescamos la tabla para que muestre los nuevos datos
             tbProducts.refresh();
-        }catch(Exception e){
+        } catch (Exception e) {
             //If there is an error in the business logic tier show message and
             //log it.
             LOGGER.log(Level.SEVERE,
-                        "PC07ProductsController: Error updating user: {0}",
-                        e.getMessage());           
+                    "PC07ProductsController: Error updating user: {0}",
+                    e.getMessage());
         }
     }
-    
+
     /**
-     * Action event handler for delete button. It asks user for confirmation on delete,
-     * sends delete message to the business logic tier and updates user table view.
+     * Action event handler for delete button. It asks user for confirmation on
+     * delete, sends delete message to the business logic tier and updates user
+     * table view.
+     *
      * @param event The ActionEvent object for the event.
-     */   
+     */
     @FXML
     private void handleDeleteProduct() {
-        Alert alert=null;
-        try{
+        Alert alert = null;
+        try {
 
-            Product selectedProduct = ((Product)tbProducts.getSelectionModel()
-                                                            .getSelectedItem());
-            alert=new Alert(Alert.AlertType.CONFIRMATION,
-                                    "¿Borrar la fila seleccionada?\n"
-                                    + "Esta operación no se puede deshacer.",
-                                    ButtonType.OK,ButtonType.CANCEL);
-            Optional<ButtonType> result = alert.showAndWait(); 
+            Product selectedProduct = ((Product) tbProducts.getSelectionModel()
+                    .getSelectedItem());
+            alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "¿Borrar la fila seleccionada?\n"
+                    + "Esta operación no se puede deshacer.",
+                    ButtonType.OK, ButtonType.CANCEL);
+            Optional<ButtonType> result = alert.showAndWait();
             //If Botton OK
-            if(result.isPresent() && result.get() == ButtonType.OK){
-               //delete user from server side
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                //delete user from server side
                 this.iLogicProduct.deleteProduct(selectedProduct);
                 //removes selected item from table
                 tbProducts.getItems().remove(selectedProduct);
@@ -419,15 +470,15 @@ public class PC07ProductsController{
                 tbProducts.getSelectionModel().clearSelection();
                 tbProducts.refresh();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             //If there is an error in the business logic tier show message and
             //log it.
             LOGGER.log(Level.SEVERE,
-                        "PC07ProductsController: Error deleting user: {0}",
-                        e.getMessage());           
+                    "PC07ProductsController: Error deleting user: {0}",
+                    e.getMessage());
         }
-}
-    
+    }
+
     /**
      * Close current view and open Login view method.
      *
@@ -438,36 +489,36 @@ public class PC07ProductsController{
         cerrar = 2;
         cerrarSesionAlert(cerrar);
     }
-    
+
     /**
      * Method that show a confirm dialog to close session
+     *
      * @param cerrar Difference for close app or close session
      */
-    public void cerrarSesionAlert(int cerrar){
+    public void cerrarSesionAlert(int cerrar) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Dialogo de confirmacion");
         alert.setContentText("Estas seguro que deseas cerrar la sesion");
         alert.setHeaderText("Cerrar Sesion");
-        
+
         Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setId("okButton");
-        
+
         Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
         cancelButton.setId("cancelButton");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            if(cerrar == 1){
+        if (result.get() == ButtonType.OK) {
+            if (cerrar == 1) {
                 System.exit(0);
-            }else{
+            } else {
                 stage.hide();
             }
-  
+
         }
     }
-    
-    //metodo para ir a la ventana de productos
 
+    //metodo para ir a la ventana de productos
     public void eventWindow(ActionEvent ev) {
         LOGGER.info("clickOn Products Menu");
         try {
@@ -476,7 +527,7 @@ public class PC07ProductsController{
             //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
             //obtener el controlador
-            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            PC05EventsController controller = (PC05EventsController) loader.getController();
             //le mando el objeto logica al controlador 
             controller.setILogic(iLogicEvent);
             //a ese controlador le paso el stage
@@ -557,6 +608,48 @@ public class PC07ProductsController{
         }
     }
 
-
+    public void comboBoxOption(ActionEvent ev) {
+        LOGGER.info("clickOn combo box");
+        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los eventos de mi txoko")) {
+            //el boton de busqueda estara habilitado
+            btnSearch.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearch.setText("");
+            //deshabilitar el textfield
+            txtSearch.setDisable(true);
+            btnSearch.requestFocus();
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+            txtSearch.setVisible(false);
+            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del evento")) {
+            //el boton de busqueda estara habilitado
+            btnSearch.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearch.setText("");
+            //habilitar el textfield
+            txtSearch.setDisable(false);
+            //que se ponga el foco en el text field
+            txtSearch.requestFocus();
+            //tooltipID.setText("Escribe el ID del evento");
+            //txtSearch.setTooltip(tooltipID);
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+          //  labelError.setVisible(false);
+            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del evento")) {
+            //el boton de busqueda estara habilitado
+            btnSearch.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearch.setText("");
+            //habilitar el textfield
+            txtSearch.setDisable(false);
+            //que se ponga el foco en el text field
+            txtSearch.requestFocus();
+            //tooltipName.setText("Escribe el nombre del evento");
+            //txtSearch.setTooltip(tooltipName);
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+            //labelError.setVisible(false);
+            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+        }
+    }
 
 }

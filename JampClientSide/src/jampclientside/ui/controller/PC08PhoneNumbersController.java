@@ -7,7 +7,9 @@ package jampclientside.ui.controller;
 
 import jampclientside.entity.Product;
 import jampclientside.entity.Telephone;
+import jampclientside.exceptions.ReadException;
 import jampclientside.logic.EventLogic;
+import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ProductLogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -368,7 +370,7 @@ public class PC08PhoneNumbersController{
     }
 
     //ir a la ventana de los telefonos
-    public void productWindow(ActionEvent ev) {
+    public void productWindow(ActionEvent ev) throws ReadException {
         LOGGER.info("clickOn Telephone Menu");
         try {
             //instancio el xml
