@@ -42,6 +42,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.UserLogic;
 
 /**
  * FXML Controller class
@@ -111,6 +112,7 @@ public class PC04ExpenseController {
     /**
      * The business logic object containing all business methods.
      */
+
     private ExpenseLogic ilogic;
 
     /**
@@ -153,6 +155,7 @@ public class PC04ExpenseController {
      *
      * @param ILogic ilogic
      */
+
     public void setILogic(ExpenseLogic iLogic) {
         this.ilogic = iLogic;
     }

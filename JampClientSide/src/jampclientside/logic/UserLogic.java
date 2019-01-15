@@ -16,7 +16,7 @@ import messageuserbean.UserBean;
  *
  * @author Paula
  */
-public interface ILogic {
+public interface UserLogic {
 
     /**
      * already exist or not.

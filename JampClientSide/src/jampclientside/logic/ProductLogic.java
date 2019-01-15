@@ -6,7 +6,6 @@
 package jampclientside.logic;
 
 import jampclientside.entity.Product;
-import jampclientside.entity.Telephone;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -21,7 +20,7 @@ import java.util.List;
  *
  * @author Julen
  */
-public interface ILogicProduct {
+public interface ProductLogic {
 
 
     /**

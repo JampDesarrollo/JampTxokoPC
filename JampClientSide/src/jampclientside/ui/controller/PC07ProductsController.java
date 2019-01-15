@@ -7,7 +7,7 @@ package jampclientside.ui.controller;
 
 import jampclientside.entity.Product;
 import jampclientside.exceptions.ReadException;
-import jampclientside.logic.ILogicProduct;
+import jampclientside.logic.EventLogic;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
@@ -18,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -41,6 +42,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.ProductLogic;
+import jampclientside.logic.TelephoneLogic;
+import jampclientside.logic.UserLogic;
 
 /**
  * FXML PC07ProductsController class
@@ -158,7 +162,11 @@ public class PC07ProductsController{
     /**
      * The business logic object containing all business methods.
      */
-    private ILogicProduct iLogicProduct;
+    private ProductLogic iLogicProduct;
+    private UserLogic iLogicUser;
+    private TelephoneLogic iLogicTelephone;
+    private EventLogic iLogicEvent;
+    private ExpenseLogic iLogicExpense;
 
     /**
      * UserBean object
@@ -200,7 +208,7 @@ public class PC07ProductsController{
      *
      * @param ILogicProduct iLogicProduct
      */
-    public void setILogicProduct(ILogicProduct iLogicProduct) {
+    public void setILogicProduct(ProductLogic iLogicProduct) {
         this.iLogicProduct = iLogicProduct;
     }
 
@@ -457,5 +465,98 @@ public class PC07ProductsController{
   
         }
     }
+    
+    //metodo para ir a la ventana de productos
+
+    public void eventWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Products Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicEvent);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearch.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+
+    }
+
+    //ir a la ventana de los telefonos
+    public void telephoneWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Telephone Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumbers.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC08PhoneNumbersController controller = (PC08PhoneNumbersController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicTelephone);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearch.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+
+    }
+
+    //ventana de los gastos
+    public void expenseWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Gastos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC04ExpenseController controller = (PC04ExpenseController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicExpense);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearch.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+    }
+
+    //ventana de los usuarios
+    public void usersWindow(ActionEvent ev) {
+        LOGGER.info("clickOn User Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC03UserController controller = (PC03UserController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicUser);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearch.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+    }
+
+
 
 }

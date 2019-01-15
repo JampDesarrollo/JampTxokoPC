@@ -19,7 +19,7 @@ import messageuserbean.UserBean;
  *
  * @author Ander
  */
-public class ILogicImplementation implements ILogic {
+public class ILogicImplementation implements UserLogic {
 
     /**
      * Atributo para el socket del cliente. Sirve para conectar con el socket

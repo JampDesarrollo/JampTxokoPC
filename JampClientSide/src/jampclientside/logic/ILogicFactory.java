@@ -5,8 +5,8 @@
  */
 package jampclientside.logic;
 
-import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicImplementation;
+import jampclientside.logic.UserLogic;
 
 
 
@@ -26,7 +26,7 @@ public class ILogicFactory {
      * @return getIlogic
      */
     
-    public static ILogic getlogic() {
+    public static UserLogic getlogic() {
         return new ILogicImplementation();
     }
     /*

@@ -21,7 +21,7 @@ import messageuserbean.UserBean;
  *
  * @author Ander
  */
-public class ILogicImplementationTelephone implements ILogicTelephone {
+public class TelephoneLogicController implements TelephoneLogic {
 
     private UserBean returnUser;
 
