@@ -1,8 +1,10 @@
 package jampclientside;
 
+import jampclientside.logic.EventLogic;
 import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicFactory;
 import jampclientside.ui.controller.PC01LoginController;
+import jampclientside.ui.controller.PC05EventsController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,14 +25,14 @@ public class UiApplication extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-        ILogic iLogic = ILogicFactory.getILogic();
+          //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+        EventLogic iLogic = ILogicFactory.getEventLogic();
         //Instanciamos el cargador
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/view/PC01Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/view/PC05Events.fxml"));
         //Cargamos el documento en el root
         Parent root = (Parent) loader.load();
         //Obtengo el controlador, por que luego quiero pasarle el stage, entonces primero lo tengo que tener
-        PC01LoginController controler = (PC01LoginController) loader.getController();
+        PC05EventsController controler = (PC05EventsController) loader.getController();
         //le paso el objeto de logica al controlador
         controler.setILogic(iLogic);
         //al metodo set stage le paso el stage, al controlador le paso el escenario
