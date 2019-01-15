@@ -225,21 +225,10 @@ public class PC01LoginController {
      * @return user
      * @author ander
      */
-    private UserBean getUserEmail() {
+    private UserBean getUserEmail(){
         UserBean returnUser = null;
 
-        try {
-            returnUser = ilogic.userForgotPassword(tfUsuario.getText());
-        } catch (UserNotExistException ex) {
-            tfUsuario.setStyle("-fx-border-color:red;");
-            tfUsuario.requestFocus();
-            tfUsuario.selectAll();
-            lblError.setText("No existe este login");
-            lblError.setStyle("-fx-text-inner-color: red;");
-            lblError.setVisible(true);
-            LOGGER.log(Level.SEVERE, " El login de usuario no existe. {0}",
-                    ex.getMessage());
-        }
+        returnUser = ilogic.userForgotPassword(tfUsuario.getText());
 
         return returnUser;
     }

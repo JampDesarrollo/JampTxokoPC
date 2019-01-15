@@ -62,4 +62,9 @@ public class ILogicImplementationTest implements UserLogic {
         return usser;
     }
 
+    @Override
+    public UserBean userForgotPassword(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

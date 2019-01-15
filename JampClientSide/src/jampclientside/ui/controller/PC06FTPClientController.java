@@ -27,10 +27,10 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.apache.commons.net.PrintCommandListener;
+/*import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFile;*/
 
 /**
  * FXML Controller class
@@ -109,7 +109,7 @@ public class PC06FTPClientController {
     /**
      * FTPClient object.
      */
-    private FTPClient ftp;
+//    private FTPClient ftp;
 
     /**
      * Sets the Stage object related to this controller.
@@ -139,8 +139,8 @@ public class PC06FTPClientController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Cliente FTP");
             stage.setResizable(false);
-            stage.setOnShowing(this::handleWindowShowing);
-            btnOut.setOnAction(this::back);
+//            stage.setOnShowing(this::handleWindowShowing);
+ //           btnOut.setOnAction(this::back);
             btnUpload.setOnAction(this::uplaodFile);
             btnDownload.setOnAction(this::downloadFile);
             stage.show();
@@ -156,7 +156,7 @@ public class PC06FTPClientController {
      *
      * @param event WindowEvent
      */
-    private void handleWindowShowing(WindowEvent event) {
+ /*   private void handleWindowShowing(WindowEvent event) {
         LOGGER.info("Beggining PCFTPCLient::handleWindowShowing");
         LOGGER.info("Ventana de cliente FTP");
         lblInfo.setVisible(false);
@@ -202,7 +202,7 @@ public class PC06FTPClientController {
     /**
      * Connect FTP client to server.
      */
-    private boolean connectFTP() {
+ /*   private boolean connectFTP() {
         boolean connected = false;
         ftp = new FTPClient();
         ftp.addProtocolCommandListener(
@@ -225,7 +225,7 @@ public class PC06FTPClientController {
      *
      * @param ev ActionEvent
      */
-    private void back(ActionEvent ev) {
+/*    private void back(ActionEvent ev) {
         LOGGER.info("Ventana de cliente FTP back");
         try {
             ftp.logout();
@@ -251,7 +251,7 @@ public class PC06FTPClientController {
         File file = fChooser.showOpenDialog(stage);
         try {
             fis = new FileInputStream(file.getName());
-            ftp.storeFile(file.getName(), fis);
+//            ftp.storeFile(file.getName(), fis);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "No se ha podido subir archivo "
                     + "a servidor FTP. {0} \n ", e.getCause());
@@ -271,7 +271,7 @@ public class PC06FTPClientController {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream("/");
-            ftp.retrieveFile("/", out);
+//            ftp.retrieveFile("/", out);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PC06FTPClientController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

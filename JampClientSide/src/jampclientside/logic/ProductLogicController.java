@@ -5,17 +5,15 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Product;
+import jampclientside.entity.ProductBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
-import jampclientside.rest.ProductRESTClient;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.GenericType;
 
 /**
  *

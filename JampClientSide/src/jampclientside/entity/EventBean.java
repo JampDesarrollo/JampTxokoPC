@@ -47,7 +47,7 @@ public class EventBean implements Serializable{
         this.img=new SimpleStringProperty(img);
         this.price=new SimpleFloatProperty(price);
     }
-    
+   
     /**
      * @return the idEvent
      */

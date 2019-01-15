@@ -5,7 +5,7 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Product;
+import jampclientside.entity.ProductBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -25,24 +25,24 @@ public interface ProductLogic {
 
     /**
      * 
-     * @param phone
+     * @param product
      * @throws DeleteException 
      */
-    public void deleteProduct(Product product) throws DeleteException;
+    public void deleteProduct(ProductBean product) throws DeleteException;
     
     /**
      * 
-     * @param phone
+     * @param product
      * @throws UpdateException 
      */
-    public void updateProduct(Product product) throws UpdateException;
+    public void updateProduct(ProductBean product) throws UpdateException;
     
     /**
      * 
-     * @param phone
+     * @param product
      * @throws CreateException 
      */
-    public void createProduct(Product product) throws CreateException;
+    public void createProduct(ProductBean product) throws CreateException;
     
     /**
      * 
@@ -50,7 +50,7 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<Product> findProductById(Integer idProduct) throws ReadException;
+    public List<ProductBean> findProductById(Integer idProduct) throws ReadException;
     
     /**
      * 
@@ -59,14 +59,14 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException;
+    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<Product> findAllProducts () throws ReadException;
+    public List<ProductBean> findAllProducts () throws ReadException;
 
     /**
      * 

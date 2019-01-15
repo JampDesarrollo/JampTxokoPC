@@ -43,13 +43,13 @@ import jampclientside.exceptions.IdNotOkException;
 import jampclientside.exceptions.ReadException;
 import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ILogicFactory;
-import jampclientside.logic.ILogicProduct;
-import jampclientside.logic.ILogicTelephone;
+import jampclientside.logic.ProductLogic;
+import jampclientside.logic.TelephoneLogic;
 import jampclientside.ui.controller.PC03UserController;
 import jampclientside.ui.controller.PC04ExpenseController;
 import jampclientside.ui.controller.PC06FTPClientController;
 import jampclientside.ui.controller.PC07ProductsController;
-import jampclientside.ui.controller.PC08PhoneNumberController;
+import jampclientside.ui.controller.PC08PhoneNumbersController;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -301,7 +301,7 @@ public class PC05EventsController {
         LOGGER.info("clickOn Products Menu");
         try {
              //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-            ILogicProduct productLogic = ILogicFactory.getProductLogic();
+            ProductLogic productLogic = ILogicFactory.getProductLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -313,7 +313,7 @@ public class PC05EventsController {
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
-            controller.initStage(root);
+//            controller.initStage(root);
             cbSearch.requestFocus();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
@@ -326,13 +326,13 @@ public class PC05EventsController {
         LOGGER.info("clickOn Telephone Menu");
         try {
             //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-            ILogicTelephone telephoneLogic = ILogicFactory.getTelephoneLogic();
+            TelephoneLogic telephoneLogic = ILogicFactory.getTelephoneLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumber.fxml"));
             //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
             //obtener el controlador
-            PC08PhoneNumberController controller = (PC08PhoneNumberController) loader.getController();
+            PC08PhoneNumbersController controller = (PC08PhoneNumbersController) loader.getController();
             //le mando el objeto logica al controlador 
             controller.setILogic(telephoneLogic);
             //a ese controlador le paso el stage

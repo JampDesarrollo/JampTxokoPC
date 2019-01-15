@@ -5,14 +5,13 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.entity.Product;
-import jampclientside.entity.Telephone;
-import jampclientside.exceptions.ReadException;
+import jampclientside.entity.EventBean;
+import jampclientside.entity.ProductBean;
+import jampclientside.entity.TelephoneBean;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ProductLogic;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -45,6 +44,8 @@ import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
 import java.util.logging.Level;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
  * FXML Controller class
@@ -53,110 +54,79 @@ import javafx.fxml.FXMLLoader;
  */
 public class PC08PhoneNumbersController{
 
-
+    private static final Logger LOGGER = Logger.getLogger("package.class");
+    private Stage stage;
+    private TelephoneLogic ilogicTelephone;
+    private UserBean user;
+    private Tooltip tooltip = new Tooltip();
+    private Tooltip tooltipID = new Tooltip();
+    private Tooltip tooltipName = new Tooltip();
+    @FXML
+    private VBox principalPane;
     /**
      * Log out menu item
      */
     @FXML
-    private MenuItem btnLogOut;
-    /**
-     * Menu 
-     */
+    private MenuItem idMenuGastos;
     @FXML
-    private Menu menu;
-    /**
-     * 
-     */
+    private MenuItem idMenuProductos;
     @FXML
-    private VBox principalPane;
-    /**
-     * 
-     */
+    private MenuItem idMenuUsuarios;
+    @FXML
+    private MenuItem idMenuEvent;
     @FXML
     private MenuBar menuBar;
-    /**
-     * 
-     */
+    @FXML
+    private Menu menuMenu;
+    @FXML
+    private MenuItem menuLogOut;
+    @FXML
+    private Menu menuEvent;
+    @FXML
+    private Menu menuGastos;
+    @FXML
+    private Menu menuProductos;
+    @FXML
+    private Menu menuUsuarios;
+    @FXML
+    private Menu menuTelefonos;
     @FXML
     private Label lblDate;
-    /**
-     * 
-     */
     @FXML
     private Label lblLogin;
-    /**
-     * 
-     */
     @FXML
     private Label lblFullName;
-    /**
-     * 
-     */
     @FXML
     private Label lblEmail;
-    /**
-     * 
-     */
     @FXML
-    private ComboBox<?> cbSearchTel;
-    /**
-     * 
-     */
+    private Label lblTxoko;
     @FXML
     private TextField txtSearchTel;
-    /**
-     * 
-     */
     @FXML
-    private ImageView btnSearchTel;
-    /**
-     * 
-     */
+    private Button btnSearchTel;
     @FXML
-    private Label requiredTel;
-    /**
-     * 
-     */
+    private Label labelError;
     @FXML
     private Button addTelephone;
-    /**
-     * 
-     */
     @FXML
     private Button delTelephone;
-    /**
-     * 
-     */
     @FXML
     private Button btnLogOut2;
-    /**
-     * 
-     */
     @FXML
-    private TableView tbTelephone;
-    /**
-     * 
-     */
+    private TableView<TelephoneBean> tbTelephone;
+    @FXML
+    private ComboBox<String> cbSearchTel;
     @FXML
     private TableColumn tbcolName;
-    /**
-     * 
-     */
     @FXML
     private TableColumn tbcolDescription;
-    /**
-     * 
-     */
     @FXML
     private TableColumn tbcolNumber;
-    /**
-     * User's table data model.
-     */
-    private ObservableList<Product> telephoneData;
+    @FXML
+    private Label requiredTel;
+
+    private ObservableList<ProductBean> telephoneData;
     
-    /**
-     * To close app or session
-     */
     private int cerrar;
 
     /**
@@ -171,25 +141,7 @@ public class PC08PhoneNumbersController{
     /**
      * Telephone object
      */
-    private Telephone telephone;
-
-    /**
-     * UserBean object
-     */
-    
-    private UserBean user;
-    
-    /**
-     * Logger object used to log messages for application.
-     */
-    protected static final Logger LOGGER = Logger.getLogger("jampclientside.ui.controller");
-    /**
-     * The Stage object associated to the Scene controlled by this controller.
-     * This is an utility method reference that provides quick access inside the
-     * controller to the Stage object in order to make its initialization. Note
-     * that this makes Application, Controller and Stage being tightly coupled.
-     */
-    protected Stage stage;
+    private TelephoneBean telephone;
 
     /**
      * 
@@ -219,7 +171,7 @@ public class PC08PhoneNumbersController{
      * 
      * @param telephone 
      */
-    public void setUser(Telephone telephone) {
+    public void setUser(TelephoneBean telephone) {
         this.telephone = telephone;
 
     }
@@ -231,7 +183,7 @@ public class PC08PhoneNumbersController{
      * @throws java.io.IOException InputOuput exception
      */
     public void initStage(Parent root) throws IOException {
-        LOGGER.info("Initializing Principal stage.");
+        LOGGER.info("Initializing Telephone stage.");
         //Create a scene associated to the node graph root.
         Scene scene = new Scene(root);
         stage = new Stage();
@@ -243,32 +195,36 @@ public class PC08PhoneNumbersController{
         stage.setTitle("Principal");
         //Set window's events handlers
         stage.setOnShowing(this::windowShow);
-        
-        btnLogOut.setOnAction(this::logOutAction);
+        //menu item de cerrar sesion
+        menuLogOut.setOnAction(this::logOutAction);
+        //boton de cerrar sesion
         btnLogOut2.setOnAction(this::logOutAction);
-        //TABLE
-        //tbTelephone.getSelectionModel().selectedItemProperty()
-        //            .addListener(() -> this.handleTelephoneTableSelectionChanged());
+        //ir a la ventana de productos
+        idMenuProductos.setOnAction(this::productWindow);
+        //ir a la ventana de eventos
+        idMenuEvent.setOnAction(this::eventWindow);
+        //gastos
+        idMenuGastos.setOnAction(this::expenseWindow);
+        //ventana de los usuarios
+//        idMenuUsuarios.setOnAction(this::usersWindow);
+        //cliente FTP
+//        btnImgEvent.setOnAction(this::FTPClientWindow);
+        //boton añadir evento
+        addTelephone.setOnAction(this::handleAddTelephone);
+        //boton eleminar evento
+        delTelephone.setOnAction(this::handleDeleteTelephone);
+        //dependiendo la opcion que pulse del combo box
+        cbSearchTel.setOnAction(this::comboBoxOption);
+        //boton de busqueda
+        btnSearchTel.setOnAction(this::searchButton);
 
-        //Set department combo data model.
-        //ObservableList<DepartmentBean> departments=
-        //        FXCollections.observableArrayList(usersManager.getAllDepartments());
-        //cbDepartamentos.setItems(departments);
-        //Add focus event handler.
-        //tfLogin.focusedProperty().addListener(this::focusChanged);
-        //Set factories for cell values in users table columns.
         tbcolDescription.setCellValueFactory(
-                new PropertyValueFactory<>("productDescription"));
+                new PropertyValueFactory<>("description"));
         tbcolName.setCellValueFactory(
-                new PropertyValueFactory<>("telephoneName"));
+                new PropertyValueFactory<>("name"));
         tbcolNumber.setCellValueFactory(
-                new PropertyValueFactory<>("telephoneNumber"));
-        //Create an obsrvable list for users table.
-        
-        //telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
-        
-        //Set table model.
-        tbTelephone.setItems(telephoneData);
+                new PropertyValueFactory<>("telephone"));
+
         //Show primary window
         stage.show();
         
@@ -287,20 +243,30 @@ public class PC08PhoneNumbersController{
      */
     private void windowShow(WindowEvent event) {
         LOGGER.info("Beginning Principal::windowShow");
-        
+        /*
         String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
-        
         lblDate.setText("Último acceso: " + date);
         lblEmail.setText("Email: " + user.getEmail());
         lblFullName.setText("Nombre Completo: " + user.getFullname());
         lblLogin.setText("Login: " + user.getLogin());
+        */
         
-        menu.setMnemonicParsing(true);
-        menu.setText("_Menu");
-        
-        btnLogOut.setMnemonicParsing(true);
-        btnLogOut.setText("_Cerrar Sesion");
-        btnLogOut.setAccelerator(
+        cbSearchTel.getItems().removeAll(cbSearchTel.getItems());
+        cbSearchTel.getItems().addAll("Todos los telefonos de mi txoko", "Id del telefono", "Nombre del telefono");
+        //labelError.setVisible(false);
+        cbSearchTel.requestFocus();
+        txtSearchTel.setDisable(true);
+//        tbTelephone.setEditable(true);
+        btnSearchTel.setDisable(true);
+        addTelephone.setDisable(true);
+        delTelephone.setDisable(true);
+        tooltip.setText("Para ver la imagen del evento");
+        //btnImg.setTooltip(tooltip);
+        menuMenu.setMnemonicParsing(true);
+        menuMenu.setText("_Menu");
+        menuLogOut.setMnemonicParsing(true);
+        menuLogOut.setText("_Cerrar Sesion");
+        menuLogOut.setAccelerator(
                 new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
         btnLogOut2.setMnemonicParsing(true);
@@ -348,7 +314,7 @@ public class PC08PhoneNumbersController{
      //metodo para ir a la ventana de productos
 
     public void eventWindow(ActionEvent ev) {
-        LOGGER.info("clickOn Products Menu");
+        LOGGER.info("clickOn Event Menu");
         try {
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
@@ -370,7 +336,7 @@ public class PC08PhoneNumbersController{
     }
 
     //ir a la ventana de los telefonos
-    public void productWindow(ActionEvent ev) throws ReadException {
+    public void productWindow(ActionEvent ev) {
         LOGGER.info("clickOn Telephone Menu");
         try {
             //instancio el xml
@@ -384,7 +350,7 @@ public class PC08PhoneNumbersController{
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
-            controller.initStage(root);
+            //controller.initStage(root);
             cbSearchTel.requestFocus();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
@@ -413,7 +379,7 @@ public class PC08PhoneNumbersController{
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
     }
-
+/*
     //ventana de los usuarios
     public void usersWindow(ActionEvent ev) {
         LOGGER.info("clickOn User Menu");
@@ -435,5 +401,222 @@ public class PC08PhoneNumbersController{
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
     }
+*/
+    //añadir evento
+    public void handleAddTelephone(ActionEvent ev) {
+        Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+        dialogoAlerta.setTitle("CONFIRMACION");
+        dialogoAlerta.setContentText("¿Estas seguro que deseas añadir un telefono?");
+        dialogoAlerta.setHeaderText("Añadir un telefono");
+        Optional<ButtonType> result = dialogoAlerta.showAndWait();
+        Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setId("buttonAdd");
+        Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setId("buttonCancel");
+        //si da en el buttonAdd que se añada una fila
+        if (result.get() == ButtonType.OK) {
+            //añadir una fila a la tabla
+            //el txoko se puede coger del label o de la base de datos
+            //añadir a la base de datos y eliminar la fila 
+            EventBean event = new EventBean();
+            //añadir fila en blanco
+            tbTelephone.getItems().add(null);
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            tbcolName.setCellFactory(TextFieldTableCell.forTableColumn());
+           
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("description"));
+            tbcolDescription.setCellFactory(TextFieldTableCell.forTableColumn());
 
+            tbcolNumber.setCellValueFactory(
+                    new PropertyValueFactory<>("telephone"));
+            tbcolNumber.setCellFactory(TextFieldTableCell.forTableColumn());
+            
+            Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+            dialog.setTitle("CONFIRMACION");
+            dialog.setContentText("El nuevotelefono ha sido añadido");
+            dialog.setHeaderText("Añadir un telefono");
+            Optional<ButtonType> resultado = dialog.showAndWait();
+            Button aceptar = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            aceptar.setId("aceptar");
+
+        }
+
+    }
+
+    //eliminar evento
+    public void handleDeleteTelephone(ActionEvent ev) {
+        boolean isSelected = isSelected();
+        if (isSelected) {
+            Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+            dialogoAlerta.setTitle("CONFIRMACION");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas eliminar un telefono?");
+            dialogoAlerta.setHeaderText("Eliminar un telefono");
+            Optional<ButtonType> resultado = dialogoAlerta.showAndWait();
+            Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("buttonDelete");
+            Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+            cancelButton.setId("buttonNotDelete");
+            if (resultado.get() == ButtonType.OK) {
+                //si pulsa en en aceptar que elimine
+                //tengo que saber el txoko de la persona
+                //el txoko se puede coger del label o de la base de datos
+                // tengo que saber el id del evento
+                //eliminar de la base de datos y eliminar la fila
+                tbTelephone.getItems().remove(tbTelephone.getSelectionModel().getSelectedItem());
+                tbTelephone.refresh();
+            }
+        } else {
+
+            Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
+            dialogoAlerta.setTitle("ERROR");
+            dialogoAlerta.setContentText("Tienes que seleccionar una fila!!");
+            dialogoAlerta.setHeaderText("Eliminar un evento");
+            dialogoAlerta.showAndWait();
+        }
+    }
+
+    //para mirar si ha seleccionado la fila de la tabla
+    private boolean isSelected() {
+        boolean isSelected = false;
+        //si es diferente a vacio
+        if (!tbTelephone.getSelectionModel().getSelectedItems().isEmpty()) {
+            //hay algo seleccionado
+            isSelected = true;
+        }
+        return isSelected;
+    }
+    
+    public void comboBoxOption(ActionEvent ev) {
+        LOGGER.info("clickOn combo box");
+        if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Todos los telefonos de mi txoko")) {
+            //el boton de busqueda estara habilitado
+            btnSearchTel.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearchTel.setText("");
+            //deshabilitar el textfield
+            txtSearchTel.setDisable(true);
+            btnSearchTel.requestFocus();
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+//            labelError.setVisible(false);
+            txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
+        } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Id del evento")) {
+            //el boton de busqueda estara habilitado
+            btnSearchTel.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearchTel.setText("");
+            //habilitar el textfield
+            txtSearchTel.setDisable(false);
+            //que se ponga el foco en el text field
+            txtSearchTel.requestFocus();
+            tooltipID.setText("Escribe el ID del evento");
+            txtSearchTel.setTooltip(tooltipID);
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+            labelError.setVisible(false);
+            txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
+        } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Nombre del evento")) {
+            //el boton de busqueda estara habilitado
+            btnSearchTel.setDisable(false);
+            //si anteriormente hay algun texto, quitarlo
+            txtSearchTel.setText("");
+            //habilitar el textfield
+            txtSearchTel.setDisable(false);
+            //que se ponga el foco en el text field
+            txtSearchTel.requestFocus();
+            tooltipName.setText("Escribe el nombre del evento");
+            txtSearchTel.setTooltip(tooltipName);
+            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+            labelError.setVisible(false);
+            txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
+        }
+    }
+    
+    //buscar evento
+    public void searchButton(ActionEvent ev) {
+        //se habilitan los botones de añadir evento, eliminar evento y busqueda de la imagen
+        addTelephone.setDisable(false);
+        delTelephone.setDisable(false);
+       // btnImgEvent.setDisable(false);
+        LOGGER.info("clickOn search button");
+        //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+//        labelError.setVisible(false);
+        txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
+        //si ha seleccionado "todos"
+        if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Todos los telefonos de mi txoko")) {
+            //telephoneData = FXCollections.observableArrayList(ilogicTelephone.getAllT());
+            // tbTelephone.setItems(telephoneData);
+            //vamos a buscar los eventos a la base de datos
+            /* List <EventBean> listaEventos = events();
+            if(listaEventos!=null){
+            //aparecen todos los eventos
+            
+            //un alert
+            Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+            dialogoAlerta.setTitle("INFORMACION");
+            dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
+            dialogoAlerta.showAndWait();
+        }*/
+        } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Id del telefono")) {
+            //miramos si el textfield esta vacio o no
+            boolean tfIDEmpty = textEmptyOrNot();
+            //si no esta vacio
+            if (tfIDEmpty) {
+                /*
+                //vamos a buscar a la base de datos
+                EventBean evento = eventIDExist();
+                //if(evento!=null){
+                //carga los datos de ese evento en la tabla
+                
+                //un alert
+                Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
+                dialogoAlerta.showAndWait();
+                */}
+            //si esta vecio
+            else {
+                txtSearchTel.setStyle("-fx-border-color: red;");
+                labelError.setText("Tienes que escribir el id de un evento");
+                labelError.setVisible(true);
+                labelError.setStyle("-fx-text-inner-color: red;");
+            }
+        }//si busca por nombre
+        else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Nombre del evento")) {
+            //miramos si el text field esta vacio
+            boolean tfNameEmpty = textEmptyOrNot();
+            //si no esta vacio
+            if (tfNameEmpty) {
+                /*
+                //miramos el nombre del evento en la base de datos
+                //EventBean event = eventNameExist();
+                //si existe
+                //if(event!=null){
+                //carga los datos de ese evento en la tabla
+                
+                //un alert
+                Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
+                dialogoAlerta.showAndWait();
+                }*/
+            }//si esta vacio
+            else {
+                txtSearchTel.setStyle("-fx-border-color: red;");
+                labelError.setText("Tienes que escribir el nombre");
+                labelError.setVisible(true);
+                labelError.setStyle("-fx-text-inner-color: red;");
+            }
+
+        }
+
+    }
+        private boolean textEmptyOrNot() {
+        boolean empty = false;
+        //si no esta vacio
+        if (!this.txtSearchTel.getText().trim().equals("")) {
+            empty = true;
+        }
+        return empty;
+    }
 }
