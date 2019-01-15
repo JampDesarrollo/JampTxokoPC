@@ -29,23 +29,28 @@
                 <MenuItem fx:id="menuLogOut" mnemonicParsing="false" text="Cerrar Sesión" />
               </items>
             </Menu>
-            <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos" />
+            <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
+                <items>
+                  <MenuItem fx:id="idMenuEventos" mnemonicParsing="false" text="Ir a la ventana de Productos" />
+                </items>
+            </Menu>
             <Menu fx:id="menuGastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
                <items>
                   <MenuItem fx:id="idMenuGastos" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
-               </items></Menu>
-            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos">
-               <items>
-                  <MenuItem fx:id="idMenuProductos" mnemonicParsing="false" text="Ir a la ventana de Productos" />
-               </items></Menu>
+               </items>
+            </Menu>
+            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos"/>
+
             <Menu fx:id="menuUsuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
                <items>
                   <MenuItem fx:id="idMenuUsuarios" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
-               </items></Menu>
+               </items>
+            </Menu>
             <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
                <items>
                   <MenuItem fx:id="idMenuTel" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
-               </items></Menu>
+               </items>
+            </Menu>
       </menus>
     </MenuBar>
       <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="766.0" spacing="20.0">
@@ -114,12 +119,13 @@
                                     <Insets left="25.0" top="25.0" />
                                  </HBox.margin>
                               </TextField>
-                              <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="49.0">
+                              <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="24.0" prefWidth="49.0">
                                  <graphic>
-                                    <ImageView fx:id="btnSearch" fitHeight="16.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="16.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@magnifying-glass-297822_960_720.png" />
-                                       </image></ImageView>
+                                          <Image url="@../../../../resources/lupa.png" />
+                                       </image>
+                                    </ImageView>
                                  </graphic>
                                  <HBox.margin>
                                     <Insets top="25.0" />
@@ -172,7 +178,7 @@
             </HBox>
          </top>
          <center>
-            <TableView fx:id="productTable" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="tbProducts" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="tbcolName" prefWidth="123.0" text="Nombre del producto" />
                 <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del producto" />

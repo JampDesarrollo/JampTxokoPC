@@ -47,5 +47,5 @@ public interface TelephoneLogic {
      * @return
      * @throws ReadException 
      */
-    public List<TelephoneBean> findAllTelephone() throws ReadException;
+    public List<TelephoneBean> findAllTelephone();
 }

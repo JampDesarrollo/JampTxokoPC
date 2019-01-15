@@ -8,6 +8,7 @@ package jampclientside.ui.controller;
 import jampclientside.entity.EventBean;
 import jampclientside.entity.ProductBean;
 import jampclientside.entity.TelephoneBean;
+import jampclientside.exceptions.ReadException;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ProductLogic;
@@ -43,6 +44,7 @@ import messageuserbean.UserBean;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
 import java.util.logging.Level;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -125,7 +127,7 @@ public class PC08PhoneNumbersController{
     @FXML
     private Label requiredTel;
 
-    private ObservableList<ProductBean> telephoneData;
+    private ObservableList<TelephoneBean> telephoneData;
     
     private int cerrar;
 
@@ -253,17 +255,17 @@ public class PC08PhoneNumbersController{
         
         cbSearchTel.getItems().removeAll(cbSearchTel.getItems());
         cbSearchTel.getItems().addAll("Todos los telefonos de mi txoko", "Id del telefono", "Nombre del telefono");
-        //labelError.setVisible(false);
+        labelError.setVisible(false);
         cbSearchTel.requestFocus();
         txtSearchTel.setDisable(true);
-//        tbTelephone.setEditable(true);
+        tbTelephone.setEditable(true);
         btnSearchTel.setDisable(true);
         addTelephone.setDisable(true);
         delTelephone.setDisable(true);
-        tooltip.setText("Para ver la imagen del evento");
-        //btnImg.setTooltip(tooltip);
+
         menuMenu.setMnemonicParsing(true);
         menuMenu.setText("_Menu");
+        
         menuLogOut.setMnemonicParsing(true);
         menuLogOut.setText("_Cerrar Sesion");
         menuLogOut.setAccelerator(
@@ -279,7 +281,7 @@ public class PC08PhoneNumbersController{
      * @param event Action Event
      */
     public void logOutAction(ActionEvent event) {
-        LOGGER.info("Beginning Principal::logout action");
+        LOGGER.info("Beginning Telephones::logout action");
         cerrar = 2;
         cerrarSesionAlert(cerrar);
     }
@@ -310,99 +312,7 @@ public class PC08PhoneNumbersController{
   
         }
     }
-    
-     //metodo para ir a la ventana de productos
 
-    public void eventWindow(ActionEvent ev) {
-        LOGGER.info("clickOn Event Menu");
-        try {
-            //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
-            //lo cargo en el root que es de tipo parent
-            Parent root = (Parent) loader.load();
-            //obtener el controlador
-            PC05EventsController controller = (PC05EventsController) loader.getController();
-            //le mando el objeto logica al controlador 
-            controller.setILogic(iLogicEvent);
-            //a ese controlador le paso el stage
-            controller.setStage(stage);
-            //inizializo el stage
-            controller.initStage(root);
-            cbSearchTel.requestFocus();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
-        }
-
-    }
-
-    //ir a la ventana de los telefonos
-    public void productWindow(ActionEvent ev) {
-        LOGGER.info("clickOn Telephone Menu");
-        try {
-            //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
-            //lo cargo en el root que es de tipo parent
-            Parent root = (Parent) loader.load();
-            //obtener el controlador
-            PC07ProductsController controller = (PC07ProductsController) loader.getController();
-            //le mando el objeto logica al controlador 
-            controller.setILogicProduct(iLogicProduct);
-            //a ese controlador le paso el stage
-            controller.setStage(stage);
-            //inizializo el stage
-            //controller.initStage(root);
-            cbSearchTel.requestFocus();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
-        }
-
-    }
-
-    //ventana de los gastos
-    public void expenseWindow(ActionEvent ev) {
-        LOGGER.info("clickOn Gastos Menu");
-        try {
-            //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
-            //lo cargo en el root que es de tipo parent
-            Parent root = (Parent) loader.load();
-            //obtener el controlador
-            PC04ExpenseController controller = (PC04ExpenseController) loader.getController();
-            //le mando el objeto logica al controlador 
-            controller.setILogic(iLogicExpense);
-            //a ese controlador le paso el stage
-            controller.setStage(stage);
-            //inizializo el stage
-            controller.initStage(root);
-            cbSearchTel.requestFocus();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
-        }
-    }
-/*
-    //ventana de los usuarios
-    public void usersWindow(ActionEvent ev) {
-        LOGGER.info("clickOn User Menu");
-        try {
-            //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
-            //lo cargo en el root que es de tipo parent
-            Parent root = (Parent) loader.load();
-            //obtener el controlador
-            PC03UserController controller = (PC03UserController) loader.getController();
-            //le mando el objeto logica al controlador 
-            controller.setILogic(iLogicUser);
-            //a ese controlador le paso el stage
-            controller.setStage(stage);
-            //inizializo el stage
-            controller.initStage(root);
-            cbSearchTel.requestFocus();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
-        }
-    }
-*/
-    //añadir evento
     public void handleAddTelephone(ActionEvent ev) {
         Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
         dialogoAlerta.setTitle("CONFIRMACION");
@@ -444,8 +354,7 @@ public class PC08PhoneNumbersController{
         }
 
     }
-
-    //eliminar evento
+    
     public void handleDeleteTelephone(ActionEvent ev) {
         boolean isSelected = isSelected();
         if (isSelected) {
@@ -472,20 +381,98 @@ public class PC08PhoneNumbersController{
             Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
             dialogoAlerta.setTitle("ERROR");
             dialogoAlerta.setContentText("Tienes que seleccionar una fila!!");
-            dialogoAlerta.setHeaderText("Eliminar un evento");
+            dialogoAlerta.setHeaderText("Eliminar un telfono");
             dialogoAlerta.showAndWait();
         }
     }
 
-    //para mirar si ha seleccionado la fila de la tabla
-    private boolean isSelected() {
-        boolean isSelected = false;
-        //si es diferente a vacio
-        if (!tbTelephone.getSelectionModel().getSelectedItems().isEmpty()) {
-            //hay algo seleccionado
-            isSelected = true;
+    public void eventWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Event Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC05EventsController controller = (PC05EventsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicEvent);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
-        return isSelected;
+
+    }
+
+    //ir a la ventana de los telefonos
+    public void productWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Telephone Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogicProduct(iLogicProduct);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        } catch (ReadException ex) {
+            Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void expenseWindow(ActionEvent ev) {
+        LOGGER.info("clickOn Gastos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC04ExpenseController controller = (PC04ExpenseController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicExpense);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+    }
+    //ventana de los usuarios
+    public void usersWindow(ActionEvent ev) {
+        LOGGER.info("clickOn User Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC03UserController controller = (PC03UserController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(iLogicUser);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
     
     public void comboBoxOption(ActionEvent ev) {
@@ -499,7 +486,7 @@ public class PC08PhoneNumbersController{
             txtSearchTel.setDisable(true);
             btnSearchTel.requestFocus();
             //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
-//            labelError.setVisible(false);
+            labelError.setVisible(false);
             txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Id del evento")) {
             //el boton de busqueda estara habilitado
@@ -532,7 +519,6 @@ public class PC08PhoneNumbersController{
         }
     }
     
-    //buscar evento
     public void searchButton(ActionEvent ev) {
         //se habilitan los botones de añadir evento, eliminar evento y busqueda de la imagen
         addTelephone.setDisable(false);
@@ -540,12 +526,12 @@ public class PC08PhoneNumbersController{
        // btnImgEvent.setDisable(false);
         LOGGER.info("clickOn search button");
         //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
-//        labelError.setVisible(false);
+        labelError.setVisible(false);
         txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
         //si ha seleccionado "todos"
         if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Todos los telefonos de mi txoko")) {
-            //telephoneData = FXCollections.observableArrayList(ilogicTelephone.getAllT());
-            // tbTelephone.setItems(telephoneData);
+            telephoneData = FXCollections.observableArrayList(ilogicTelephone.findAllTelephone());
+            tbTelephone.setItems(telephoneData);
             //vamos a buscar los eventos a la base de datos
             /* List <EventBean> listaEventos = events();
             if(listaEventos!=null){
@@ -607,16 +593,26 @@ public class PC08PhoneNumbersController{
                 labelError.setVisible(true);
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
-
         }
-
     }
-        private boolean textEmptyOrNot() {
+
+    private boolean textEmptyOrNot() {
         boolean empty = false;
         //si no esta vacio
         if (!this.txtSearchTel.getText().trim().equals("")) {
             empty = true;
         }
         return empty;
+    }
+    
+    //para mirar si ha seleccionado la fila de la tabla
+    private boolean isSelected() {
+        boolean isSelected = false;
+        //si es diferente a vacio
+        if (!tbTelephone.getSelectionModel().getSelectedItems().isEmpty()) {
+            //hay algo seleccionado
+            isSelected = true;
+        }
+        return isSelected;
     }
 }

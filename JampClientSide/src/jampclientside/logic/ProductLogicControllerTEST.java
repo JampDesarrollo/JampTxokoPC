@@ -13,7 +13,6 @@ import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -24,11 +23,11 @@ public class ProductLogicControllerTEST implements ProductLogic{
     private ArrayList<ProductBean> product;
     private static final Logger LOGGER = Logger.getLogger("package.class");  
       public ProductLogicControllerTEST(){
-        LOGGER.info("Building fake events data for testing UI.");
+        LOGGER.info("Building fake products data for testing UI.");
         product=new ArrayList();
         //Create 25 UserBean fake data objects.
         for(int i=0;i<25;i++)
-            product.add(new ProductBean("Coca", "zero", i));
+            product.add(new ProductBean("Coca", "zero", i, (float)1.0));
     }
 
     @Override
@@ -57,20 +56,18 @@ public class ProductLogicControllerTEST implements ProductLogic{
     }
 
     @Override
-    public List<ProductBean> findAllProducts() throws ReadException {
-        List<ProductBean> productos = null;
-        try{
-            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
+    public List<ProductBean> findAllProducts(){
+/*            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.
           //  productos = ProductWebClient.findAllProducts(new GenericType<List<Product>>() {});
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception finding all products, {0}",
                     ex.getMessage());
-            throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
-        }
+            //throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
+        }*/
         
-        return productos;
+        return product;
     }
 
     @Override

@@ -61,10 +61,12 @@ public class ProductBean implements Serializable{
     
         public ProductBean(String name,
                     String description,
-                    Integer stock){
+                    Integer stock,
+                    Float price){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
         this.stock=new SimpleIntegerProperty(stock);
+        this.price = new SimpleFloatProperty(price);
     }
 
     /**

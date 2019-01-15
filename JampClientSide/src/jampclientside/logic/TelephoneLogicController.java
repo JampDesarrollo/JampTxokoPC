@@ -68,7 +68,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @throws ReadException 
      */
     @Override
-    public List<TelephoneBean> findAllTelephone() throws ReadException {
+    public List<TelephoneBean> findAllTelephone(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
