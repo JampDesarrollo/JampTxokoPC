@@ -6,14 +6,15 @@
 package jampclientside.ui.controller;
 
 import jampclientside.entity.ProductBean;
+import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
+import jampclientside.exceptions.UpdateException;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +34,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -80,124 +80,52 @@ public class PC07ProductsController {
     private Menu menuUsuarios;
     @FXML
     private Menu menuTelefonos;
-
     @FXML
     private VBox principalPane;
-
-    /**
-     *
-     */
     @FXML
     private Label lblDate;
-    /**
-     *
-     */
     @FXML
     private Label lblLogin;
-    /**
-     *
-     */
     @FXML
     private Label lblFullName;
-    /**
-     *
-     */
     @FXML
     private Label lblEmail;
-    /**
-     *
-     */
     @FXML
     private ComboBox<String> cbSearch;
-    /**
-     *
-     */
     @FXML
     private TextField txtSearch;
-    /**
-     *
-     */
     @FXML
-    private ImageView btnSearch;
-    /**
-     *
-     */
+    private Button btnSearch;
     @FXML
     private Label labelError;
-    
     @FXML
     private Button addProduct;
-    /**
-     *
-     */
     @FXML
     private Button delProduct;
-
-    /**
-     *
-     */
     @FXML
     private Button btnLogOut;
-
-    /**
-     *
-     */
     @FXML
     private Button btnLogOut2;
-
-    /**
-     *
-     */
     @FXML
     private TableView<ProductBean> tbProducts;
-    /**
-     * User's login data table column.
-     */
     @FXML
     private TableColumn tbcolName;
-    /**
-     * User's name data table column.
-     */
     @FXML
     private TableColumn tbcolDescription;
-    /**
-     * User's profile data table column.
-     */
     @FXML
     private TableColumn tbcolPrice;
-    /**
-     * User's department data table column.
-     */
     @FXML
     private TableColumn tbcolStock;
-    /**
-     * User's table data model.
-     */
     private ObservableList<ProductBean> productData;
-
-    /**
-     * To close app or session
-     */
     private int cerrar;
-
-    /**
-     * The business logic object containing all business methods.
-     */
     private ProductLogic iLogicProduct;
     private UserLogic iLogicUser;
     private TelephoneLogic iLogicTelephone;
     private EventLogic iLogicEvent;
     private ExpenseLogic iLogicExpense;
-
-    /**
-     * UserBean object
-     */
     private UserBean user;
-
-    /**
-     * Logger object used to log messages for application.
-     */
     protected static final Logger LOGGER = Logger.getLogger("jamp.pc.ui.controller");
+   
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -227,7 +155,7 @@ public class PC07ProductsController {
     /**
      * Set logic for this view controller
      *
-     * @param ILogicProduct iLogicProduct
+     * @param iLogicProduct
      */
     public void setILogicProduct(ProductLogic iLogicProduct) {
         this.iLogicProduct = iLogicProduct;
@@ -248,6 +176,7 @@ public class PC07ProductsController {
      *
      * @param root root
      * @throws java.io.IOException InputOuput exception
+     * @throws jampclientside.exceptions.ReadException
      */
     public void initStage(Parent root) throws IOException, ReadException {
         LOGGER.info("Initializing Product Window.");
@@ -276,14 +205,14 @@ public class PC07ProductsController {
         // idMenuUsuarios.setOnAction(this::usersWindow);
         
         //boton añadir producto
-        addProduct.setOnAction(this::handleCrearAction);
+        addProduct.setOnAction(this::handleAddProduct);
         //boton borrar producto
-       // delProduct.setOnAction(this::handleDeleteProduct);
+        delProduct.setOnAction(this::handleDeleteProduct);
         //dependiendo la opcion que pulse del combo box
         cbSearch.setOnAction(this::comboBoxOption);
 
         //boton de busqueda
-//        btnSearch.setOnAction(this::searchButton);
+        btnSearch.setOnAction(this::searchButton);
 
 
         //las columnas van a coger el valos de los atributos
@@ -333,14 +262,13 @@ public class PC07ProductsController {
         labelError.setVisible(false);
         cbSearch.requestFocus();
         txtSearch.setDisable(true);
-        
         tbProducts.setEditable(true);
         btnSearch.setDisable(true);
         addProduct.setDisable(true);
         delProduct.setDisable(true);
         
-        menu.setMnemonicParsing(true);
-        menu.setText("_Menu");
+        menuMenu.setMnemonicParsing(true);
+        menuMenu.setText("_Menu");
 
         menuLogOut.setMnemonicParsing(true);
         menuLogOut.setText("_Cerrar Sesion");
@@ -350,22 +278,42 @@ public class PC07ProductsController {
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
     }
+    
+    /**
+     * Close current view and open Login view method.
+     *
+     * @param event Action Event
+     */
+    public void logOutAction(ActionEvent event) {
+        LOGGER.info("Beginning Productos::logout action");
+        cerrar = 2;
+        cerrarSesionAlert(cerrar);
+    }
 
     /**
-     * A focus change event event handler. This is an example that only logs a
-     * message.
-     *
-     * @param observable the observable focus property.
-     * @param oldValue the old boolean value for the property.
-     * @param newValue the new boolean value for the property.
+     * Method that show a confirm dialog to close session
+     * @param cerrar Difference for close app or close session
      */
-    private void focusChanged(ObservableValue observable,
-            Boolean oldValue,
-            Boolean newValue) {
-        if (newValue) {
-            LOGGER.info("onFocus");
-        } else if (oldValue) {
-            LOGGER.info("onBlur");
+    public void cerrarSesionAlert(int cerrar) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Dialogo de confirmacion");
+        alert.setContentText("Estas seguro que deseas cerrar la sesion");
+        alert.setHeaderText("Cerrar Sesion");
+
+        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setId("okButton");
+
+        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setId("cancelButton");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            if (cerrar == 1) {
+                System.exit(0);
+            } else {
+                stage.hide();
+            }
+
         }
     }
 
@@ -376,8 +324,7 @@ public class PC07ProductsController {
      *
      * @param event The ActionEvent object for the event.
      */
-    @FXML
-    private void handleCrearAction(ActionEvent event) {
+    private void handleAddProduct(ActionEvent event) {
         try {
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
             dialogoAlerta.setTitle("CONFIRMACION");
@@ -413,13 +360,13 @@ public class PC07ProductsController {
                         new PropertyValueFactory<>("stock"));
                 tbcolStock.setCellFactory(TextFieldTableCell.forTableColumn());
                 
-                Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+ /*               Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
                 dialog.setTitle("CONFIRMACION");
-                dialog.setContentText("El nuevo evento va a ser añadido");
-                dialog.setHeaderText("Añadir un evento");
+                dialog.setContentText("El nuevo producto va a ser añadido");
+                dialog.setHeaderText("Añadir un producto");
                 Optional<ButtonType> resultado = dialog.showAndWait();
                 Button aceptar = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-                aceptar.setId("aceptar");
+                aceptar.setId("aceptar");*/
             }
         } catch (Exception e) {
             //If there is an error in the business logic tier show message and
@@ -437,8 +384,7 @@ public class PC07ProductsController {
      *
      * @param event The ActionEvent object for the event.
      */
-    @FXML
-    private void handleModificarAction(ActionEvent event) {
+    private void handleUpdateProduct(ActionEvent event) {
         try {
             //Get selected user data from table view.
             ProductBean selectedProduct = ((ProductBean) tbProducts.getSelectionModel()
@@ -460,7 +406,7 @@ public class PC07ProductsController {
             tbProducts.getSelectionModel().clearSelection();
             //Refrescamos la tabla para que muestre los nuevos datos
             tbProducts.refresh();
-        } catch (Exception e) {
+        } catch (ProductExist | UpdateException e) {
             //If there is an error in the business logic tier show message and
             //log it.
             LOGGER.log(Level.SEVERE,
@@ -474,10 +420,9 @@ public class PC07ProductsController {
      * delete, sends delete message to the business logic tier and updates user
      * table view.
      *
-     * @param event The ActionEvent object for the event.
+     * @param ev The ActionEvent object for the event.
      */
-    @FXML
-    private void handleDeleteProduct() {
+    private void handleDeleteProduct(ActionEvent ev) {
         boolean isSelected = isSelected();
         try {
             if (isSelected) {
@@ -516,51 +461,12 @@ public class PC07ProductsController {
         }
     }
 
-    /**
-     * Close current view and open Login view method.
-     *
-     * @param event Action Event
-     */
-    public void logOutAction(ActionEvent event) {
-        LOGGER.info("Beginning Principal::logout action");
-        cerrar = 2;
-        cerrarSesionAlert(cerrar);
-    }
-
-    /**
-     * Method that show a confirm dialog to close session
-     *
-     * @param cerrar Difference for close app or close session
-     */
-    public void cerrarSesionAlert(int cerrar) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Dialogo de confirmacion");
-        alert.setContentText("Estas seguro que deseas cerrar la sesion");
-        alert.setHeaderText("Cerrar Sesion");
-
-        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.setId("okButton");
-
-        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.setId("cancelButton");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            if (cerrar == 1) {
-                System.exit(0);
-            } else {
-                stage.hide();
-            }
-
-        }
-    }
-
     //metodo para ir a la ventana de productos
     public void eventWindow(ActionEvent ev) {
         LOGGER.info("clickOn Products Menu");
         try {
             //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05Events.fxml"));
             //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
             //obtener el controlador
@@ -601,7 +507,6 @@ public class PC07ProductsController {
 
     }
 
-    //ventana de los gastos
     public void expenseWindow(ActionEvent ev) {
         LOGGER.info("clickOn Gastos Menu");
         try {
@@ -647,7 +552,7 @@ public class PC07ProductsController {
 
     public void comboBoxOption(ActionEvent ev) {
         LOGGER.info("clickOn combo box");
-        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los eventos de mi txoko")) {
+        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
             //el boton de busqueda estara habilitado
             btnSearch.setDisable(false);
             //si anteriormente hay algun texto, quitarlo
@@ -656,9 +561,9 @@ public class PC07ProductsController {
             txtSearch.setDisable(true);
             btnSearch.requestFocus();
             //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
-            txtSearch.setVisible(false);
+            txtSearch.setVisible(true);
             txtSearch.setStyle("-fx-border-color: -fx-box-border;");
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del evento")) {
+        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
             //el boton de busqueda estara habilitado
             btnSearch.setDisable(false);
             //si anteriormente hay algun texto, quitarlo
@@ -672,7 +577,7 @@ public class PC07ProductsController {
             //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
             labelError.setVisible(false);
             txtSearch.setStyle("-fx-border-color: -fx-box-border;");
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del evento")) {
+        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del producto")) {
             //el boton de busqueda estara habilitado
             btnSearch.setDisable(false);
             //si anteriormente hay algun texto, quitarlo
@@ -688,19 +593,19 @@ public class PC07ProductsController {
             txtSearch.setStyle("-fx-border-color: -fx-box-border;");
         }
     }
-    
-     //buscar evento
-    public void searchButton(ActionEvent ev) throws ReadException {
+
+    public void searchButton(ActionEvent ev) {
         //se habilitan los botones de añadir evento, eliminar evento y busqueda de la imagen
         addProduct.setDisable(false);
         delProduct.setDisable(false);
+        txtSearch.setDisable(false);
         //btnImgEvent.setDisable(false);
         LOGGER.info("clickOn search button");
         //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
         labelError.setVisible(false);
         txtSearch.setStyle("-fx-border-color: -fx-box-border;");
         //si ha seleccionado "todos"
-        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los eventos de mi txoko")) {
+        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
             productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
             tbProducts.setItems(productData);
             //vamos a buscar los eventos a la base de datos
@@ -764,9 +669,7 @@ public class PC07ProductsController {
                 labelError.setVisible(true);
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
-
         }
-
     }
     
     private boolean textEmptyOrNot() {
@@ -788,5 +691,4 @@ public class PC07ProductsController {
         }
         return isSelected;
     }
-
 }

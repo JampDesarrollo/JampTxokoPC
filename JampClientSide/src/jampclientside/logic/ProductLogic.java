@@ -66,7 +66,7 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findAllProducts () throws ReadException;
+    public List<ProductBean> findAllProducts ();
 
     /**
      * 

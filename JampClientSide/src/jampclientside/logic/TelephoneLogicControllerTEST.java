@@ -5,11 +5,9 @@
  */
 package jampclientside.logic;
 
-import java.util.logging.Logger;
 import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
-import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ public class TelephoneLogicControllerTEST implements TelephoneLogic {
       private ArrayList<TelephoneBean> telephones;
       public TelephoneLogicControllerTEST(){
         telephones=new ArrayList();
-        //Create 25 UserBean fake data objects.
+        //Create 25 TelephoneBean fake data objects.
         for(int i=0;i<25;i++)
             telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, i));
     
@@ -44,8 +42,8 @@ public class TelephoneLogicControllerTEST implements TelephoneLogic {
     }
 
     @Override
-    public List<TelephoneBean> findAllTelephone() throws ReadException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<TelephoneBean> findAllTelephone() {
+        return telephones;
     }
     
 }

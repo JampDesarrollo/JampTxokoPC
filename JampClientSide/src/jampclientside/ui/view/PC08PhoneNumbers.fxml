@@ -122,8 +122,9 @@
                                  <graphic>
                                     <ImageView  fitHeight="16.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@magnifying-glass-297822_960_720.png" />
-                                       </image></ImageView>
+                                          <Image url="@../../../../resources/lupa.png" />
+                                       </image>
+                                    </ImageView>
                                  </graphic>
                                  <HBox.margin>
                                     <Insets top="25.0" />
@@ -134,7 +135,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </HBox>
-                        <Label fx:id="requiredTel" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="225.0" text="Campo requerido" textFill="#f20909">
+                        <Label fx:id="labelError" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="225.0" text="Campo requerido" textFill="#f20909">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
