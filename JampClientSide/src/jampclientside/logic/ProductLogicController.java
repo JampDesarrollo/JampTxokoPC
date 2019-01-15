@@ -24,6 +24,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author Julen
  */
+/*
 public class ProductLogicController implements ProductLogic {
 
     //REST users web client
@@ -32,13 +33,13 @@ public class ProductLogicController implements ProductLogic {
     /**
      * Attribute to appear the information text.
      */
-    private static final Logger LOGGER
+  /*  private static final Logger LOGGER
             = Logger.getLogger("jamp.pc.logic.IlogicImplementationProduct");
 
     /**
      * Create a ILogicImplementationroduct.
      */
-    public ProductLogicController(){
+  /*  public ProductLogicController(){
         ProductWebClient=new ProductRESTClient();
     }
     /**
@@ -47,7 +48,7 @@ public class ProductLogicController implements ProductLogic {
      * @param product The ProductBean object to be deleted.
      * @throws DeleteException
      */
-    @Override
+ /*   @Override
     public void deleteProduct(Product product) throws DeleteException {
         try{
             LOGGER.log(Level.INFO,"ProductImplementation: Deleting product {0}.",product.getName());
@@ -65,7 +66,7 @@ public class ProductLogicController implements ProductLogic {
      * @param product The PrductBean object to be updated.
      * @throws UpdateException If there is any error while processing.
      */
-    @Override
+  /*  @Override
     public void updateProduct(Product product) throws UpdateException {
         try{
             LOGGER.log(Level.INFO,"ProductImplementation: Updating user {0}.",product.getIdProduct());
@@ -84,7 +85,7 @@ public class ProductLogicController implements ProductLogic {
      * @param product The UserBean object to be added.
      * @throws CreateException If there is any error while processing.
      */
-    @Override
+ /*   @Override
     public void createProduct(Product product) throws CreateException {
          try{
             LOGGER.log(Level.INFO,"ProductImplementation: Creating user {0}.",product.getIdProduct());
@@ -96,13 +97,13 @@ public class ProductLogicController implements ProductLogic {
             throw new CreateException("ProductImplementation: Error creating user:" + ex.getMessage());
         }
     }
-         
+       
     /**
      * This method returns a collection of products for users.
      * @return A collection of Product.
      * @throws ReadExcdeption If there is any error while processing.
      */
-    @Override
+ /*   @Override
     public List<Product> findAllProducts() throws ReadException {
         List<Product> productos = null;
         try{
@@ -118,13 +119,13 @@ public class ProductLogicController implements ProductLogic {
         
         return productos;
     }
-    
+  */  
     /**
      * This method returns a collection of products for users.
      * @return A collection of Product.
      * @throws ReadExcdeption If there is any error while processing.
      */
-    @Override
+ /*   @Override
     public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException{
             List<Product> productos = null;
         try{
@@ -139,13 +140,13 @@ public class ProductLogicController implements ProductLogic {
         }
         return productos;
     }
-
+*/
     /**
      * This method returns a collection of products for users.
      * @return A collection of Product.
      * @throws ReadExcdeption If there is any error while processing.
      */
-    @Override
+  /*  @Override
     public Product findProductsByIdByTxoko() throws ReadException {
             Product productos = null;
         try{
@@ -162,7 +163,7 @@ public class ProductLogicController implements ProductLogic {
     }
 
     @Override
-    public Product findProductsById() throws ReadException {
+    public Product findProductsById(Integer idProduct) throws ReadException {
             Product productos = null;
         try{
             LOGGER.info("ProductImplementation: Finding products by id from REST service (XML).");
@@ -182,4 +183,4 @@ public class ProductLogicController implements ProductLogic {
         
         }
 
-}
+}*/
