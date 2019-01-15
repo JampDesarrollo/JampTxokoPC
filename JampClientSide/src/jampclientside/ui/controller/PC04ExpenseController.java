@@ -5,12 +5,24 @@
  */
 package jampclientside.ui.controller;
 
+import jampclientside.entity.ExpenseBean;
+import jampclientside.logic.EventLogic;
+import jampclientside.logic.ExpenseLogic;
+import jampclientside.logic.ILogic;
+import jampclientside.logic.ILogicFactory;
+import jampclientside.logic.ILogicProduct;
 import java.io.IOException;
+import static java.lang.Math.E;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,6 +35,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import static javafx.scene.input.KeyCode.E;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Modality;
@@ -63,23 +76,33 @@ public class PC04ExpenseController {
     @FXML
     private Label lblTxoko;
     @FXML
-    private Button btnUpdate;
+    private Button btnSeeMonth;
     @FXML
     private Button btnSeeAll;
     @FXML
     private Button btnLogOut2;
     @FXML
-    private TableView<?> tabExpenses;
+    private TableView tabExpenses;
     @FXML
-    private TableColumn<?, ?> colDate;
+    private TableColumn colDate;
     @FXML
-    private TableColumn<?, ?> colidUser;
+    private TableColumn colUser;
     @FXML
-    private TableColumn<?, ?> colType;
+    private TableColumn colType;
     @FXML
-    private TableColumn<?, ?> colDescription;
+    private TableColumn colDescription;
     @FXML
-    private TableColumn<?, ?> colPrice;
+    private TableColumn colPrice;
+    @FXML
+    private MenuItem idMenuEventos;
+    @FXML
+    private MenuItem idMenuProductos;
+    @FXML
+    private MenuItem idMenuUsuarios;
+    @FXML
+    private MenuItem idMenuTel;
+    private ObservableList<ExpenseBean> expenseData;
+    private ObservableList<UserBean> userData;
 
     /**
      * To close app or session
@@ -89,7 +112,8 @@ public class PC04ExpenseController {
     /**
      * The business logic object containing all business methods.
      */
-    private UserLogic ilogic;
+
+    private ExpenseLogic ilogic;
 
     /**
      * UserBean object
@@ -131,8 +155,9 @@ public class PC04ExpenseController {
      *
      * @param ILogic ilogic
      */
-    public void setILogic(UserLogic ILogic) {
-        this.ilogic = ILogic;
+
+    public void setILogic(ExpenseLogic iLogic) {
+        this.ilogic = iLogic;
     }
 
     /**
@@ -152,7 +177,7 @@ public class PC04ExpenseController {
      * @throws java.io.IOException InputOuput exception
      */
     public void initStage(Parent root) throws IOException {
-        LOGGER.info("Initializing Principal stage.");
+        LOGGER.info("Initializing PrincipalExpense stage.");
         //Create a scene associated to the node graph root.
         Scene scene = new Scene(root);
         stage = new Stage();
@@ -164,16 +189,27 @@ public class PC04ExpenseController {
         stage.setTitle("Principal");
         //Set window's events handlers
         stage.setOnShowing(this::windowShow);
-
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
-        btnEvents.setOnAction(this::goEvents);
-        btnExpenses.setOnAction(this::goExpenses);
-        btnProducts.setOnAction(this::goProducts);
-        btnUsers.setOnAction(this::goUsers);
-        btnPhones.setOnAction(this::goPhones);
+        idMenuEventos.setOnAction(this::goEvents);
+//        idMenuProductos.setOnAction(this::goProducts);
+//        idMenuUsuarios.setOnAction(this::goUsers);
+//        idMenuTel.setOnAction(this::goPhones);
         btnSeeAll.setOnAction(this::seeAll);
-        btnUpdate.setOnAction(this::seeMonth);
+        btnSeeMonth.setOnAction(this::seeMonth);
+        //las columnas van a coger el valos de los atributos
+        /* colDate.setCellValueFactory(
+                new PropertyValueFactory<>("date"));*/
+    /*    userData = FXCollections.observableArrayList(ilogic.getAllUsers());
+        tabExpenses.setItems(userData);*/
+        colUser.setCellValueFactory(
+                new PropertyValueFactory<>("user"));
+        colType.setCellValueFactory(
+                new PropertyValueFactory<>("type"));
+        colDescription.setCellValueFactory(
+                new PropertyValueFactory<>("description"));
+        colPrice.setCellValueFactory(
+                new PropertyValueFactory<>("price"));
         //Show primary window
         stage.show();
 
@@ -191,8 +227,8 @@ public class PC04ExpenseController {
      * @param event WindowEvent event
      */
     private void windowShow(WindowEvent event) {
-        LOGGER.info("Beginning Principal::windowShow");
-
+        LOGGER.info("Beginning PrincipalExpense::windowShow");
+        /*
         String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
 
         lblDate.setText("Último acceso: " + date);
@@ -201,7 +237,7 @@ public class PC04ExpenseController {
         lblLogin.setText("Login: " + user.getLogin());
         //TODO
         lblTxoko.setText("Txoko: ");
-
+         */
         menu.setMnemonicParsing(true);
         menu.setText("_Menu");
 
@@ -212,6 +248,10 @@ public class PC04ExpenseController {
 
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
+        btnSeeAll.setDisable(false);
+        btnSeeMonth.setDisable(false);
+        tabExpenses.setEditable(false);
+
     }
 
     /**
@@ -254,70 +294,114 @@ public class PC04ExpenseController {
     }
 
     private void goEvents(ActionEvent event) {
+        LOGGER.info("clickOn Eventos Menu");
+        try {
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            EventLogic eventLogic = ILogicFactory.getEventLogic();
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05Events.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC05EventsController controller = (PC05EventsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(eventLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
 
     }
 
+    /*
     private void goProducts(ActionEvent event) {
-
-    }
-
-    private void goExpenses(ActionEvent event) {
+          LOGGER.info("clickOn Productos Menu");
+          try{
+           //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            ILogicProduct productLogic = ILogicFactory.getProductLogic();
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(productLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        }catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
 
     }
 
     private void goUsers(ActionEvent event) {
-
+          LOGGER.info("clickOn Usuarios Menu");
+          try{
+          //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            ILogic usersLogic = ILogicFactory.getIlogicImplementation();
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC03UserController controller = (PC03UserController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(usersLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        }catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void goPhones(ActionEvent event) {
-
+          LOGGER.info("clickOn Telefonos Menu");
+         try{
+          //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            ILogicTelephone usersLogic = ILogicFactory.getTelephoneLogic();
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumber.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC08PhoneNumberController controller = (PC08PhoneNumberController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(usersLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+         }catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
-
+     */
+    @SuppressWarnings("empty-statement")
     private void seeAll(ActionEvent event) {
-       // ObservableList<Expense> expenses = ilogic.findExpensesAll(
-            //    Integer.parseInt(lblTxoko.getText()));
-        tabExpenses.setEditable(false);
-        
-        colDate.setMinWidth(100);
-        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        
-        colidUser.setMinWidth(100);
-        colidUser.setCellValueFactory(new PropertyValueFactory<>("idUser"));
-        
-        colType.setMinWidth(150);
-        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        
-        colPrice.setMinWidth(100);
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
-        colDescription.setMinWidth(200);
-        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        
-       // tabExpenses.setItems(expenses);
-       // tabExpenses.getColumns().addAll(colDate, colidUser, colType, colPrice, colDescription);
+        // ObservableList<Expense> expenses = ilogic.findExpensesAll(
+         //   Integer.parseInt(lblTxoko.getText()));
+
+        expenseData = FXCollections.observableArrayList(ilogic.getAllExpense());
+        tabExpenses.setItems(expenseData);
+
+        // tabExpenses.setItems(expenses);
+        // tabExpenses.getColumns().addAll(colDate, colidUser, colType, colPrice, colDescription);
     }
 
     private void seeMonth(ActionEvent event) {
-       // ObservableList<Expense> expenses = ilogic.findExpensesMonth(
-         //       Integer.parseInt(lblTxoko.getText()));
-        tabExpenses.setEditable(false);
-        
-        colDate.setMinWidth(100);
-        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        
-        colidUser.setMinWidth(100);
-        colidUser.setCellValueFactory(new PropertyValueFactory<>("idUser"));
-        
-        colType.setMinWidth(150);
-        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        
-        colPrice.setMinWidth(100);
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
-        colDescription.setMinWidth(200);
-        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        
-       // tabExpenses.setItems(expenses);
+        // ObservableList<Expense> expenses = ilogic.findExpensesMonth(
+        //       Integer.parseInt(lblTxoko.getText()));
+
+        // tabExpenses.setItems(expenses);
         //tabExpenses.getColumns().addAll(colDate, colidUser, colType, colPrice, colDescription);
     }
 

@@ -35,15 +35,18 @@ public class ILogicFactory {
     }
     */
     public static EventLogic getEventLogic() {
-        return new EventLogicController();
+        return new EventLogicControllerTEST();
     }
-    /*
-     public static ProductLogic getProductLogic() {
-        return new ProductLogicController();
-    }
+    
+     public static ILogicProduct getProductLogic() {
+        return new ILogicImplementationProduct();
+    } 
      public static ExpenseLogic getExpenseLogic() {
-        return new ExpenseLogicController();
+        return new ExpenseLogicControllerTEST();
     }
-    */
+    
+     public static ILogicTelephone getTelephoneLogic() {
+        return new ILogicImplementationTelephone();
+    } 
 
 }
