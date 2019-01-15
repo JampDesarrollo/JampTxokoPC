@@ -24,10 +24,11 @@ import java.util.List;
  */
 public interface EventLogic {
 
-    public void deleteEvent(EventBean event)throws DeleteException;
+    public void deleteEvent(Integer idEvent)throws DeleteException;
     public void createEvent(EventBean event)throws CreateException;
     public Collection<EventBean> findAllEvents(Integer idTxoko) throws ReadException;
     public EventBean findEventById(Integer idEvent, Integer idTxoko) throws ReadException, IdNotOkException;
     public EventBean findEventByName(String name, Integer idTxoko) throws ReadException, NameNotOkException;
     public void attendEvent(Integer idEvent, Integer idUser)throws UpdateException;
+    public Collection getAllEvents();
 }
