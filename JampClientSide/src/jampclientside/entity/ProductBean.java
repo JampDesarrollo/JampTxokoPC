@@ -5,7 +5,8 @@
  */
 package jampclientside.entity;
 
-import java.util.Date;
+
+import java.io.Serializable;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,7 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Julen
  */
-public class Product{
+public class ProductBean implements Serializable{
 
     /**
      * 
@@ -49,7 +50,7 @@ public class Product{
         return idProduct;
     }
     
-    public Product(){
+    public ProductBean(){
      this.idProduct = new SimpleIntegerProperty();
      this.name = new SimpleStringProperty ();
      this.description = new SimpleStringProperty();
@@ -58,7 +59,7 @@ public class Product{
 
      }
     
-        public Product(String name,
+        public ProductBean(String name,
                     String description,
                     Integer stock){
         this.name=new SimpleStringProperty(name);

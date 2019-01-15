@@ -5,7 +5,7 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Product;
+import jampclientside.entity.ProductBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -21,44 +21,44 @@ import java.util.logging.Logger;
  * @author 2dam
  */
 public class ProductLogicControllerTEST implements ProductLogic{
-    private ArrayList<Product> product;
+    private ArrayList<ProductBean> product;
     private static final Logger LOGGER = Logger.getLogger("package.class");  
       public ProductLogicControllerTEST(){
         LOGGER.info("Building fake events data for testing UI.");
         product=new ArrayList();
         //Create 25 UserBean fake data objects.
         for(int i=0;i<25;i++)
-            product.add(new Product("Coca", "zero", i));
+            product.add(new ProductBean("Coca", "zero", i));
     }
 
     @Override
-    public void deleteProduct(Product product) throws DeleteException {
+    public void deleteProduct(ProductBean product) throws DeleteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void updateProduct(Product product) throws UpdateException {
+    public void updateProduct(ProductBean product) throws UpdateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createProduct(Product product) throws CreateException {
+    public void createProduct(ProductBean product) throws CreateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Product> findProductById(Integer idProduct) throws ReadException {
+    public List<ProductBean> findProductById(Integer idProduct) throws ReadException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException {
+    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Product> findAllProducts() throws ReadException {
-        List<Product> productos = null;
+    public List<ProductBean> findAllProducts() throws ReadException {
+        List<ProductBean> productos = null;
         try{
             LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.

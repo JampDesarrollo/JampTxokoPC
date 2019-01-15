@@ -26,7 +26,7 @@ public class Expense implements Serializable {
     /**
      * Id of the user.
      */
-    private User user;
+    private UserBean user;
     
     /**
      * Date of the expense.
@@ -65,14 +65,14 @@ public class Expense implements Serializable {
     /**
      * @return the idUser
      */
-    public User getUser() {
+    public UserBean getUser() {
         return user;
     }
 
     /**
      * @param idUser the idUser to set
      */
-    public void setUser(User user) {
+    public void setUser(UserBean user) {
         this.user = user;
     }
 

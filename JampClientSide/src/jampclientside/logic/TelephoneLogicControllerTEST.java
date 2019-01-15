@@ -5,72 +5,47 @@
  */
 package jampclientside.logic;
 
+import java.util.logging.Logger;
 import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-import messageuserbean.UserBean;
 
 /**
  *
- * Clase que implementa la interfaz de Logica. Class that implements the logic
- * interface.
- *
- * @author Ander
+ * @author odoo
  */
-public class TelephoneLogicController implements TelephoneLogic {
+public class TelephoneLogicControllerTEST implements TelephoneLogic {
+      private ArrayList<TelephoneBean> telephones;
+      public TelephoneLogicControllerTEST(){
+        telephones=new ArrayList();
+        //Create 25 UserBean fake data objects.
+        for(int i=0;i<25;i++)
+            telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, i));
+    
+    }
 
-    private UserBean returnUser;
-
-    /**
-     * Atributo para poder sacar textos de información. Attribute to appear the
-     * information text.
-     */
-    private static final Logger LOGGER
-            = Logger.getLogger("jamp.pc.logic.IlogicImplementationTelephone");
-
-    /**
-     * 
-     * @param phone
-     * @throws DeleteException 
-     */
     @Override
     public void deleteTelephone(TelephoneBean phone) throws DeleteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * 
-     * @param phone
-     * @throws UpdateException 
-     */
     @Override
     public void updateTelephone(TelephoneBean phone) throws UpdateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * 
-     * @param phone
-     * @throws CreateException 
-     */
     @Override
     public void createTelephone(TelephoneBean phone) throws CreateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * 
-     * @return
-     * @throws ReadException 
-     */
     @Override
     public List<TelephoneBean> findAllTelephone() throws ReadException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
+    
 }

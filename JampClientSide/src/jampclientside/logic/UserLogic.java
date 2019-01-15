@@ -46,4 +46,6 @@ public interface UserLogic {
      */
     public UserBean userLogin(UserBean user) throws UserNotExistException, PasswordNotOkException, Exception;
 
+    public UserBean userForgotPassword(String text);
+
 }
