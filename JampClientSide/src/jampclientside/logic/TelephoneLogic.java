@@ -5,7 +5,7 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Telephone;
+import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ReadException;
@@ -19,33 +19,33 @@ import java.util.List;
  *
  * @author Julen
  */
-public interface ILogicTelephone {
+public interface TelephoneLogic {
 
     /**
      * 
      * @param phone
      * @throws DeleteException 
      */
-    public void deleteTelephone(Telephone phone) throws DeleteException;
+    public void deleteTelephone(TelephoneBean phone) throws DeleteException;
     
     /**
      * 
      * @param phone
      * @throws UpdateException 
      */
-    public void updateTelephone(Telephone phone) throws UpdateException;
+    public void updateTelephone(TelephoneBean phone) throws UpdateException;
     
     /**
      * 
      * @param phone
      * @throws CreateException 
      */
-    public void createTelephone(Telephone phone) throws CreateException;
+    public void createTelephone(TelephoneBean phone) throws CreateException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findAllTelephone() throws ReadException;
+    public List<TelephoneBean> findAllTelephone();
 }

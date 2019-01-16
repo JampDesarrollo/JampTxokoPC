@@ -5,7 +5,10 @@
  */
 package jampclientside.entity;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -13,12 +16,26 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Julen
  */
-public class Telephone {
+public class TelephoneBean implements Serializable{
     private SimpleIntegerProperty idTelephone;
-    private SimpleStringProperty nombre;
+    private SimpleStringProperty name;
     private SimpleIntegerProperty telephone;
     private SimpleStringProperty description;
 
+    public TelephoneBean(){
+        this.idTelephone = new SimpleIntegerProperty();
+        this.description = new SimpleStringProperty();
+        this.telephone = new SimpleIntegerProperty ();
+        this.name = new SimpleStringProperty ();
+     }
+     
+    public TelephoneBean(String name,
+                    String description,
+                    Integer telephone){
+        this.name=new SimpleStringProperty(name);
+        this.description=new SimpleStringProperty(description);
+        this.telephone=new SimpleIntegerProperty(telephone);
+    }
     /**
      * @return the id
      */
@@ -36,15 +53,15 @@ public class Telephone {
     /**
      * @return the nombre
      */
-    public String getNombre() {
-        return this.nombre.get();
+    public String getName() {
+        return this.name.get();
     }
 
     /**
      * @param nombre the nombre to set
      */
-    public void setNombre(String nombre) {
-        this.nombre.set(nombre);
+    public void setName(String nombre) {
+        this.name.set(nombre);
     }
 
     /**

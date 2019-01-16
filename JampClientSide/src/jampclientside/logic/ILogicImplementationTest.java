@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author 2dam
  */
-public class ILogicImplementationTest implements ILogic {
+public class ILogicImplementationTest implements UserLogic {
 
     private final ArrayList<UserBean> users = new ArrayList<>();
 
@@ -60,6 +60,11 @@ public class ILogicImplementationTest implements ILogic {
             usser = ((UserBean) usersWithLogin.get(1));
         }
         return usser;
+    }
+
+    @Override
+    public UserBean userForgotPassword(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

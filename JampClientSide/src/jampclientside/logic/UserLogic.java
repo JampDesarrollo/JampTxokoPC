@@ -16,7 +16,7 @@ import messageuserbean.UserBean;
  *
  * @author Paula
  */
-public interface ILogic {
+public interface UserLogic {
 
     /**
      * already exist or not.
@@ -45,5 +45,7 @@ public interface ILogic {
      *
      */
     public UserBean userLogin(UserBean user) throws UserNotExistException, PasswordNotOkException, Exception;
+
+    public UserBean userForgotPassword(String text);
 
 }

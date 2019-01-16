@@ -5,7 +5,6 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.logic.ILogic;
 import jampclientside.exceptions.UserLoginExistException;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -32,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
+import jampclientside.logic.UserLogic;
 
 /**
  * FXML Controller class for users sign up view. It contains event handlers
@@ -140,7 +140,7 @@ public class PC02SignUpController {
     /**
      * Class that implements iLogic interface
      */
-    private ILogic iLogic;
+    private UserLogic iLogic;
     /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
@@ -157,7 +157,7 @@ public class PC02SignUpController {
      *
      * @param iLogic iLogic to set
      */
-    public void setILogic(ILogic iLogic) {
+    public void setILogic(UserLogic iLogic) {
         this.iLogic = iLogic;
     }
 
