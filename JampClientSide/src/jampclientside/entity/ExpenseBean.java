@@ -7,6 +7,7 @@ package jampclientside.entity;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -20,7 +21,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class ExpenseBean implements Serializable {
 
     private SimpleIntegerProperty idExpense;
-    private Date date;
+    private SimpleObjectProperty<LocalDateTime> date;
     private SimpleObjectProperty<UserBean> user;
     private SimpleStringProperty type;
     private SimpleStringProperty description;
@@ -28,22 +29,22 @@ public class ExpenseBean implements Serializable {
 
     public ExpenseBean() {
         this.idExpense = new SimpleIntegerProperty();
-        this.date = new Date();
+        this.date = new SimpleObjectProperty<>();
         this.user = new SimpleObjectProperty();
         this.type = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
         this.price = new SimpleFloatProperty();
     }
 
-    public ExpenseBean(UserBean user, String type,
+    public ExpenseBean(LocalDateTime date, UserBean user, String type,
             String description,
             Float price) {
+        this.date = new SimpleObjectProperty<>(date);
         this.user = new SimpleObjectProperty(user);
         this.type = new SimpleStringProperty(type);
         this.description = new SimpleStringProperty(description);
         this.price = new SimpleFloatProperty(price);
     }
-
 
     /**
      * @return the idExpense
@@ -57,20 +58,6 @@ public class ExpenseBean implements Serializable {
      */
     public void setIdExpense(Integer idExpense) {
         this.idExpense.set(idExpense);
-    }
-
-    /**
-     * @return the date
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     /**
@@ -127,6 +114,20 @@ public class ExpenseBean implements Serializable {
      */
     public void setPrice(Float price) {
         this.price.set(price);
+    }
+
+    /**
+     * @return the date
+     */
+    public LocalDateTime getDate() {
+        return this.date.get();
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(LocalDateTime date) {
+        this.date.set(date);
     }
 
 }

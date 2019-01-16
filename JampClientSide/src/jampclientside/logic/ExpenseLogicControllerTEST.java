@@ -7,6 +7,8 @@ package jampclientside.logic;
 
 import jampclientside.entity.ExpenseBean;
 import jampclientside.entity.UserBean;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -21,6 +23,7 @@ public class ExpenseLogicControllerTEST implements ExpenseLogic {
     // List for storing users data.
     private ArrayList<UserBean> users;
     private ArrayList<ExpenseBean> expense;
+    private final LocalDateTime fechaActual = LocalDateTime.now();
 
     public ExpenseLogicControllerTEST() {
         //primero obtenemos los usuarios
@@ -30,10 +33,10 @@ public class ExpenseLogicControllerTEST implements ExpenseLogic {
         UserBean user = new UserBean();
         user.setLogin("paula");
         users.add(user);
-
         for (float i = 0; i < 25; i++) {
-            expense.add(new ExpenseBean(user, "Evento" + i, "Cumple" + i, i));
+            expense.add(new ExpenseBean(fechaActual, user, "Evento" + i, "Cumple" + i, i));
         }
+        LOGGER.info("El usuario es "+user.getLogin());
     }
 
     @Override
@@ -47,11 +50,10 @@ public class ExpenseLogicControllerTEST implements ExpenseLogic {
         return users;
 
     }
-    
-    @Override
-     public Collection getThisMonthExpense(){
-     return null;
-     }
 
+    @Override
+    public Collection getThisMonthExpense() {
+        return null;
+    }
 
 }
