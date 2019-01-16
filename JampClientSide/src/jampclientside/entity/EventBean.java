@@ -5,49 +5,52 @@
  */
 package jampclientside.entity;
 
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-
 /**
  *
  * @author Usuario
  */
-public class EventBean implements Serializable{
-     private SimpleIntegerProperty idEvent;
-     private SimpleStringProperty description;
-     private SimpleFloatProperty price;
-     private SimpleStringProperty name;
-     private SimpleStringProperty img;
-     private Date date;
-     private SimpleObjectProperty<TxokoBean>txoko;
-     private SimpleObjectProperty<UserBean>users;
-     
-     public EventBean(){
-     this.idEvent = new SimpleIntegerProperty();
-     this.description = new SimpleStringProperty();
-     this.price = new SimpleFloatProperty ();
-     this.name = new SimpleStringProperty ();
-     this.img = new SimpleStringProperty();
-     this.date = new Date();
-     }
-     
-    public EventBean(String name,
-                    String description,
-                    String img,
-                    Float price){
-        this.name=new SimpleStringProperty(name);
-        this.description=new SimpleStringProperty(description);
-        this.img=new SimpleStringProperty(img);
-        this.price=new SimpleFloatProperty(price);
+public class EventBean implements Serializable {
+
+    private SimpleIntegerProperty idEvent;
+    private SimpleStringProperty description;
+    private SimpleFloatProperty price;
+    private SimpleStringProperty name;
+    private SimpleStringProperty img;
+    private SimpleObjectProperty<LocalDateTime>date;
+    private SimpleObjectProperty<TxokoBean> txoko;
+    private SimpleObjectProperty<UserBean> users;
+
+    public EventBean() {
+        this.idEvent = new SimpleIntegerProperty();
+        this.description = new SimpleStringProperty();
+        this.price = new SimpleFloatProperty();
+        this.name = new SimpleStringProperty();
+        this.img = new SimpleStringProperty();
+        this.date = new SimpleObjectProperty<>();
     }
-   
+
+    public EventBean(String name,
+            String description,
+            LocalDateTime date,
+            String img,
+            Float price) {
+        this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
+        this.date = new SimpleObjectProperty<>(date);
+        this.img = new SimpleStringProperty(img);
+        this.price = new SimpleFloatProperty(price);
+    }
+
     /**
      * @return the idEvent
      */
@@ -89,6 +92,8 @@ public class EventBean implements Serializable{
     public void setPrice(Float price) {
         this.price.set(price);
     }
+    
+ 
 
     /**
      * @return the name
@@ -149,18 +154,25 @@ public class EventBean implements Serializable{
     /**
      * @return the date
      */
-    public Date getDate() {
-        return date;
+    public LocalDateTime getDate() {
+        return this.date.get();
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(LocalDateTime date) {
+        this.date.set(date);
     }
 
- 
+
+    public String getDateAsString() {
+        SimpleDateFormat smp = new SimpleDateFormat("yyyy MMMMM dd");
+        String strDate = (null == date || null == date.get())
+                ? "" : smp.format(date.get());
+        
+        return strDate;
+    }
     
-  
+    
 }

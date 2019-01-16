@@ -43,23 +43,30 @@ import jampclientside.exceptions.IdNotOkException;
 import jampclientside.exceptions.ReadException;
 import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ILogicFactory;
-import jampclientside.logic.ProductLogic;
-import jampclientside.logic.TelephoneLogic;
 import jampclientside.ui.controller.PC03UserController;
 import jampclientside.ui.controller.PC04ExpenseController;
 import jampclientside.ui.controller.PC06FTPClientController;
 import jampclientside.ui.controller.PC07ProductsController;
-import jampclientside.ui.controller.PC08PhoneNumbersController;
+import jampclientside.ui.controller.PC08PhoneNumberController;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import jampclientside.logic.ProductLogic;
+import jampclientside.logic.TelephoneLogic;
 
 /**
  * FXML Controller class
@@ -128,7 +135,7 @@ public class PC05EventsController {
     @FXML
     private Button btnLogOut2;
     @FXML
-    private TableView<EventBean> tableView;
+    private TableView tableView;
     @FXML
     private ComboBox<String> cbSearch;
     @FXML
@@ -143,7 +150,9 @@ public class PC05EventsController {
     private TableColumn tbcolPrice;
     @FXML
     private DatePicker datePicker;
+    private ObservableValue ov;
     private ObservableList<EventBean> eventsData;
+    private LocalDate fechaActual;
 
     /**
      * Initializes the controller class.
@@ -192,13 +201,26 @@ public class PC05EventsController {
         cbSearch.setOnAction(this::comboBoxOption);
         //boton de busqueda
         btnSearch.setOnAction(this::searchButton);
+        //cuando pulse en el date picker 
+        datePicker.setOnAction(new EventHandler() {
+            public void handle(Event t) {
+                fechaActual = datePicker.getValue();
+                System.err.println("Selected date: " + fechaActual);
+                tbcolDate.setCellValueFactory(
+                        new PropertyValueFactory<>("date"));
+                labelError.setVisible(true);
+                labelError.setText("date" + fechaActual);
+
+            }
+        });
         //las columnas van a coger el valos de los atributos
         tbcolName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
         tbcolDescription.setCellValueFactory(
                 new PropertyValueFactory<>("description"));
-        /*tbcolDate.setCellValueFactory(
-                    new PropertyValueFactory<>("date"));*/
+        tbcolDate.setCellValueFactory(
+                new PropertyValueFactory<>("date"));
+        tbcolDate.setEditable(true);
         tbcolImg.setCellValueFactory(
                 new PropertyValueFactory<>("img"));
         tbcolPrice.setCellValueFactory(
@@ -300,7 +322,7 @@ public class PC05EventsController {
     public void productsWindow(ActionEvent ev) {
         LOGGER.info("clickOn Products Menu");
         try {
-             //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
             ProductLogic productLogic = ILogicFactory.getProductLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
@@ -313,7 +335,7 @@ public class PC05EventsController {
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
-//            controller.initStage(root);
+            controller.initStage(root);
             cbSearch.requestFocus();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
@@ -332,7 +354,7 @@ public class PC05EventsController {
             //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
             //obtener el controlador
-            PC08PhoneNumbersController controller = (PC08PhoneNumbersController) loader.getController();
+            PC08PhoneNumberController controller = (PC08PhoneNumberController) loader.getController();
             //le mando el objeto logica al controlador 
             controller.setILogic(telephoneLogic);
             //a ese controlador le paso el stage
@@ -344,7 +366,7 @@ public class PC05EventsController {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
 
-    } 
+    }
 
     //ventana de los gastos
     public void expenseWindow(ActionEvent ev) {
@@ -416,6 +438,7 @@ public class PC05EventsController {
 
     //añadir evento
     public void addEvent(ActionEvent ev) {
+        LOGGER.info("clickOn addevent");
         Alert dialogoAlerta = new Alert(AlertType.CONFIRMATION);
         dialogoAlerta.setTitle("CONFIRMACION");
         dialogoAlerta.setContentText("¿Estas seguro que deseas añadir un evento?");
@@ -427,44 +450,48 @@ public class PC05EventsController {
         cancelButton.setId("buttonCancel");
         //si da en el buttonAdd que se añada una fila
         if (result.get() == ButtonType.OK) {
+            LOGGER.info("clickOn aceptar");
             //se habilita el date picker
             datePicker.setDisable(false);
             //añadir una fila a la tabla
             //el txoko se puede coger del label o de la base de datos
             //añadir a la base de datos y eliminar la fila 
             EventBean event = new EventBean();
+
             //añadir fila en blanco
             tableView.getItems().add(null);
             tbcolName.setCellValueFactory(
                     new PropertyValueFactory<>("name"));
             tbcolName.setCellFactory(TextFieldTableCell.forTableColumn());
-           
+
             tbcolDescription.setCellValueFactory(
                     new PropertyValueFactory<>("description"));
             tbcolDescription.setCellFactory(TextFieldTableCell.forTableColumn());
-            /*  tbcolDate.setCellValueFactory(
-                    new PropertyValueFactory<>("date"));
-            tbcolDate.setCellFactory(TextFieldTableCell.forTableColumn());*/
+            /*tbcolDate.setCellValueFactory(
+                    new PropertyValueFactory<>("date"));*/
             tbcolImg.setCellValueFactory(
                     new PropertyValueFactory<>("img"));
             tbcolImg.setCellFactory(TextFieldTableCell.forTableColumn());
-            /*tbcolPrice.setCellValueFactory(
+
+            tbcolPrice.setCellValueFactory(
                     new PropertyValueFactory<>("price"));
-            tbcolPrice.setCellFactory(TextFieldTableCell.forTableColumn());*/
+            tbcolPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+ /*
             Alert dialog = new Alert(AlertType.CONFIRMATION);
             dialog.setTitle("CONFIRMACION");
             dialog.setContentText("El nuevo evento va a ser añadido");
             dialog.setHeaderText("Añadir un evento");
             Optional<ButtonType> resultado = dialog.showAndWait();
             Button aceptar = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-            aceptar.setId("aceptar");
-
+            aceptar.setId("aceptar");*/
         }
 
     }
 
     //eliminar evento
     public void deleteEvent(ActionEvent ev) {
+        LOGGER.info("clickOn delete event");
+        //mirar si la fila esta seleccionada
         boolean isSelected = isSelected();
         if (isSelected) {
             Alert dialogoAlerta = new Alert(AlertType.CONFIRMATION);
@@ -497,6 +524,7 @@ public class PC05EventsController {
 
     //para mirar si ha seleccionado la fila de la tabla
     private boolean isSelected() {
+        LOGGER.info("Mirando si el text field esta vacio o no");
         boolean isSelected = false;
         //si es diferente a vacio
         if (!tableView.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -576,6 +604,10 @@ public class PC05EventsController {
             dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
             dialogoAlerta.showAndWait();
         }*/
+            Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+            dialogoAlerta.setTitle("INFORMACION");
+            dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
+            dialogoAlerta.showAndWait();
         } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del evento")) {
             //miramos si el textfield esta vacio o no
             boolean tfIDEmpty = textEmptyOrNot();
@@ -592,8 +624,8 @@ public class PC05EventsController {
                 dialogoAlerta.setTitle("INFORMACION");
                 dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
                 dialogoAlerta.showAndWait();
-                */}
-            //si esta vecio
+                 */
+            } //si esta vecio
             else {
                 tfSearch.setStyle("-fx-border-color: red;");
                 labelError.setText("Tienes que escribir el id de un evento");

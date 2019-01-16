@@ -6,6 +6,7 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -27,8 +28,8 @@ public class UserBean implements Serializable{
     private SimpleObjectProperty<UserStatus> userStatus;
     private SimpleObjectProperty<UserPrivilege> userPrivilege;
     private SimpleStringProperty password;
-    private Date lastAccess;
-    private Date lastPasswordChange;
+    private SimpleObjectProperty<LocalDateTime> lastAccess;
+    private SimpleObjectProperty<LocalDateTime> lastPasswordChange;
     
     public UserBean(){
      this.idUser = new SimpleIntegerProperty();
@@ -41,8 +42,8 @@ public class UserBean implements Serializable{
      this.userStatus = new SimpleObjectProperty<>();
      this.userPrivilege = new SimpleObjectProperty<>();
      this.password = new SimpleStringProperty();
-     this.lastAccess = new Date();
-     this.lastPasswordChange = new Date();
+     this.lastAccess = new SimpleObjectProperty<>();
+     this.lastPasswordChange = new SimpleObjectProperty<>();
    
      }
 
@@ -115,7 +116,12 @@ public class UserBean implements Serializable{
     public void setLogin(String login) {
         this.login.set(login);
     }
-
+  
+     @Override
+    public String toString() {
+        return this.login.get();
+    }
+    
     /**
      * @return the email
      */
@@ -189,30 +195,31 @@ public class UserBean implements Serializable{
     /**
      * @return the lastAccess
      */
-    public Date getLastAccess() {
-        return lastAccess;
+    public LocalDateTime getLastAccess() {
+        return this.lastAccess.get();
     }
 
     /**
      * @param lastAccess the lastAccess to set
      */
-    public void setLastAccess(Date lastAccess) {
-        this.lastAccess = lastAccess;
+    public void setLastAccess(LocalDateTime lastAccess) {
+        this.lastAccess.set(lastAccess);
     }
 
     /**
      * @return the lastPasswordChange
      */
-    public Date getLastPasswordChange() {
-        return lastPasswordChange;
+    public LocalDateTime getLastPasswordChange() {
+        return this.lastPasswordChange.get();
     }
 
     /**
      * @param lastPasswordChange the lastPasswordChange to set
      */
-    public void setLastPasswordChange(Date lastPasswordChange) {
-        this.lastPasswordChange = lastPasswordChange;
+    public void setLastPasswordChange(LocalDateTime lastPasswordChange) {
+        this.lastPasswordChange.set(lastPasswordChange);
     }
+
     
     
     

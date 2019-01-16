@@ -8,9 +8,8 @@ package jampclientside.ui.controller;
 import jampclientside.entity.ExpenseBean;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
-import jampclientside.logic.UserLogic;
+import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicFactory;
-import jampclientside.logic.ProductLogic;
 import java.io.IOException;
 import static java.lang.Math.E;
 import java.text.SimpleDateFormat;
@@ -42,7 +41,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
-import jampclientside.logic.UserLogic;
+import jampclientside.logic.ProductLogic;
 
 /**
  * FXML Controller class
@@ -112,7 +111,6 @@ public class PC04ExpenseController {
     /**
      * The business logic object containing all business methods.
      */
-
     private ExpenseLogic ilogic;
 
     /**
@@ -155,7 +153,6 @@ public class PC04ExpenseController {
      *
      * @param ILogic ilogic
      */
-
     public void setILogic(ExpenseLogic iLogic) {
         this.ilogic = iLogic;
     }
@@ -198,10 +195,8 @@ public class PC04ExpenseController {
         btnSeeAll.setOnAction(this::seeAll);
         btnSeeMonth.setOnAction(this::seeMonth);
         //las columnas van a coger el valos de los atributos
-        /* colDate.setCellValueFactory(
-                new PropertyValueFactory<>("date"));*/
-    /*    userData = FXCollections.observableArrayList(ilogic.getAllUsers());
-        tabExpenses.setItems(userData);*/
+         colDate.setCellValueFactory(
+                new PropertyValueFactory<>("date"));
         colUser.setCellValueFactory(
                 new PropertyValueFactory<>("user"));
         colType.setCellValueFactory(
