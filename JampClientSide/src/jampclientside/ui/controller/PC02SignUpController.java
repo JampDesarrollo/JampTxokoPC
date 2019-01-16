@@ -5,7 +5,11 @@
  */
 package jampclientside.ui.controller;
 
+
+import jampclientside.entity.UserBean;
+import jampclientside.logic.ILogic;
 import jampclientside.exceptions.UserLoginExistException;
+import jampclientside.logic.UserLogic;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.logging.Level;
@@ -30,8 +34,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import messageuserbean.UserBean;
-import jampclientside.logic.UserLogic;
 
 /**
  * FXML Controller class for users sign up view. It contains event handlers
@@ -321,12 +323,12 @@ public class PC02SignUpController {
             if (filled && fieldsLength && emailCorrect && passwMatch && passwLen) {
                 imgLoading.setVisible(true);
                 Timestamp now = new Timestamp(System.currentTimeMillis());
-                UserBean user = new UserBean(tfLogin.getText().trim(),
+                /*UserBean user = new UserBean(tfLogin.getText().trim(),
                         tfEmail.getText().trim(), tfFullName.getText().trim(),
-                        pfPassw.getText().trim(), now, now);
+                        pfPassw.getText().trim(), now, now);*/
                 LOGGER.info("UserSignUp of user");
                 //Recibo la Ilogic que me pasa Paula
-                iLogic.userSignUp(user);
+                //iLogic.createUser(user);
 
                 this.stage.hide();
                 FXMLLoader loader = new FXMLLoader(getClass()
@@ -340,14 +342,14 @@ public class PC02SignUpController {
                         = (PC03UserController) loader.getController();
                 controller.setILogic(iLogic);
                 controller.setStage(stage);
-                controller.setUser(user);
+               // controller.setUser(user);
                 //inizializo el stage
                 imgLoading.setVisible(false);
                 controller.initStage(root);
 
             }
 
-        } catch (UserLoginExistException e) {
+       /* } catch (UserLoginExistException e) {
             lblLoginW.setText("Ese nombre de usuario existe");
             lblLoginW.setStyle("-fx-text-inner-color: red;");
             lblLoginW.setVisible(true);
@@ -356,7 +358,7 @@ public class PC02SignUpController {
             tfLogin.selectAll();
             LOGGER.log(Level.SEVERE, " El login de usuario ya existe. {0}",
                     e.getMessage());
-            imgLoading.setVisible(false);
+            imgLoading.setVisible(false);*/
         } catch (IOException e) {
             lblRpasswW.setText("Ha habido un error");
             lblRpasswW.setStyle("-fx-text-inner-color: red;");

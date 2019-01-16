@@ -6,47 +6,70 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
- * @author WIN10
+ * @author Ander
  */
 public class UserBean implements Serializable{
+
+    /**
+     *
+     */
+
     private SimpleIntegerProperty idUser;
-    private SimpleObjectProperty<ExpenseBean>expense;
-    private SimpleObjectProperty<EventBean>events;
-    private SimpleObjectProperty<TxokoBean>txoko;
+    /**
+     *
+     */
+
+    private SimpleObjectProperty<TxokoBean> txoko;
+    /**
+     *
+     */
+
     private SimpleStringProperty login;
+    /**
+     *
+     */
     private SimpleStringProperty email;
-    private SimpleStringProperty fullName;
-    private SimpleObjectProperty<UserStatus> userStatus;
-    private SimpleObjectProperty<UserPrivilege> userPrivilege;
-    private SimpleStringProperty password;
-    private SimpleObjectProperty<LocalDateTime> lastAccess;
-    private SimpleObjectProperty<LocalDateTime> lastPasswordChange;
+    /**
+     *
+     */
+    private SimpleStringProperty fullname;
+    /**
+     *
+     */
+
+    private SimpleObjectProperty<UserStatus> status;
+    /**
+     *
+     */
+
+    private SimpleObjectProperty<UserPrivilege> privilege;
+    /**
+     *
+     */
+
+    private SimpleStringProperty lastAccess;
     
     public UserBean(){
-     this.idUser = new SimpleIntegerProperty();
-     this.expense = new SimpleObjectProperty<>();
-     this.events = new SimpleObjectProperty<>();
-     this.txoko = new SimpleObjectProperty<>();
-     this.login = new SimpleStringProperty();
-     this.email = new SimpleStringProperty ();
-     this.fullName = new SimpleStringProperty();
-     this.userStatus = new SimpleObjectProperty<>();
-     this.userPrivilege = new SimpleObjectProperty<>();
-     this.password = new SimpleStringProperty();
-     this.lastAccess = new SimpleObjectProperty<>();
-     this.lastPasswordChange = new SimpleObjectProperty<>();
-   
-     }
+        
+    }
 
+    public UserBean(Integer idUser, String login, String email,
+            String fullname, UserStatus status, UserPrivilege privilege) {
+        this.idUser = new SimpleIntegerProperty(idUser);
+        this.login = new SimpleStringProperty(login);
+        this.email = new SimpleStringProperty(email) ;
+        this.fullname = new SimpleStringProperty(fullname);
+        this.status = new SimpleObjectProperty<UserStatus>(status);
+        this.privilege = new SimpleObjectProperty<UserPrivilege>(privilege);
+    }
+    
+    
     /**
      * @return the idUser
      */
@@ -62,41 +85,14 @@ public class UserBean implements Serializable{
     }
 
     /**
-     * @return the expense
-     */
-    public ExpenseBean getExpense() {
-        return this.expense.get();
-    }
-
-    /**
-     * @param expense the expense to set
-     */
-    public void setExpense(ExpenseBean expense) {
-        this.expense.set(expense);
-    }
-
-    /**
-     * @return the events
-     */
-    public EventBean getEvents() {
-        return this.events.get();
-    }
-
-    /**
-     * @param events the events to set
-     */
-    public void setEvents(EventBean events) {
-        this.events.set(events);
-    }
-
-    /**
-     * @return the txoko
+     * @return the idTxoko
      */
     public TxokoBean getTxoko() {
         return this.txoko.get();
     }
 
     /**
+
      * @param txoko the txoko to set
      */
     public void setTxoko(TxokoBean txoko) {
@@ -117,11 +113,12 @@ public class UserBean implements Serializable{
         this.login.set(login);
     }
   
-     @Override
+    @Override
     public String toString() {
         return this.login.get();
     }
     
+
     /**
      * @return the email
      */
@@ -137,90 +134,58 @@ public class UserBean implements Serializable{
     }
 
     /**
-     * @return the fullName
+     * @return the fullname
      */
-    public String getFullName() {
-        return this.fullName.get();
+    public String getFullname() {
+        return this.fullname.get();
     }
 
     /**
-     * @param fullName the fullName to set
+     * @param fullname the fullname to set
      */
-    public void setFullName(String fullName) {
-        this.fullName.set(fullName);
+    public void setFullname(String fullname) {
+        this.fullname.set(fullname);
     }
 
     /**
-     * @return the userStatus
+     * @return the status
      */
-    public UserStatus getUserStatus() {
-        return this.userStatus.get();
+    public UserStatus getStatus() {
+        return this.status.get();
     }
 
     /**
-     * @param userStatus the userStatus to set
+     * @param status the status to set
      */
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus.set(userStatus);
+    public void setStatus(UserStatus status) {
+        this.status.set(status);
     }
 
     /**
-     * @return the userPrivilege
+     * @return the privilege
      */
-    public UserPrivilege getUserPrivilege() {
-        return this.userPrivilege.get();
+    public UserPrivilege getPrivilege() {
+        return this.privilege.get();
     }
 
     /**
-     * @param userPrivilege the userPrivilege to set
+     * @param privilege the privilege to set
      */
-    public void setUserPrivilege(UserPrivilege userPrivilege) {
-        this.userPrivilege.set(userPrivilege);
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return this.password.get();
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password.set(password);
+    public void setPrivilege(UserPrivilege privilege) {
+        this.privilege.set(privilege);
     }
 
     /**
      * @return the lastAccess
      */
-    public LocalDateTime getLastAccess() {
+    public String getLastAccess() {
         return this.lastAccess.get();
     }
 
     /**
      * @param lastAccess the lastAccess to set
      */
-    public void setLastAccess(LocalDateTime lastAccess) {
+    public void setLastAccess(String lastAccess) {
         this.lastAccess.set(lastAccess);
     }
-
-    /**
-     * @return the lastPasswordChange
-     */
-    public LocalDateTime getLastPasswordChange() {
-        return this.lastPasswordChange.get();
-    }
-
-    /**
-     * @param lastPasswordChange the lastPasswordChange to set
-     */
-    public void setLastPasswordChange(LocalDateTime lastPasswordChange) {
-        this.lastPasswordChange.set(lastPasswordChange);
-    }
-
-    
-    
-    
 }

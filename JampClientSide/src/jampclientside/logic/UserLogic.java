@@ -5,47 +5,24 @@
  */
 package jampclientside.logic;
 
-import jampclientside.exceptions.UserNotExistException;
-import jampclientside.exceptions.PasswordNotOkException;
-import jampclientside.exceptions.UserLoginExistException;
-import messageuserbean.UserBean;
+import jampclientside.entity.UserBean;
+import jampclientside.exceptions.BusinessLogicException;
+import java.util.Collection;
+import java.util.List;
 
 /**
- * Es la interfaz de lógica. Si hay que hacer una llamada entre dos objetos de
- * diferentes clases, se necesita una interfaz.
  *
- * @author Paula
+ * @author Ander
  */
 public interface UserLogic {
 
-    /**
-     * already exist or not.
-     *
-     * @param user user that receives.
-     * @throws UserLoginExistException If the user exist it throws this
-     * exception.
-     * @throws Exception If there is not connection with the database jumps this
-     * exception.
-     */
+    public Collection findAllUsers(Integer idTxoko) throws BusinessLogicException;
 
-    public void userSignUp(UserBean user) throws UserLoginExistException, Exception;
+    public void updateUser(UserBean user) throws BusinessLogicException;
 
-    /**
-     *
-     * Method for the user login.
-     *
-     * @param user User that receives.
-     * @return It returns the user.
-     * @throws UserNotExistException If the login doesn't exist in the database
-     * it throws this exception.
-     * @throws PasswordNotOkException If the password doesn't exist it throws
-     * this exception.
-     * @throws Exception If there is no connection with the database, throws
-     * this exception
-     *
-     */
-    public UserBean userLogin(UserBean user) throws UserNotExistException, PasswordNotOkException, Exception;
+    public void deleteUser(UserBean user) throws BusinessLogicException;
 
-    public UserBean userForgotPassword(String text);
+    public UserBean findUserByLoginPassw(String login, String passw) throws BusinessLogicException;
 
+    public Boolean findUserForgotPassw(String login) throws BusinessLogicException;
 }
