@@ -28,7 +28,12 @@ import java.util.logging.Logger;
  *
  * @author Paula
  */
+/*
 public class EventLogicController implements EventLogic {
+
+     public EventLogicController(){
+        webClient=new EventRESTClient();
+    }
 
     @Override
     public void deleteEvent(EventBean event) throws DeleteException {
@@ -66,3 +71,4 @@ public class EventLogicController implements EventLogic {
    
 
 }
+*/

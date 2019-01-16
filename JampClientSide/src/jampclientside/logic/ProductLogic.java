@@ -5,10 +5,10 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Product;
-import jampclientside.entity.Telephone;
+import jampclientside.entity.ProductBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
+import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import java.util.List;
@@ -20,29 +20,29 @@ import java.util.List;
  *
  * @author Julen
  */
-public interface ILogicProduct {
+public interface ProductLogic {
 
 
     /**
      * 
-     * @param phone
+     * @param product
      * @throws DeleteException 
      */
-    public void deleteProduct(Product product) throws DeleteException;
+    public void deleteProduct(ProductBean product) throws DeleteException;
     
     /**
      * 
-     * @param phone
+     * @param product
      * @throws UpdateException 
      */
-    public void updateProduct(Product product) throws UpdateException;
+    public void updateProduct(ProductBean product) throws UpdateException;
     
     /**
      * 
-     * @param phone
+     * @param product
      * @throws CreateException 
      */
-    public void createProduct(Product product) throws CreateException;
+    public void createProduct(ProductBean product) throws CreateException;
     
     /**
      * 
@@ -50,7 +50,7 @@ public interface ILogicProduct {
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findProductById(Integer idProduct) throws ReadException;
+    public List<ProductBean> findProductById(Integer idProduct) throws ReadException;
     
     /**
      * 
@@ -59,14 +59,21 @@ public interface ILogicProduct {
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findProductByName(String name, Integer idTxoko) throws ReadException;
+    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<Telephone> findAllProducts () throws ReadException;
+    public List<ProductBean> findAllProducts ();
+
+    /**
+     * 
+     * @param id
+     * @throws ProductExist 
+     */
+    public void isProductExist(Integer id) throws ProductExist;
 
    
     

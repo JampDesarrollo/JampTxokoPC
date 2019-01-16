@@ -19,7 +19,7 @@ import messageuserbean.UserBean;
  *
  * @author Ander
  */
-public class ILogicImplementation implements ILogic {
+public class ILogicImplementation implements UserLogic {
 
     /**
      * Atributo para el socket del cliente. Sirve para conectar con el socket
@@ -86,6 +86,11 @@ public class ILogicImplementation implements ILogic {
         returnUser = socket.logIn(user);
 
         return returnUser;
+    }
+
+    @Override
+    public UserBean userForgotPassword(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

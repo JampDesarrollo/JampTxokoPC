@@ -92,7 +92,8 @@ public class UserBean implements Serializable{
     }
 
     /**
-     * @param txoko
+
+     * @param txoko the txoko to set
      */
     public void setTxoko(TxokoBean txoko) {
         this.txoko.set(txoko);
@@ -111,6 +112,12 @@ public class UserBean implements Serializable{
     public void setLogin(String login) {
         this.login.set(login);
     }
+  
+    @Override
+    public String toString() {
+        return this.login.get();
+    }
+    
 
     /**
      * @return the email
@@ -181,5 +188,4 @@ public class UserBean implements Serializable{
     public void setLastAccess(String lastAccess) {
         this.lastAccess.set(lastAccess);
     }
-
 }

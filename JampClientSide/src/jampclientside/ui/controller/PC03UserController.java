@@ -103,6 +103,7 @@ public class PC03UserController {
      */
     private UserLogic userLogic;
 
+
     /**
      * UserBean object
      */
@@ -143,8 +144,12 @@ public class PC03UserController {
      *
      * @param iLogic
      */
+
+  
     public void setILogic(UserLogic iLogic) {
         this.userLogic = iLogic;
+
+  
     }
 
     /**

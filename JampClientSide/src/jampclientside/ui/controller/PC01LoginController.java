@@ -6,6 +6,7 @@
  */
 package jampclientside.ui.controller;
 
+
 import jampclientside.entity.UserBean;
 import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.PasswordNotOkException;
@@ -229,6 +230,7 @@ public class PC01LoginController {
      * @return user
      * @author ander
      */
+
     private Boolean getUserEmail() {
         Boolean allOk = false;
 
@@ -244,6 +246,7 @@ public class PC01LoginController {
             LOGGER.log(Level.SEVERE, " El login de usuario no existe. {0}",
                     ex.getMessage());
         }
+
 
         return allOk;
     }

@@ -5,7 +5,7 @@
  */
 package jampclientside.logic;
 
-import jampclientside.entity.Telephone;
+import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ReadException;
@@ -21,7 +21,7 @@ import messageuserbean.UserBean;
  *
  * @author Ander
  */
-public class ILogicImplementationTelephone implements ILogicTelephone {
+public class TelephoneLogicController implements TelephoneLogic {
 
     private UserBean returnUser;
 
@@ -38,7 +38,7 @@ public class ILogicImplementationTelephone implements ILogicTelephone {
      * @throws DeleteException 
      */
     @Override
-    public void deleteTelephone(Telephone phone) throws DeleteException {
+    public void deleteTelephone(TelephoneBean phone) throws DeleteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -48,7 +48,7 @@ public class ILogicImplementationTelephone implements ILogicTelephone {
      * @throws UpdateException 
      */
     @Override
-    public void updateTelephone(Telephone phone) throws UpdateException {
+    public void updateTelephone(TelephoneBean phone) throws UpdateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -58,7 +58,7 @@ public class ILogicImplementationTelephone implements ILogicTelephone {
      * @throws CreateException 
      */
     @Override
-    public void createTelephone(Telephone phone) throws CreateException {
+    public void createTelephone(TelephoneBean phone) throws CreateException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -68,7 +68,7 @@ public class ILogicImplementationTelephone implements ILogicTelephone {
      * @throws ReadException 
      */
     @Override
-    public List<Telephone> findAllTelephone() throws ReadException {
+    public List<TelephoneBean> findAllTelephone(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

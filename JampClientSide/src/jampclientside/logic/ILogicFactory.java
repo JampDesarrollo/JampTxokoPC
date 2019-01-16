@@ -5,8 +5,8 @@
  */
 package jampclientside.logic;
 
-import jampclientside.logic.ILogic;
 import jampclientside.logic.ILogicImplementation;
+import jampclientside.logic.UserLogic;
 
 
 
@@ -26,7 +26,7 @@ public class ILogicFactory {
      * @return getIlogic
      */
     
-    public static ILogic getlogic() {
+    public static UserLogic getlogic() {
         return new ILogicImplementation();
     }
     /*
@@ -35,15 +35,18 @@ public class ILogicFactory {
     }
     */
     public static EventLogic getEventLogic() {
-        return new EventLogicController();
+        return new EventLogicControllerTEST();
     }
-    /*
+    
      public static ProductLogic getProductLogic() {
-        return new ProductLogicController();
-    }
+        return new ProductLogicControllerTEST();
+    } 
      public static ExpenseLogic getExpenseLogic() {
-        return new ExpenseLogicController();
+        return new ExpenseLogicControllerTEST();
     }
-    */
+    
+     public static TelephoneLogic getTelephoneLogic() {
+        return new TelephoneLogicControllerTEST();
+    } 
 
 }

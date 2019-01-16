@@ -5,6 +5,8 @@
  */
 package jampclientside.entity;
 
+
+import java.io.Serializable;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Julen
  */
-public class Product{
+public class ProductBean implements Serializable{
 
     /**
      * 
@@ -46,6 +48,25 @@ public class Product{
      */
     public SimpleIntegerProperty getIdProduct() {
         return idProduct;
+    }
+    
+    public ProductBean(){
+     this.idProduct = new SimpleIntegerProperty();
+     this.name = new SimpleStringProperty ();
+     this.description = new SimpleStringProperty();
+     this.price = new SimpleFloatProperty ();
+     this.stock = new SimpleIntegerProperty();
+
+     }
+    
+        public ProductBean(String name,
+                    String description,
+                    Integer stock,
+                    Float price){
+        this.name=new SimpleStringProperty(name);
+        this.description=new SimpleStringProperty(description);
+        this.stock=new SimpleIntegerProperty(stock);
+        this.price = new SimpleFloatProperty(price);
     }
 
     /**

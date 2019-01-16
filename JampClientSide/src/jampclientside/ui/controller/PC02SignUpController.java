@@ -5,6 +5,7 @@
  */
 package jampclientside.ui.controller;
 
+
 import jampclientside.entity.UserBean;
 import jampclientside.logic.ILogic;
 import jampclientside.exceptions.UserLoginExistException;

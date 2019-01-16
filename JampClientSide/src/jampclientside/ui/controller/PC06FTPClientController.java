@@ -120,6 +120,7 @@ public class PC06FTPClientController {
         this.iLogic = iLogic;
     }
 
+
     /**
      * Sets the Stage object related to this controller.
      *
@@ -148,8 +149,8 @@ public class PC06FTPClientController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Cliente FTP");
             stage.setResizable(false);
-            stage.setOnShowing(this::handleWindowShowing);
-            btnOut.setOnAction(this::back);
+//            stage.setOnShowing(this::handleWindowShowing);
+ //           btnOut.setOnAction(this::back);
             btnUpload.setOnAction(this::uplaodFile);
             btnDownload.setOnAction(this::downloadFile);
             btnDeleteFile.setOnAction(this::deleteFile);
@@ -168,7 +169,7 @@ public class PC06FTPClientController {
      *
      * @param event WindowEvent
      */
-    private void handleWindowShowing(WindowEvent event) {
+ /*   private void handleWindowShowing(WindowEvent event) {
         LOGGER.info("Beggining PCFTPCLient::handleWindowShowing");
         LOGGER.info("Ventana de cliente FTP");
         lblInfo.setVisible(false);
@@ -232,6 +233,7 @@ public class PC06FTPClientController {
         stage.show();
 
     }
+
     
     private String getPath(TreeItem item){
         String fullPath = "";
@@ -261,7 +263,7 @@ public class PC06FTPClientController {
      *
      * @param ev ActionEvent
      */
-    private void back(ActionEvent ev) {
+/*    private void back(ActionEvent ev) {
         LOGGER.info("Ventana de cliente FTP back");
         iLogic.disconnectFTP();
         stage.hide();
@@ -279,8 +281,8 @@ public class PC06FTPClientController {
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         File file = fChooser.showOpenDialog(stage);
         iLogic.uploadFile(file);
-
     }
+  
     /**
      * 
      * @param ev 

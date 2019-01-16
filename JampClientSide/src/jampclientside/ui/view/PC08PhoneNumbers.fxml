@@ -20,24 +20,36 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC08PhoneNumberController">
+<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC08PhoneNumbersController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Menú">
+            <Menu fx:id="menuMenu" mnemonicParsing="false" style="-fx-color: #005192;" text="Menú">
               <items>
-                <MenuItem mnemonicParsing="false" text="Cerrar Sesión" />
+                <MenuItem fx:id="menuLogOut" mnemonicParsing="false" text="Cerrar Sesión" />
               </items>
             </Menu>
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos" />
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos" />
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios" />
-            <Menu mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-              </items>
+            <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
+                <items>
+                  <MenuItem fx:id="idMenuEvent" mnemonicParsing="false" text="Ir a la ventana de Eventos " />
+                </items>
             </Menu>
+            <Menu fx:id="menuGastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
+               <items>
+                  <MenuItem fx:id="idMenuGastos" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos">
+               <items>
+                  <MenuItem fx:id="idMenuProductos" mnemonicParsing="false" text="Ir a la ventana de Productos" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuUsuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
+               <items>
+                  <MenuItem fx:id="idMenuUsuarios" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos"/>
       </menus>
     </MenuBar>
       <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="766.0" spacing="20.0">
@@ -106,12 +118,13 @@
                                     <Insets left="25.0" top="25.0" />
                                  </HBox.margin>
                               </TextField>
-                              <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="49.0">
+                              <Button fx:id="btnSearchTel" mnemonicParsing="false" prefHeight="24.0" prefWidth="49.0">
                                  <graphic>
-                                    <ImageView fx:id="btnSearchTel" fitHeight="16.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView  fitHeight="16.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@magnifying-glass-297822_960_720.png" />
-                                       </image></ImageView>
+                                          <Image url="@../../../../resources/lupa.png" />
+                                       </image>
+                                    </ImageView>
                                  </graphic>
                                  <HBox.margin>
                                     <Insets top="25.0" />
@@ -122,7 +135,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </HBox>
-                        <Label fx:id="requiredTel" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="225.0" text="Campo requerido" textFill="#f20909">
+                        <Label fx:id="labelError" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="225.0" text="Campo requerido" textFill="#f20909">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
@@ -166,16 +179,10 @@
          <center>
             <TableView fx:id="telephoneTable" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="telName" prefWidth="123.0" text="Nombre del telefono" />
-                <TableColumn fx:id="telDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del telefono" />
-                  <TableColumn fx:id="telNumber" prefWidth="152.0" text="Numero de telefono" />
+                <TableColumn fx:id="tbcolName" prefWidth="123.0" text="Nombre del telefono" />
+                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del telefono" />
+                <TableColumn fx:id="tbcolNumber" prefWidth="152.0" text="Numero de telefono" />
               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
             </TableView>
          </center>
          <right>
