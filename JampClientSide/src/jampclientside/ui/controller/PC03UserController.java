@@ -5,14 +5,21 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.logic.ILogic;
+import jampclientside.entity.UserBean;
+import jampclientside.exceptions.BusinessLogicException;
+import jampclientside.logic.UserLogic;
+import jampclientside.logic.UserLogicTestDataGenerator;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,13 +30,13 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import messageuserbean.UserBean;
 
 /**
  * FXML Controller class
@@ -71,29 +78,30 @@ public class PC03UserController {
     @FXML
     private Button btnLogOut2;
     @FXML
-    private TableView<?> tabUsers;
+    private TableView tabUsers;
     @FXML
-    private TableColumn<?, ?> colIdUser;
+    private TableColumn colIdUser;
     @FXML
-    private TableColumn<?, ?> colLogin;
+    private TableColumn colLogin;
     @FXML
-    private TableColumn<?, ?> colEmail;
+    private TableColumn colEmail;
     @FXML
-    private TableColumn<?, ?> colNameSur;
+    private TableColumn colNameSur;
     @FXML
-    private TableColumn<?, ?> colStatus;
+    private TableColumn colStatus;
     @FXML
-    private TableColumn<?, ?> colPriv;
-
+    private TableColumn colPriv;
+    
+    private ObservableList<UserBean> usersData;
     /**
      * To close app or session
      */
     private int cerrar;
 
     /**
-     * The business logic object containing all business methods.
+     * The business logic object containing all business methods for users.
      */
-    private ILogic ilogic;
+    private UserLogic userLogic;
 
     /**
      * UserBean object
@@ -133,10 +141,10 @@ public class PC03UserController {
     /**
      * Set logic for this view controller
      *
-     * @param ILogic ilogic
+     * @param iLogic
      */
-    public void setILogic(ILogic ILogic) {
-        this.ilogic = ILogic;
+    public void setILogic(UserLogic iLogic) {
+        this.userLogic = iLogic;
     }
 
     /**
@@ -177,17 +185,34 @@ public class PC03UserController {
         btnUsers.setOnAction(this::goUsers);
         btnPhones.setOnAction(this::goPhones);
         btnDeleteUser.setOnAction(this::deleteUser);
-        btnEditUser.setOnAction(this::editUser);
+        btnEditUser.setOnAction(this::updateUser);
+        tabUsers.getSelectionModel().selectedItemProperty()
+                    .addListener(this::handleUsersTableSelection);
         lblError.setVisible(false);
         //Show primary window
-        stage.show();
-
         stage.setOnCloseRequest((WindowEvent e) -> {
             cerrar = 1;
             e.consume();
             cerrarSesionAlert(cerrar);
 
         });
+        
+        tabUsers.setEditable(false);
+        colIdUser.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+        colLogin.setCellValueFactory(new PropertyValueFactory<>("login"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colNameSur.setCellValueFactory(new PropertyValueFactory<>("fullname"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colPriv.setCellValueFactory(new PropertyValueFactory<>("privilege"));
+        UserLogicTestDataGenerator c = new UserLogicTestDataGenerator();
+        try {
+            usersData = FXCollections.observableArrayList(c.findAllUsers(1));
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(PC03UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tabUsers.setItems(usersData);
+        
+        stage.show();
     }
 
     /**
@@ -198,14 +223,14 @@ public class PC03UserController {
     private void windowShow(WindowEvent event) {
         LOGGER.info("Beginning Principal::windowShow");
 
-        String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
+/*      String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
 
         lblDate.setText("Último acceso: " + date);
         lblEmail.setText("Email: " + user.getEmail());
         lblFullName.setText("Nombre Completo: " + user.getFullname());
         lblLogin.setText("Login: " + user.getLogin());
         //TODO
-        lblTxoko.setText("Txoko: ");
+        lblTxoko.setText("Txoko: " + user.getTxoko().getName());*/
 
         menu.setMnemonicParsing(true);
         menu.setText("_Menu");
@@ -216,7 +241,9 @@ public class PC03UserController {
                 new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
         btnLogOut2.setMnemonicParsing(true);
-        btnLogOut2.setText("_Cerrar Sesion");
+        btnLogOut2.setText("_Cerrar Sesion");     
+        btnDeleteUser.setDisable(true);
+        btnEditUser.setDisable(true);
     }
 
     /**
@@ -257,32 +284,123 @@ public class PC03UserController {
 
         }
     }
+    
+    private void handleUsersTableSelection(ObservableValue observable,
+             Object oldValue,
+             Object newValue) {
+        if(newValue!=null){
+            btnDeleteUser.setDisable(false);
+            btnEditUser.setDisable(false);
+        }
+        
+    }
 
     private void goEvents(ActionEvent event) {
-
+        LOGGER.info("clickOn Eventos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05Events.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC05EventsController controller = (PC05EventsController) loader.getController();
+            //le mando el objeto logica al controlador
+           /**********************************************/
+           // controller.setILogic(iLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void goProducts(ActionEvent event) {
-
+        LOGGER.info("clickOn Productos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC07ProductsController controller = (PC07ProductsController) loader.getController();
+            //le mando el objeto logica al controlador 
+            //controller.setILogicProduct(iLogicProduct);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void goExpenses(ActionEvent event) {
-
+        LOGGER.info("clickOn Gastos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC04ExpenseController controller = (PC04ExpenseController) loader.getController();
+            //le mando el objeto logica al controlador 
+            //controller.setILogic(ilogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void goUsers(ActionEvent event) {
-
+        LOGGER.info("clickOn Usuarios Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC03UserController controller = (PC03UserController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(userLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void goPhones(ActionEvent event) {
-
+        LOGGER.info("clickOn Telefonos Menu");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumber.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC08PhoneNumberController controller = (PC08PhoneNumberController) loader.getController();
+            //le mando el objeto logica al controlador 
+            //controller.setILogic(iLogicTelephone);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
     }
 
     private void deleteUser(ActionEvent event) {
        
     }
 
-    private void editUser(ActionEvent event) {
+    private void updateUser(ActionEvent event) {
 
     }
 }

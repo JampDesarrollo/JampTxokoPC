@@ -6,10 +6,11 @@
  */
 package jampclientside.ui.controller;
 
-
-import jampclientside.logic.ILogic;
+import jampclientside.entity.UserBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.PasswordNotOkException;
 import jampclientside.exceptions.UserNotExistException;
+import jampclientside.logic.UserLogic;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import messageuserbean.UserBean;
 
 /**
  *
@@ -54,7 +54,7 @@ public class PC01LoginController {
      * Attribute ilogic to be able to pass the ilogic object to the others
      * class.
      */
-    private ILogic ilogic;
+    private UserLogic ilogic;
 
     /**
      *
@@ -149,8 +149,8 @@ public class PC01LoginController {
      * @param ILogic it receives the logic object that came from the application
      * class
      */
-    public void setILogic(ILogic ILogic) {
-        this.ilogic = ILogic;
+    public void setILogic(UserLogic iLogic) {
+        this.ilogic = iLogic;
     }
 
     /**
@@ -214,9 +214,13 @@ public class PC01LoginController {
         boolean loginFilled = chkLoginFilled();
         if (loginFilled) {
 
-            UserBean userReturn = getUserEmail();
-
-            //Create and send email
+            Boolean allOk = getUserEmail();
+            if (allOk) {
+                lblError.setText("Se ha restablecido su contraseña, "
+                        + "compruebe su email");
+            lblError.setStyle("-fx-text-inner-color: green;");
+            lblError.setVisible(true);
+            }
         }
     }
 
@@ -225,12 +229,12 @@ public class PC01LoginController {
      * @return user
      * @author ander
      */
-    private UserBean getUserEmail() {
-        UserBean returnUser = null;
+    private Boolean getUserEmail() {
+        Boolean allOk = false;
 
         try {
-            returnUser = ilogic.userForgotPassword(tfUsuario.getText());
-        } catch (UserNotExistException ex) {
+            allOk = ilogic.findUserForgotPassw(tfUsuario.getText());
+        } catch (BusinessLogicException ex) {
             tfUsuario.setStyle("-fx-border-color:red;");
             tfUsuario.requestFocus();
             tfUsuario.selectAll();
@@ -241,7 +245,7 @@ public class PC01LoginController {
                     ex.getMessage());
         }
 
-        return returnUser;
+        return allOk;
     }
 
     /**
@@ -343,7 +347,7 @@ public class PC01LoginController {
                         //lo cargo en el root que es de tipo parent
                         Parent root = (Parent) loader.load();
                         //obtener el controlador
-                        PC03PrincipalController controller = (PC03PrincipalController) loader.getController();
+                        PC03UserController controller = (PC03UserController) loader.getController();
                         //le mando el objeto logica 
                         controller.setILogic(ilogic);
                         //ilogic.UserLogin(mensaje);
@@ -478,15 +482,18 @@ public class PC01LoginController {
      */
     private UserBean chkUserPassword() {
         UserBean returnUser = null;
-        try {
+        //try {
             byte[] encryptedPassw = EncryptPassword.encrypt(pfContraseña.getText().getBytes());
             String ePassw = new String(encryptedPassw);
 
+        try {
             //creo un nuevo usuario con contraseña y password solamente
-            UserBean usuario = new UserBean(tfUsuario.getText(), ePassw);
 
-            returnUser = ilogic.userLogin(usuario); // el userlogin me va a devolver el usuario entero 
-        } catch (UserNotExistException e) {
+            returnUser = ilogic.findUserByLoginPassw(tfUsuario.getText(), ePassw); // el userlogin me va a devolver el usuario entero 
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(PC01LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      /*  } catch (UserNotExistException e) {
             LOGGER.log(Level.SEVERE, "User not exist exception {0}", e.getCause());
             //se pone el foco en el usuario
             btnInicio.requestFocus();
@@ -519,10 +526,10 @@ public class PC01LoginController {
             lblError.setStyle("-fx-text-inner-color: red;");
             lblError.setVisible(true);
             imLoading.setVisible(false);
-        }
+        }*/
         return returnUser;
     }
-    
+
     /**
      * Method to be able to see the password or not.
      *
