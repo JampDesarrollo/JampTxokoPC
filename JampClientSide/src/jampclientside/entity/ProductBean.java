@@ -7,6 +7,7 @@ package jampclientside.entity;
 
 
 import java.io.Serializable;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,13 +43,11 @@ public class ProductBean implements Serializable{
      * 
      */
     private SimpleStringProperty description;
-
+    
     /**
-     * @return the idProduct
+     * 
      */
-    public SimpleIntegerProperty getIdProduct() {
-        return idProduct;
-    }
+    private SimpleBooleanProperty venta;
     
     public ProductBean(){
      this.idProduct = new SimpleIntegerProperty();
@@ -56,19 +55,28 @@ public class ProductBean implements Serializable{
      this.description = new SimpleStringProperty();
      this.price = new SimpleFloatProperty ();
      this.stock = new SimpleIntegerProperty();
+     this.venta = new SimpleBooleanProperty();
 
      }
     
         public ProductBean(String name,
                     String description,
                     Integer stock,
-                    Float price){
+                    Float price,
+                    Boolean venta){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
         this.stock=new SimpleIntegerProperty(stock);
         this.price = new SimpleFloatProperty(price);
+        this.venta = new SimpleBooleanProperty(venta);
     }
 
+    /**
+     * @return the idProduct
+     */
+    public SimpleIntegerProperty getIdProduct() {
+        return idProduct;
+    }
     /**
      * @param idProduct the idProduct to set
      */
@@ -128,8 +136,22 @@ public class ProductBean implements Serializable{
     /**
      * @param description the description to set
      */
-    public void setDescription(SimpleStringProperty description) {
-        this.description = description;
+    public void setDescription(String description) {
+        this.description.set(description);
     }    
+
+    /**
+     * @return the venta
+     */
+    public Boolean getVenta() {
+        return this.venta.get();
+    }
+
+    /**
+     * @param venta the venta to set
+     */
+    public void setVenta(SimpleBooleanProperty venta) {
+        this.venta = venta;
+    }
 
 }

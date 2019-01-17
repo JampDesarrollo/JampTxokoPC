@@ -72,5 +72,34 @@ public class TelephoneLogicController implements TelephoneLogic {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public List<TelephoneBean> findAllTelephoneByTxoko() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * 
+     * @param idTelephone
+     * @return 
+     */
+    @Override
+    public List<TelephoneBean> findTelephoneById(Integer idTelephone) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * 
+     * @param name
+     * @return 
+     */
+    @Override
+    public List<TelephoneBean> findTelephoneByName(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 }

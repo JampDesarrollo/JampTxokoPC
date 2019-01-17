@@ -8,6 +8,7 @@ package jampclientside.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,20 +22,24 @@ public class TelephoneBean implements Serializable{
     private SimpleStringProperty name;
     private SimpleIntegerProperty telephone;
     private SimpleStringProperty description;
+    private SimpleBooleanProperty venta;
 
     public TelephoneBean(){
         this.idTelephone = new SimpleIntegerProperty();
         this.description = new SimpleStringProperty();
-        this.telephone = new SimpleIntegerProperty ();
-        this.name = new SimpleStringProperty ();
+        this.telephone = new SimpleIntegerProperty();
+        this.name = new SimpleStringProperty();
+        this.venta = new SimpleBooleanProperty();
      }
      
     public TelephoneBean(String name,
                     String description,
-                    Integer telephone){
+                    Integer telephone,
+                    Boolean venta){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
         this.telephone=new SimpleIntegerProperty(telephone);
+        this.venta = new SimpleBooleanProperty(venta);
     }
     /**
      * @return the id
@@ -90,6 +95,20 @@ public class TelephoneBean implements Serializable{
      */
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    /**
+     * @return the venta
+     */
+    public Boolean getVenta() {
+        return this.venta.get();
+    }
+
+    /**
+     * @param venta the venta to set
+     */
+    public void setVenta(Boolean venta) {
+        this.venta.set(venta);
     }
 
 }

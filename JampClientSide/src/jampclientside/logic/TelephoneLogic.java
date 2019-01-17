@@ -48,4 +48,21 @@ public interface TelephoneLogic {
      * @throws ReadException 
      */
     public List<TelephoneBean> findAllTelephone();
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<TelephoneBean> findAllTelephoneByTxoko();
+    /**
+     * 
+     * @param <error>
+     * @return 
+     */
+    public List<TelephoneBean> findTelephoneById(Integer idTelephone);
+    /**
+     * 
+     * @return 
+     */
+    public List<TelephoneBean> findTelephoneByName(String name);
 }

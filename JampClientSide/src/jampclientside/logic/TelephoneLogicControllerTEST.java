@@ -22,7 +22,7 @@ public class TelephoneLogicControllerTEST implements TelephoneLogic {
         telephones=new ArrayList();
         //Create 25 TelephoneBean fake data objects.
         for(int i=0;i<25;i++)
-            telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, i));
+            telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, i, false));
     
     }
 
@@ -44,6 +44,21 @@ public class TelephoneLogicControllerTEST implements TelephoneLogic {
     @Override
     public List<TelephoneBean> findAllTelephone() {
         return telephones;
+    }
+    
+    @Override
+    public List<TelephoneBean> findAllTelephoneByTxoko() {
+        return telephones;
+    }
+
+    @Override
+    public List<TelephoneBean> findTelephoneById(Integer idTelephone) {
+          return telephones;
+    }
+
+    @Override
+    public List<TelephoneBean> findTelephoneByName(String name) {
+          return telephones;
     }
     
 }

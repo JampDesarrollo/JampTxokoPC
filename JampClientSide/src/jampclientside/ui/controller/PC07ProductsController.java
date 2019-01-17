@@ -11,6 +11,7 @@ import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
+import jampclientside.logic.ILogicFactory;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -45,6 +46,8 @@ import messageuserbean.UserBean;
 import jampclientside.logic.ProductLogic;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
@@ -54,6 +57,11 @@ import javafx.scene.control.cell.TextFieldTableCell;
  */
 public class PC07ProductsController {
 
+    private static final Logger LOGGER = Logger.getLogger("package.class");
+
+    private Tooltip tooltip = new Tooltip();
+    private Tooltip tooltipID = new Tooltip();
+    private Tooltip tooltipName = new Tooltip();
     @FXML
     private Menu menu;
     @FXML
@@ -91,6 +99,8 @@ public class PC07ProductsController {
     @FXML
     private Label lblEmail;
     @FXML
+    private Label lbllTxoko;
+    @FXML
     private ComboBox<String> cbSearch;
     @FXML
     private TextField txtSearch;
@@ -115,16 +125,15 @@ public class PC07ProductsController {
     @FXML
     private TableColumn tbcolPrice;
     @FXML
+    private TableColumn tbcolVenta;
+    @FXML
     private TableColumn tbcolStock;
     private ObservableList<ProductBean> productData;
     private int cerrar;
     private ProductLogic iLogicProduct;
-    private UserLogic iLogicUser;
-    private TelephoneLogic iLogicTelephone;
-    private EventLogic iLogicEvent;
-    private ExpenseLogic iLogicExpense;
+
     private UserBean user;
-    protected static final Logger LOGGER = Logger.getLogger("jamp.pc.ui.controller");
+
    
     /**
      * The Stage object associated to the Scene controlled by this controller.
@@ -202,20 +211,16 @@ public class PC07ProductsController {
         //ir a la ventana de telefonos
         idMenuTel.setOnAction(this::telephoneWindow);
         //ventana de los usuarios
-        // idMenuUsuarios.setOnAction(this::usersWindow);
-        
+        idMenuUsuarios.setOnAction(this::usersWindow);
         //boton añadir producto
         addProduct.setOnAction(this::handleAddProduct);
         //boton borrar producto
         delProduct.setOnAction(this::handleDeleteProduct);
         //dependiendo la opcion que pulse del combo box
         cbSearch.setOnAction(this::comboBoxOption);
-
         //boton de busqueda
         btnSearch.setOnAction(this::searchButton);
-
-
-        //las columnas van a coger el valos de los atributos
+        //las columnas van a coger el valor de los atributos
         tbcolName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
         tbcolDescription.setCellValueFactory(
@@ -224,21 +229,15 @@ public class PC07ProductsController {
                 new PropertyValueFactory<>("price"));
         tbcolStock.setCellValueFactory(
                 new PropertyValueFactory<>("stock"));
-        //Create an observable list for users table.
-
-        //productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-
-        //Set table model.
-//        tbProducts.setItems(productData);
-       
+        tbcolVenta.setCellValueFactory(
+                new PropertyValueFactory<>("venta"));
+        tbcolVenta.setCellFactory(CheckBoxTableCell.forTableColumn(tbcolVenta));
         //Show primary window
         stage.show();
-
         stage.setOnCloseRequest((WindowEvent e) -> {
             int cerrar = 1;
             e.consume();
             cerrarSesionAlert(cerrar);
-
         });
     }
 
@@ -258,7 +257,7 @@ public class PC07ProductsController {
         lblLogin.setText("Login: " + user.getLogin());
 */
         cbSearch.getItems().removeAll(cbSearch.getItems());
-        cbSearch.getItems().addAll("Todos los productos de mi txoko", "Id del producto", "Nombre del producto");
+        cbSearch.getItems().addAll("Todos los productos de mi txoko", "Todos los productos del catalogo", "Id del producto", "Nombre del producto");
         labelError.setVisible(false);
         cbSearch.requestFocus();
         txtSearch.setDisable(true);
@@ -277,6 +276,9 @@ public class PC07ProductsController {
 
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
+        
+        productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+        tbProducts.setItems(productData);
     }
     
     /**
@@ -313,7 +315,6 @@ public class PC07ProductsController {
             } else {
                 stage.hide();
             }
-
         }
     }
 
@@ -359,14 +360,6 @@ public class PC07ProductsController {
                 tbcolStock.setCellValueFactory(
                         new PropertyValueFactory<>("stock"));
                 tbcolStock.setCellFactory(TextFieldTableCell.forTableColumn());
-                
- /*               Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
-                dialog.setTitle("CONFIRMACION");
-                dialog.setContentText("El nuevo producto va a ser añadido");
-                dialog.setHeaderText("Añadir un producto");
-                Optional<ButtonType> resultado = dialog.showAndWait();
-                Button aceptar = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-                aceptar.setId("aceptar");*/
             }
         } catch (Exception e) {
             //If there is an error in the business logic tier show message and
@@ -465,6 +458,7 @@ public class PC07ProductsController {
     public void eventWindow(ActionEvent ev) {
         LOGGER.info("clickOn Products Menu");
         try {
+            EventLogic iLogicEvent = ILogicFactory.getEventLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05Events.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -478,16 +472,17 @@ public class PC07ProductsController {
             //inizializo el stage
             controller.initStage(root);
             cbSearch.requestFocus();
+            stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
-
     }
 
     //ir a la ventana de los telefonos
     public void telephoneWindow(ActionEvent ev) {
         LOGGER.info("clickOn Telephone Menu");
         try {
+            TelephoneLogic iLogicTelephone = ILogicFactory.getTelephoneLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumbers.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -501,15 +496,16 @@ public class PC07ProductsController {
             //inizializo el stage
             controller.initStage(root);
             cbSearch.requestFocus();
+            stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
-
     }
 
     public void expenseWindow(ActionEvent ev) {
         LOGGER.info("clickOn Gastos Menu");
         try {
+            ExpenseLogic iLogicExpense = ILogicFactory.getExpenseLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC04Expense.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -523,6 +519,7 @@ public class PC07ProductsController {
             //inizializo el stage
             controller.initStage(root);
             cbSearch.requestFocus();
+            stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
@@ -532,6 +529,7 @@ public class PC07ProductsController {
     public void usersWindow(ActionEvent ev) {
         LOGGER.info("clickOn User Menu");
         try {
+            UserLogic iLogicUser = ILogicFactory.getUserLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -545,6 +543,7 @@ public class PC07ProductsController {
             //inizializo el stage
             controller.initStage(root);
             cbSearch.requestFocus();
+            stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
@@ -553,16 +552,25 @@ public class PC07ProductsController {
     public void comboBoxOption(ActionEvent ev) {
         LOGGER.info("clickOn combo box");
         if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
-            //el boton de busqueda estara habilitado
-            btnSearch.setDisable(false);
-            //si anteriormente hay algun texto, quitarlo
-            txtSearch.setText("");
-            //deshabilitar el textfield
-            txtSearch.setDisable(true);
-            btnSearch.requestFocus();
-            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
-            txtSearch.setVisible(true);
-            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+            productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+            if(productData == null){
+               Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+               dialogoAlerta.setTitle("INFORMACION");
+               dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+               dialogoAlerta.showAndWait(); 
+            }else{
+                tbProducts.setItems(productData);
+            } 
+        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos del catalogo")) {
+            productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+            if(productData == null){
+               Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+               dialogoAlerta.setTitle("INFORMACION");
+               dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+               dialogoAlerta.showAndWait(); 
+            }else{
+                tbProducts.setItems(productData);
+            } 
         } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
             //el boton de busqueda estara habilitado
             btnSearch.setDisable(false);
@@ -572,26 +580,22 @@ public class PC07ProductsController {
             txtSearch.setDisable(false);
             //que se ponga el foco en el text field
             txtSearch.requestFocus();
-            //tooltipID.setText("Escribe el ID del evento");
-            //txtSearch.setTooltip(tooltipID);
+            tooltipID.setText("Escribe el ID del producto");
+            txtSearch.setTooltip(tooltipID);
             //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
             labelError.setVisible(false);
             txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+ 
         } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del producto")) {
-            //el boton de busqueda estara habilitado
             btnSearch.setDisable(false);
-            //si anteriormente hay algun texto, quitarlo
             txtSearch.setText("");
-            //habilitar el textfield
             txtSearch.setDisable(false);
-            //que se ponga el foco en el text field
             txtSearch.requestFocus();
-            //tooltipName.setText("Escribe el nombre del evento");
-            //txtSearch.setTooltip(tooltipName);
-            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
+            tooltipName.setText("Escribe el nombre del producto");
+            txtSearch.setTooltip(tooltipName);
             labelError.setVisible(false);
             txtSearch.setStyle("-fx-border-color: -fx-box-border;");
-        }
+        } 
     }
 
     public void searchButton(ActionEvent ev) {
@@ -605,63 +609,47 @@ public class PC07ProductsController {
         labelError.setVisible(false);
         txtSearch.setStyle("-fx-border-color: -fx-box-border;");
         //si ha seleccionado "todos"
-        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
-            productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-            tbProducts.setItems(productData);
-            //vamos a buscar los eventos a la base de datos
-            /* List <EventBean> listaEventos = events();
-            if(listaEventos!=null){
-            //aparecen todos los eventos
-            
-            //un alert
-            Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
-            dialogoAlerta.setTitle("INFORMACION");
-            dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
-            dialogoAlerta.showAndWait();
-        }*/
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del evento")) {
+        if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
             //miramos si el textfield esta vacio o no
             boolean tfIDEmpty = textEmptyOrNot();
             //si no esta vacio
             if (tfIDEmpty) {
-                /*
-                //vamos a buscar a la base de datos
-                EventBean evento = eventIDExist();
-                //if(evento!=null){
-                //carga los datos de ese evento en la tabla
-                
-                //un alert
-                Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
-                dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
-                dialogoAlerta.showAndWait();
-                */}
-            //si esta vecio
-            else {
+            
+            int idProduct = Integer.parseInt(txtSearch.getText().trim());
+            
+            productData = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
+                if(productData == null){
+                   Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                   dialogoAlerta.setTitle("INFORMACION");
+                   dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+                   dialogoAlerta.showAndWait(); 
+                }else{
+                    tbProducts.setItems(productData);
+                }
+            }else {
                 txtSearch.setStyle("-fx-border-color: red;");
                 labelError.setText("Tienes que escribir el id de un evento");
                 labelError.setVisible(true);
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
         }//si busca por nombre
-        else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del evento")) {
+        else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del producto")) {
             //miramos si el text field esta vacio
             boolean tfNameEmpty = textEmptyOrNot();
             //si no esta vacio
             if (tfNameEmpty) {
-                /*
-                //miramos el nombre del evento en la base de datos
-                //EventBean event = eventNameExist();
-                //si existe
-                //if(event!=null){
-                //carga los datos de ese evento en la tabla
-                
-                //un alert
-                Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
-                dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setHeaderText("Si deseas ver la imagen del evento, pulsa en el botón Cliente FTP");
-                dialogoAlerta.showAndWait();
-                }*/
+                String nameProduct = txtSearch.getText();
+                Integer idTxoko = Integer.parseInt(lbllTxoko.getText());
+
+                productData = FXCollections.observableArrayList(iLogicProduct.findProductByName(nameProduct, idTxoko));
+                if(productData == null){
+                   Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                   dialogoAlerta.setTitle("INFORMACION");
+                   dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+                   dialogoAlerta.showAndWait(); 
+                }else{
+                    tbProducts.setItems(productData);
+                } 
             }//si esta vacio
             else {
                 txtSearch.setStyle("-fx-border-color: red;");

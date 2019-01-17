@@ -27,7 +27,7 @@ public class ProductLogicControllerTEST implements ProductLogic{
         product=new ArrayList();
         //Create 25 UserBean fake data objects.
         for(int i=0;i<25;i++)
-            product.add(new ProductBean("Coca", "zero", i, (float)1.0));
+            product.add(new ProductBean("Coca", "zero", i, (float)1.0, false));
     }
 
     @Override
@@ -46,17 +46,32 @@ public class ProductLogicControllerTEST implements ProductLogic{
     }
 
     @Override
-    public List<ProductBean> findProductById(Integer idProduct) throws ReadException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ProductBean> findProductById(Integer idProduct){
+        return product;
     }
 
     @Override
-    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException {
+    public List<ProductBean> findProductByName(String name, Integer idTxoko){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<ProductBean> findAllProducts(){
+/*            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
+            //Ask webClient for all departments' data.
+          //  productos = ProductWebClient.findAllProducts(new GenericType<List<Product>>() {});
+        }catch(Exception ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding all products, {0}",
+                    ex.getMessage());
+            //throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
+        }*/
+        
+        return product;
+    }
+    
+    @Override
+    public List<ProductBean> findAllProductsByTxoko(){
 /*            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.
           //  productos = ProductWebClient.findAllProducts(new GenericType<List<Product>>() {});
