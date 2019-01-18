@@ -128,8 +128,11 @@ public class PC07ProductsController {
     private TableColumn tbcolVenta;
     @FXML
     private TableColumn tbcolStock;
+    
     private ObservableList<ProductBean> productData;
+   
     private int cerrar;
+   
     private ProductLogic iLogicProduct;
 
     private UserBean user;
@@ -258,6 +261,7 @@ public class PC07ProductsController {
 */
         cbSearch.getItems().removeAll(cbSearch.getItems());
         cbSearch.getItems().addAll("Todos los productos de mi txoko", "Todos los productos del catalogo", "Id del producto", "Nombre del producto");
+        cbSearch.getSelectionModel().selectFirst();
         labelError.setVisible(false);
         cbSearch.requestFocus();
         txtSearch.setDisable(true);
@@ -277,7 +281,10 @@ public class PC07ProductsController {
         btnLogOut2.setMnemonicParsing(true);
         btnLogOut2.setText("_Cerrar Sesion");
         
-        productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+        //String idTxoko = lbllTxoko.getText();
+        String idTxoko = "1";
+        
+        productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
         tbProducts.setItems(productData);
     }
     
@@ -419,6 +426,7 @@ public class PC07ProductsController {
         boolean isSelected = isSelected();
         try {
             if (isSelected) {
+                
                 Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
                 dialogoAlerta.setTitle("CONFIRMACION");
                 dialogoAlerta.setContentText("¿Estas seguro que deseas eliminar un producto?");
@@ -434,6 +442,8 @@ public class PC07ProductsController {
                     //el txoko se puede coger del label o de la base de datos
                     // tengo que saber el id del evento
                     //eliminar de la base de datos y eliminar la fila
+                    
+                    
                     tbProducts.getItems().remove(tbProducts.getSelectionModel().getSelectedItem());
                     tbProducts.refresh();
                 }
@@ -552,7 +562,9 @@ public class PC07ProductsController {
     public void comboBoxOption(ActionEvent ev) {
         LOGGER.info("clickOn combo box");
         if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
-            productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+            //String idTxoko = lbllTxoko.getText();
+            String idTxoko = "1";
+            productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
             if(productData == null){
                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                dialogoAlerta.setTitle("INFORMACION");
@@ -562,7 +574,7 @@ public class PC07ProductsController {
                 tbProducts.setItems(productData);
             } 
         } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos del catalogo")) {
-            productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko());
+            productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
             if(productData == null){
                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                dialogoAlerta.setTitle("INFORMACION");
@@ -611,17 +623,18 @@ public class PC07ProductsController {
         //si ha seleccionado "todos"
         if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
             //miramos si el textfield esta vacio o no
+            productData = null;
             boolean tfIDEmpty = textEmptyOrNot();
             //si no esta vacio
             if (tfIDEmpty) {
             
-            int idProduct = Integer.parseInt(txtSearch.getText().trim());
+            String idProduct = txtSearch.getText();
             
             productData = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
-                if(productData == null){
+                if(productData.size() == 0){
                    Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                    dialogoAlerta.setTitle("INFORMACION");
-                   dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+                   dialogoAlerta.setHeaderText("No hay productos en la lista");
                    dialogoAlerta.showAndWait(); 
                 }else{
                     tbProducts.setItems(productData);
@@ -635,17 +648,19 @@ public class PC07ProductsController {
         }//si busca por nombre
         else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del producto")) {
             //miramos si el text field esta vacio
+            productData = null;
             boolean tfNameEmpty = textEmptyOrNot();
             //si no esta vacio
             if (tfNameEmpty) {
-                String nameProduct = txtSearch.getText();
-                Integer idTxoko = Integer.parseInt(lbllTxoko.getText());
+                String nameProduct = txtSearch.getText().trim();
+                //String idTxoko = lbllTxoko.getText();
+                String idTxoko = "1";
 
                 productData = FXCollections.observableArrayList(iLogicProduct.findProductByName(nameProduct, idTxoko));
-                if(productData == null){
+                if(productData.size() == 0){
                    Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                    dialogoAlerta.setTitle("INFORMACION");
-                   dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
+                   dialogoAlerta.setHeaderText("No hay productos en la lista");
                    dialogoAlerta.showAndWait(); 
                 }else{
                     tbProducts.setItems(productData);

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
+<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -37,7 +37,7 @@
                   <MenuItem fx:id="idMenuGastos" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
                </items>
             </Menu>
-            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos"/>
+            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
 
             <Menu fx:id="menuUsuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
                <items>
@@ -96,13 +96,13 @@
          <top>
             <HBox prefHeight="151.0" prefWidth="1276.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="222.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="151.0" prefWidth="307.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="225.0" text="Búsqueda por" textAlignment="RIGHT">
                            <font>
                               <Font size="14.0" />
                            </font></Label>
-                        <ComboBox fx:id="cbSearch" prefHeight="25.0" prefWidth="184.0" />
+                        <ComboBox fx:id="cbSearch" prefHeight="25.0" prefWidth="247.0" />
                      </children>
                      <HBox.margin>
                         <Insets left="100.0" />
@@ -178,11 +178,11 @@
          <center>
             <TableView fx:id="tbProducts" editable="true" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="tbcolName" prefWidth="123.0" text="Nombre del producto" />
-                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del producto" />
-                <TableColumn fx:id="tbcolPrice" prefWidth="152.0" text="Precio" />
-                <TableColumn fx:id="tbcolStock" prefWidth="206.0" text="Stock" />
-                <TableColumn fx:id="tbcolVenta" prefWidth="206.0" text="Productos a la Venta" />
+                <TableColumn fx:id="tbcolName" prefWidth="261.0" text="Nombre del producto" />
+                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="538.0" text="Descripción del producto" />
+                <TableColumn fx:id="tbcolPrice" prefWidth="169.0" text="Precio" />
+                <TableColumn fx:id="tbcolStock" prefWidth="131.0" text="Stock" />
+                <TableColumn fx:id="tbcolVenta" prefWidth="180.0" text="Productos a la Venta" />
               </columns>
             </TableView>
          </center>

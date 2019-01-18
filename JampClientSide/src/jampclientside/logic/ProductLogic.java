@@ -50,7 +50,16 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findProductById(Integer idProduct);
+    public ProductBean findProductById(String idProduct);
+    
+    /**
+     * 
+     * @param idProduct
+     * @param idTxoko
+     * @return
+     * @throws ReadException 
+     */
+    public ProductBean findProductByIdByTxoko(String idProduct, String idTxoko);
     
     /**
      * 
@@ -59,7 +68,7 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findProductByName(String name, Integer idTxoko);
+    public List<ProductBean> findProductByName(String name, String idTxoko);
     
     /**
      * 
@@ -72,7 +81,7 @@ public interface ProductLogic {
      * 
      * @return 
      */
-    public List<ProductBean> findAllProductsByTxoko();
+    public List<ProductBean> findAllProductsByTxoko(String idTxoko);
 
     /**
      * 

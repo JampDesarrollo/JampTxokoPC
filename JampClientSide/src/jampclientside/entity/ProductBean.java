@@ -11,12 +11,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  *
  * @author Julen
  */
+@XmlRootElement (name = "product")
 public class ProductBean implements Serializable{
 
     /**
@@ -74,8 +76,8 @@ public class ProductBean implements Serializable{
     /**
      * @return the idProduct
      */
-    public SimpleIntegerProperty getIdProduct() {
-        return idProduct;
+    public Integer getIdProduct() {
+        return this.idProduct.get();
     }
     /**
      * @param idProduct the idProduct to set

@@ -5,9 +5,11 @@
  */
 package jampclientside.rest;
 
+import jampclientside.entity.ProductBean;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:ProductREST [product]<br>
@@ -32,7 +34,7 @@ public class ProductRESTClient {
         webTarget = client.target(BASE_URI).path("product");
     }
 
-    public void deleteProduct(String idProduct) throws ClientErrorException {
+    public void deleteProduct(Integer idProduct) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("idProducto/{0}", new Object[]{idProduct})).request().delete();
     }
 
@@ -44,31 +46,36 @@ public class ProductRESTClient {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
     
-    public <T> T findProductsById(Class<T> responseType, String idProduct) throws ClientErrorException {
+    public <T> T findProductByIdByTxoko(Class<T> responseType, String idProduct, String idTxoko) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("idProduct/{0}/txoko/{1}", new Object[]{idProduct, Integer.parseInt(idTxoko)}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findProductByName(GenericType<T> responseType, String name, String idTxoko) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("name/{0}/txoko/{1}", new Object[]{name, Integer.parseInt(idTxoko)}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public <T> T findAllProducts(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+    
+    public <T> T findAllProductsByTxoko(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    public ProductBean findProductById(Class<ProductBean> responseType, String idProduct) {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("idProducto/{0}", new Object[]{idProduct}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
-
-    public <T> T findProductByIdByTxoko(Class<T> responseType, String idProduct, String idTxoko) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("idProduct/{0}/txoko/{1}", new Object[]{idProduct, idTxoko}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    public <T> T findProductByName(Class<T> responseType, String name, String idTxoko) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("name/{0}/txoko/{1}", new Object[]{name, idTxoko}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    public <T> T findAllProducts(Class<T> responseType) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
+    
     public void close() {
         client.close();
     }
-    
+
 }

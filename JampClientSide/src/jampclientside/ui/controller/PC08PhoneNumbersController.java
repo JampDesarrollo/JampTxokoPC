@@ -250,6 +250,7 @@ public class PC08PhoneNumbersController{
         
         cbSearchTel.getItems().removeAll(cbSearchTel.getItems());
         cbSearchTel.getItems().addAll("Todos los telefonos de mi txoko", "Todos los telefonos del catalogo", "Id del telefono", "Nombre del telefono");
+        cbSearchTel.getSelectionModel().selectFirst();
         labelError.setVisible(false);
         cbSearchTel.requestFocus();
         txtSearchTel.setDisable(true);
