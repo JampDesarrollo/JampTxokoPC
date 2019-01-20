@@ -75,6 +75,8 @@ public class PC08PhoneNumbersController{
     @FXML
     private MenuItem idMenuEvent;
     @FXML
+    private MenuItem idMenuFTP;
+    @FXML
     private MenuBar menuBar;
     @FXML
     private Menu menuMenu;
@@ -205,6 +207,8 @@ public class PC08PhoneNumbersController{
         idMenuGastos.setOnAction(this::expenseWindow);
         //ventana de los usuarios
         idMenuUsuarios.setOnAction(this::usersWindow);
+        //ventana de los usuarios
+        idMenuFTP.setOnAction(this::usersWindow);
         //boton añadir evento
         addTelephone.setOnAction(this::handleAddTelephone);
         //boton eleminar evento
@@ -467,6 +471,28 @@ public class PC08PhoneNumbersController{
             controller.initStage(root);
             cbSearchTel.requestFocus();
             stage.hide();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+    }
+    
+    //ventana del cliente FTP
+    public void FTPClientWindow(ActionEvent ev) {
+        LOGGER.info("clickOn FTP Client btn");
+        try {
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC06FTPClient.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC06FTPClientController controller = (PC06FTPClientController) loader.getController();
+            //le mando el objeto logica al controlador 
+         //   controller.setILogic(ilogicFTP);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+            cbSearchTel.requestFocus();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }

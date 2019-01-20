@@ -54,7 +54,7 @@ public class ProductRESTClient {
 
     public <T> T findProductByName(GenericType<T> responseType, String name, String idTxoko) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("name/{0}/txoko/{1}", new Object[]{name, Integer.parseInt(idTxoko)}));
+        resource = resource.path(java.text.MessageFormat.format("name/{0}/idTxoko/{1}", new Object[]{name, Integer.parseInt(idTxoko)}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -63,8 +63,9 @@ public class ProductRESTClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
     
-    public <T> T findAllProductsByTxoko(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T findAllProductsByTxoko(GenericType<T> responseType, String idTxoko) throws ClientErrorException {
         WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("idTxoko/{0}", new Object[]{Integer.parseInt(idTxoko)}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

@@ -49,6 +49,11 @@
                </items>
             </Menu>
             <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos" />
+            <Menu fx:id="menuFtp" mnemonicParsing="false" style="-fx-color: #005192;" text="Cliente FTP">
+               <items>
+                  <MenuItem fx:id="idMenuFTP" mnemonicParsing="false" text="Ir a la ventana de FTP" />
+               </items>
+            </Menu>
       </menus>
     </MenuBar>
       <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="766.0" spacing="20.0">

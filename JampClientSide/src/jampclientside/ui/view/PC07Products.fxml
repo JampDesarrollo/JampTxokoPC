@@ -29,7 +29,7 @@
             </Menu>
             <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
                 <items>
-                  <MenuItem fx:id="idMenuEventos" mnemonicParsing="false" text="Ir a la ventana de Productos" />
+                  <MenuItem fx:id="idMenuEventos" mnemonicParsing="false" text="Ir a la ventana de Eventos" />
                 </items>
             </Menu>
             <Menu fx:id="menuGastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
@@ -47,6 +47,11 @@
             <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
                <items>
                   <MenuItem fx:id="idMenuTel" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
+               </items>
+            </Menu>
+            <Menu fx:id="menuFtp" mnemonicParsing="false" style="-fx-color: #005192;" text="Cliente FTP">
+               <items>
+                  <MenuItem fx:id="idMenuFTP" mnemonicParsing="false" text="Ir a la ventana de FTP" />
                </items>
             </Menu>
       </menus>
