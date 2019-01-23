@@ -189,10 +189,11 @@ public class ProductLogicController implements ProductLogic {
     @Override
     public List<ProductBean> findAllProductsByTxoko(String idTxoko) {
         List<ProductBean> productos = null;
+        idTxoko = "5";
         try{
             LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.
-            productos = ProductWebClient.findAllProducts(new GenericType<List<ProductBean>>() {});
+            productos = ProductWebClient.findAllProductsByTxoko(new GenericType<List<ProductBean>>() {}, idTxoko);
         }catch(Exception ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception finding all products, {0}",

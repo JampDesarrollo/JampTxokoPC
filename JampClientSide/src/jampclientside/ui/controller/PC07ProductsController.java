@@ -6,6 +6,8 @@
 package jampclientside.ui.controller;
 
 import jampclientside.entity.ProductBean;
+import jampclientside.entity.TxokoBean;
+import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
@@ -46,7 +48,10 @@ import messageuserbean.UserBean;
 import jampclientside.logic.ProductLogic;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
+import java.util.List;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -115,6 +120,8 @@ public class PC07ProductsController {
     private Button addProduct;
     @FXML
     private Button delProduct;
+    @FXML
+    private Button updateProduct;
     @FXML
     private Button btnLogOut;
     @FXML
@@ -209,12 +216,50 @@ public class PC07ProductsController {
         idMenuFTP.setOnAction(this::usersWindow);
         addProduct.setOnAction(this::handleAddProduct);
         delProduct.setOnAction(this::handleDeleteProduct);
+        updateProduct.setOnAction(this::handleUpdateProduct);
         cbSearch.setOnAction(this::comboBoxOption);
         btnSearch.setOnAction(this::searchButton);      
         tbProducts.getSelectionModel().selectedItemProperty()
                 .addListener(this::handleUsersTableSelectionChanged);
         tbcolName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
+        tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                ((ProductBean) tbProducts.getItems().get(
+                        e.getTablePosition().getRow())
+                        ).setName(e.getNewValue());
+            }
+        });
+        tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                ((ProductBean) tbProducts.getItems().get(
+                        e.getTablePosition().getRow())
+                        ).setName(e.getNewValue());
+            }
+        });
+        tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                ((ProductBean) tbProducts.getItems().get(
+                        e.getTablePosition().getRow())
+                        ).setName(e.getNewValue());
+            }
+        });
+        tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                ((ProductBean) tbProducts.getItems().get(
+                        e.getTablePosition().getRow())
+                        ).setName(e.getNewValue());
+            }
+        });
+        
         tbcolDescription.setCellValueFactory(
                 new PropertyValueFactory<>("description"));
         tbcolPrice.setCellValueFactory(
@@ -276,7 +321,7 @@ public class PC07ProductsController {
         btnLogOut2.setText("_Cerrar Sesion");
         
         //String idTxoko = lbllTxoko.getText();
-        String idTxoko = "1";
+        String idTxoko = "5";
         
         productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
         tbProducts.setItems(productData);
@@ -356,7 +401,9 @@ public class PC07ProductsController {
            
             if (result.get() == ButtonType.OK) {
 
+
                 ProductBean product = new ProductBean();
+
                 //añadir fila en blanco
                 tbProducts.getItems().add(null);
                 tbcolName.setCellValueFactory(
@@ -389,36 +436,23 @@ public class PC07ProductsController {
      *
      * @param event The ActionEvent object for the event.
      */
-    private void handleUpdateProduct(ActionEvent event) {
+    private void handleUpdateProduct(ActionEvent event){
         try {
             //Get selected user data from table view.
             ProductBean selectedProduct = ((ProductBean) tbProducts.getSelectionModel()
                     .getSelectedItem());
-            //check if loin vaalue for selectedrowin table
-            //is equal to loginfield content
-            if (!selectedProduct.getIdProduct().toString().equals(txtSearch.getText())) {
-                //If not, validate login existence.
-                iLogicProduct.isProductExist(12);
-                selectedProduct.setName(txtSearch.getText().trim());
-            }
-            //If login value does not exist: 
-            //send data to modify user data in business tier
+
             this.iLogicProduct.updateProduct(selectedProduct);
-            //Clean entry text fields
-            txtSearch.setText("");
-            cbSearch.getSelectionModel().clearSelection();
+
             //Deseleccionamos la fila seleccionada en la tabla
             tbProducts.getSelectionModel().clearSelection();
             //Refrescamos la tabla para que muestre los nuevos datos
             tbProducts.refresh();
-        } catch (ProductExist | UpdateException e) {
-            //If there is an error in the business logic tier show message and
-            //log it.
-            LOGGER.log(Level.SEVERE,
-                    "PC07ProductsController: Error updating user: {0}",
-                    e.getMessage());
+        } catch (UpdateException ex) {
+            Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+       }
+    
 
     /**
      * Action event handler for delete button. It asks user for confirmation on

@@ -7,6 +7,7 @@ package jampclientside.entity;
 
 
 import java.io.Serializable;
+import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,7 +30,7 @@ public class ProductBean implements Serializable{
     /**
      * 
      */
-    private SimpleIntegerProperty stock;
+    private SimpleStringProperty stock;
     
     /**
      * 
@@ -39,7 +40,7 @@ public class ProductBean implements Serializable{
     /**
     * 
     */
-    private SimpleFloatProperty price; 
+    private SimpleStringProperty price; 
     
     /**
      * 
@@ -49,28 +50,34 @@ public class ProductBean implements Serializable{
     /**
      * 
      */
-    private SimpleBooleanProperty venta;
+    private SimpleStringProperty venta;
+    
+    /**
+     * 
+     */
+    private List<TxokoBean> txokos;
     
     public ProductBean(){
      this.idProduct = new SimpleIntegerProperty();
      this.name = new SimpleStringProperty ();
      this.description = new SimpleStringProperty();
-     this.price = new SimpleFloatProperty ();
-     this.stock = new SimpleIntegerProperty();
-     this.venta = new SimpleBooleanProperty();
+     this.price = new SimpleStringProperty();
+     this.stock = new SimpleStringProperty();
+     this.venta = new SimpleStringProperty();
+     this.txokos = txokos;
 
      }
     
         public ProductBean(String name,
                     String description,
-                    Integer stock,
-                    Float price,
-                    Boolean venta){
+                    String stock,
+                    String price,
+                    String venta){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
-        this.stock=new SimpleIntegerProperty(stock);
-        this.price = new SimpleFloatProperty(price);
-        this.venta = new SimpleBooleanProperty(venta);
+        this.stock=new SimpleStringProperty(stock);
+        this.price = new SimpleStringProperty(price);
+        this.venta = new SimpleStringProperty(venta);
     }
 
     /**
@@ -89,14 +96,14 @@ public class ProductBean implements Serializable{
     /**
      * @return the stock
      */
-    public Integer getStock() {
+    public String getStock() {
         return this.stock.get();
     }
 
     /**
      * @param stock the stock to set
      */
-    public void setStock(Integer stock) {
+    public void setStock(String stock) {
         this.stock.set(stock);
     }
 
@@ -117,14 +124,14 @@ public class ProductBean implements Serializable{
     /**
      * @return the price
      */
-    public Float getPrice() {
+    public String getPrice() {
         return this.price.get();
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(Float price) {
+    public void setPrice(String price) {
         this.price.set(price);
     }
 
@@ -145,15 +152,29 @@ public class ProductBean implements Serializable{
     /**
      * @return the venta
      */
-    public Boolean getVenta() {
+    public String getVenta() {
         return this.venta.get();
     }
 
     /**
      * @param venta the venta to set
      */
-    public void setVenta(SimpleBooleanProperty venta) {
-        this.venta = venta;
+    public void setVenta(String venta) {
+        this.venta.set(venta);
+    }
+
+    /**
+     * @return the txokos
+     */
+    public List<TxokoBean> getTxokos() {
+        return txokos;
+    }
+
+    /**
+     * @param txokos the txokos to set
+     */
+    public void setTxokos(List<TxokoBean> txokos) {
+        this.txokos = txokos;
     }
 
 }

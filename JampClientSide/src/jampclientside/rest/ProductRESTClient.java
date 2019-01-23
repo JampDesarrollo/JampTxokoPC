@@ -27,7 +27,7 @@ public class ProductRESTClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/jampserverside/webresources";
+    private static final String BASE_URI = "http://localhost:8080/JampServerSide/webresources";
 
     public ProductRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -65,7 +65,7 @@ public class ProductRESTClient {
     
     public <T> T findAllProductsByTxoko(GenericType<T> responseType, String idTxoko) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("idTxoko/{0}", new Object[]{Integer.parseInt(idTxoko)}));
+        resource = resource.path(java.text.MessageFormat.format("txoko/{0}", new Object[]{Integer.parseInt(idTxoko)}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

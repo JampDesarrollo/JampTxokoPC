@@ -161,6 +161,11 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
+                        <Button fx:id="updateProduct" mnemonicParsing="false" text=" Modificar producto">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
                      </children>
                      <HBox.margin>
                         <Insets left="50.0" />
