@@ -6,6 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.ProductBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -15,6 +16,7 @@ import jampclientside.rest.ProductRESTClient;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 
 /**
@@ -46,18 +48,19 @@ public class ProductLogicController implements ProductLogic {
      * This method deletes data for an existing product. 
      * This is done by sending a DELETE request to a RESTful web service.
      * @param product The ProductBean object to be deleted.
+     * @throws jampclientside.exceptions.BusinessLogicException
      * @throws DeleteException
      */
     @Override
-    public void deleteProduct(ProductBean product) throws DeleteException {
+    public void deleteProduct(ProductBean product) throws BusinessLogicException {
         try{
             LOGGER.log(Level.INFO,"ProductImplementation: Deleting product {0}.",product.getName());
             ProductWebClient.deleteProduct(product.getIdProduct());
-        }catch(Exception ex){
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception deleting product, {0}",
                     ex.getMessage());
-            throw new DeleteException("ProductImplementation: Error deleting product:\n"+ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error deleting product:\n"+ex.getMessage());
         }
     }
     /**

@@ -6,6 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.ProductBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -28,7 +29,7 @@ public interface ProductLogic {
      * @param product
      * @throws DeleteException 
      */
-    public void deleteProduct(ProductBean product) throws DeleteException;
+    public void deleteProduct(ProductBean product) throws BusinessLogicException;
     
     /**
      * 
