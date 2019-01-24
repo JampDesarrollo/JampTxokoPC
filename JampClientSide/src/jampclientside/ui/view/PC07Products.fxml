@@ -179,6 +179,14 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
+                  <Button fx:id="addTxoko" contentDisplay="CENTER" mnemonicParsing="false" text="Añadir al Txoko">
+                     <HBox.margin>
+                        <Insets left="30.0" top="50.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
                </children>
                <BorderPane.margin>
                   <Insets top="30.0" />

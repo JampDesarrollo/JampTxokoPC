@@ -6,9 +6,7 @@
 package jampclientside.ui.controller;
 
 import jampclientside.entity.ProductBean;
-import jampclientside.entity.TxokoBean;
 import jampclientside.exceptions.CreateException;
-import jampclientside.exceptions.ProductExist;
 import jampclientside.exceptions.ReadException;
 import jampclientside.exceptions.UpdateException;
 import jampclientside.logic.EventLogic;
@@ -49,6 +47,7 @@ import jampclientside.logic.ProductLogic;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -63,88 +62,254 @@ import javafx.scene.control.cell.TextFieldTableCell;
  */
 public class PC07ProductsController {
 
+    /**
+     * 
+     */
     private static final Logger LOGGER = Logger.getLogger("package.class");
 
+    /**
+     * 
+     */
     private final Tooltip tooltip = new Tooltip();
+    
+    /**
+     * 
+     */
     private final Tooltip tooltipID = new Tooltip();
+    
+    /**
+     * 
+     */
     private final Tooltip tooltipName = new Tooltip();
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menu;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuItem idMenuGastos;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuItem idMenuEventos;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuItem idMenuUsuarios;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuItem idMenuTel;
+   
+    /**
+     * 
+     */
     @FXML
     private MenuItem idMenuFTP;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuBar menuBar;
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menuMenu;
+    
+    /**
+     * 
+     */
     @FXML
     private MenuItem menuLogOut;
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menuEvent;
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menuGastos;
+   
+    /**
+     * 
+     */
     @FXML
     private Menu menuProductos;
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menuUsuarios;
+    
+    /**
+     * 
+     */
     @FXML
     private Menu menuTelefonos;
+    
+    /**
+     * 
+     */
     @FXML
     private VBox principalPane;
+    
+    /**
+     * 
+     */
     @FXML
     private Label lblDate;
+    
+    /**
+     * 
+     */
     @FXML
     private Label lblLogin;
+    
+    /**
+     * 
+     */
     @FXML
     private Label lblFullName;
+    
+    /**
+     * 
+     */
     @FXML
     private Label lblEmail;
+    
+    /**
+     * 
+     */
     @FXML
     private Label lbllTxoko;
+    
+    /**
+     * 
+     */
     @FXML
     private ComboBox<String> cbSearch;
+    
+    /**
+     * 
+     */
     @FXML
     private TextField txtSearch;
+    
+    /**
+     * 
+     */
     @FXML
     private Button btnSearch;
+    
+    /**
+     * 
+     */
     @FXML
     private Label labelError;
+    
+    /**
+     * 
+     */
     @FXML
     private Button addProduct;
+    
+    /**
+     * 
+     */
     @FXML
     private Button delProduct;
+    
+    /**
+     * 
+     */
     @FXML
     private Button updateProduct;
+    
+    /**
+     * 
+     */
     @FXML
     private Button btnLogOut;
+    
+    /**
+     * 
+     */
     @FXML
     private Button btnLogOut2;
+    
+    /**
+     * 
+     */
     @FXML
     private TableView<ProductBean> tbProducts;
+    
+    /**
+     * 
+     */
     @FXML
     private TableColumn tbcolName;
+    
+    /**
+     * 
+     */
     @FXML
     private TableColumn tbcolDescription;
+    
+    /**
+     * 
+     */
     @FXML
     private TableColumn tbcolPrice;
+    
+    /**
+     * 
+     */
     @FXML
     private TableColumn tbcolVenta;
+    
+    /**
+     * 
+     */
     @FXML
     private TableColumn tbcolStock;
     
+    /**
+     * 
+     */
     private ObservableList<ProductBean> productData;
    
+    /**
+     * 
+     */
     private int cerrar;
    
+    /**
+     * 
+     */
     private ProductLogic iLogicProduct;
 
+    /**
+     * 
+     */
     private UserBean user;
     
     /**
@@ -230,6 +395,11 @@ public class PC07ProductsController {
                 ((ProductBean) tbProducts.getItems().get(
                         e.getTablePosition().getRow())
                         ).setName(e.getNewValue());
+                try {
+                    addUpdateProduct();
+                } catch (CreateException | UpdateException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
@@ -238,16 +408,28 @@ public class PC07ProductsController {
             public void handle(CellEditEvent<ProductBean,String> e) {
                 ((ProductBean) tbProducts.getItems().get(
                         e.getTablePosition().getRow())
-                        ).setName(e.getNewValue());
+                        ).setDescription(e.getNewValue());
+                try {
+                    addUpdateProduct();
+                } catch (CreateException | UpdateException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
         });
+
         tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
         tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
             @Override
             public void handle(CellEditEvent<ProductBean,String> e) {
                 ((ProductBean) tbProducts.getItems().get(
                         e.getTablePosition().getRow())
-                        ).setName(e.getNewValue());
+                        ).setPrice(e.getNewValue());
+                try {
+                    addUpdateProduct();
+                } catch (CreateException | UpdateException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
@@ -256,7 +438,12 @@ public class PC07ProductsController {
             public void handle(CellEditEvent<ProductBean,String> e) {
                 ((ProductBean) tbProducts.getItems().get(
                         e.getTablePosition().getRow())
-                        ).setName(e.getNewValue());
+                        ).setStock(e.getNewValue());
+                try {
+                    addUpdateProduct();
+                } catch (CreateException | UpdateException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -405,22 +592,9 @@ public class PC07ProductsController {
                 ProductBean product = new ProductBean();
 
                 //añadir fila en blanco
-                tbProducts.getItems().add(null);
-                tbcolName.setCellValueFactory(
-                        new PropertyValueFactory<>("name"));
-                tbcolName.setCellFactory(TextFieldTableCell.forTableColumn());
-           
-                tbcolDescription.setCellValueFactory(
-                        new PropertyValueFactory<>("description"));
-                tbcolDescription.setCellFactory(TextFieldTableCell.forTableColumn());
-
-                tbcolPrice.setCellValueFactory(
-                        new PropertyValueFactory<>("price"));
-                tbcolPrice.setCellFactory(TextFieldTableCell.forTableColumn());
-                
-                tbcolStock.setCellValueFactory(
-                        new PropertyValueFactory<>("stock"));
-                tbcolStock.setCellFactory(TextFieldTableCell.forTableColumn());
+                tbProducts.getItems().add(product);
+                tbProducts.refresh();
+ 
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE,
@@ -451,7 +625,7 @@ public class PC07ProductsController {
         } catch (UpdateException ex) {
             Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       }
+    }
     
 
     /**
@@ -512,6 +686,10 @@ public class PC07ProductsController {
         }
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void eventWindow(ActionEvent ev) {
         LOGGER.info("clickOn Products Menu");
         try {
@@ -529,6 +707,10 @@ public class PC07ProductsController {
         }
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void telephoneWindow(ActionEvent ev) {
         LOGGER.info("clickOn Telephone Menu");
         try {
@@ -546,6 +728,10 @@ public class PC07ProductsController {
         }
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void expenseWindow(ActionEvent ev) {
         LOGGER.info("clickOn Gastos Menu");
         try {
@@ -563,6 +749,10 @@ public class PC07ProductsController {
         }
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void usersWindow(ActionEvent ev) {
         LOGGER.info("clickOn User Menu");
         try {
@@ -580,6 +770,10 @@ public class PC07ProductsController {
         }
     }
     
+    /**
+     * 
+     * @param ev 
+     */
     public void FTPClientWindow(ActionEvent ev) {
         LOGGER.info("clickOn FTP Client btn");
         try {
@@ -595,6 +789,10 @@ public class PC07ProductsController {
         }
     }
     
+    /**
+     * 
+     * @param ev 
+     */
     public void comboBoxOption(ActionEvent ev) {
         LOGGER.info("clickOn combo box");
         if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
@@ -645,6 +843,10 @@ public class PC07ProductsController {
         } 
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void searchButton(ActionEvent ev) {
         txtSearch.setDisable(false);
         LOGGER.info("clickOn search button");
@@ -694,6 +896,10 @@ public class PC07ProductsController {
         }
     }
     
+    /**
+     * 
+     * @return 
+     */
     private boolean textEmptyOrNot() {
         boolean empty = false;
         //si no esta vacio
@@ -703,11 +909,37 @@ public class PC07ProductsController {
         return empty;
     }
     
+    /**
+     * 
+     * @return 
+     */
     private boolean isSelected() {
         boolean isSelected = false;
         if (!tbProducts.getSelectionModel().getSelectedItems().isEmpty()) {
             isSelected = true;
         }
         return isSelected;
+    }
+    
+    /**
+     * 
+     * @throws CreateException
+     * @throws UpdateException 
+     */
+    private void addUpdateProduct() throws CreateException, UpdateException {
+        List<ProductBean> productos = tbProducts.getItems();
+      
+        for(ProductBean product: productos){
+            if(!product.getName().trim().isEmpty()&& !product.getDescription().trim().isEmpty()&& 
+                    !product.getPrice().trim().isEmpty() && !product.getStock().trim().isEmpty()){             
+                    
+                    List productequals = productData.stream().filter(p -> p.getIdProduct()== product.getIdProduct()).collect(Collectors.toList());
+                    if(productequals.size() == 0){
+                        iLogicProduct.createProduct(product);
+                    }else if (!productequals.get(0).equals(product)){
+                        iLogicProduct.updateProduct(product);
+                    }
+            }
+        }
     }
 }

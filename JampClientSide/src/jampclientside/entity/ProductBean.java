@@ -177,4 +177,28 @@ public class ProductBean implements Serializable{
         this.txokos = txokos;
     }
 
+        @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof ProductBean)) {
+            return false;
+        }
+        ProductBean other = (ProductBean) object;
+        if ((this.getIdProduct() == null && other.getIdProduct() != null) || (this.getIdProduct() != null && !this.idProduct.equals(other.idProduct))) {
+            return false;
+        }
+        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.name.equals(other.name))) {
+            return false;
+        }
+        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.description.equals(other.description))) {
+            return false;
+        }
+        if ((this.getStock() == null && other.getStock() != null) || (this.getStock() != null && !this.stock.equals(other.stock))) {
+            return false;
+        }
+        if ((this.getPrice() == null && other.getPrice() != null) || (this.getPrice() != null && !this.price.equals(other.price))) {
+            return false;
+        }
+        return true;
+    }
 }
