@@ -153,7 +153,7 @@
                   </Separator>
                   <VBox alignment="TOP_CENTER" prefHeight="242.0" prefWidth="161.0" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="addProduct" mnemonicParsing="false" text="Añadir producto">
+                        <Button fx:id="addProduct" mnemonicParsing="false" prefWidth="130.0" text="Añadir producto">
                            <VBox.margin>
                               <Insets left="10.0" top="25.0" />
                            </VBox.margin>
@@ -161,32 +161,42 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button fx:id="updateProduct" mnemonicParsing="false" text=" Modificar producto">
+                        <Button fx:id="delProduct" mnemonicParsing="false" text="Eliminar Producto">
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
                         </Button>
                      </children>
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
                   </VBox>
-                  <Button fx:id="delProduct" contentDisplay="CENTER" mnemonicParsing="false" text="Eliminar producto">
+                  <VBox prefHeight="151.0" prefWidth="133.0">
+                     <children>
+                        <Button fx:id="asignProduct" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="130.0" text="Añadir al Txoko">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="unasignProduct" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="130.0" text="Quitar del Txoko">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
                      <HBox.margin>
-                        <Insets left="30.0" top="25.0" />
+                        <Insets left="30.0" />
                      </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="addTxoko" contentDisplay="CENTER" mnemonicParsing="false" text="Añadir al Txoko">
-                     <HBox.margin>
-                        <Insets left="30.0" top="50.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
+                  </VBox>
                </children>
                <BorderPane.margin>
                   <Insets top="30.0" />
@@ -196,12 +206,14 @@
          <center>
             <TableView fx:id="tbProducts" editable="true" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="tbcolName" prefWidth="261.0" text="Nombre del producto" />
-                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="538.0" text="Descripción del producto" />
-                <TableColumn fx:id="tbcolPrice" prefWidth="169.0" text="Precio" />
-                <TableColumn fx:id="tbcolStock" prefWidth="131.0" text="Stock" />
-                <TableColumn fx:id="tbcolVenta" prefWidth="180.0" text="Productos a la Venta" />
+                <TableColumn fx:id="tbcolName" prefWidth="384.0" text="Nombre del producto" />
+                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="446.0" text="Descripción del producto" />
+                <TableColumn fx:id="tbcolPrice" prefWidth="248.0" text="Precio" />
+                <TableColumn fx:id="tbcolStock" prefWidth="201.0" text="Stock" />
               </columns>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </TableView>
          </center>
       </BorderPane>

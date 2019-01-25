@@ -6,10 +6,6 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -20,26 +16,26 @@ import javafx.beans.property.SimpleStringProperty;
 public class TelephoneBean implements Serializable{
     private SimpleIntegerProperty idTelephone;
     private SimpleStringProperty name;
-    private SimpleIntegerProperty telephone;
+    private SimpleStringProperty telephone;
     private SimpleStringProperty description;
-    private SimpleBooleanProperty venta;
+    private SimpleStringProperty town;
 
     public TelephoneBean(){
         this.idTelephone = new SimpleIntegerProperty();
         this.description = new SimpleStringProperty();
-        this.telephone = new SimpleIntegerProperty();
+        this.telephone = new SimpleStringProperty();
         this.name = new SimpleStringProperty();
-        this.venta = new SimpleBooleanProperty();
+        this.town = new SimpleStringProperty();
      }
      
     public TelephoneBean(String name,
                     String description,
-                    Integer telephone,
-                    Boolean venta){
+                    String telephone,
+                    String town){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
-        this.telephone=new SimpleIntegerProperty(telephone);
-        this.venta = new SimpleBooleanProperty(venta);
+        this.telephone=new SimpleStringProperty(telephone);
+        this.town = new SimpleStringProperty(town);
     }
     /**
      * @return the id
@@ -72,14 +68,14 @@ public class TelephoneBean implements Serializable{
     /**
      * @return the telephon
      */
-    public Integer getTelephon() {
+    public String getTelephon() {
         return this.telephone.get();
     }
 
     /**
      * @param telephon the telephon to set
      */
-    public void setTelephon(Integer telephone) {
+    public void setTelephon(String telephone) {
         this.telephone.set(telephone);
     }
 
@@ -89,6 +85,21 @@ public class TelephoneBean implements Serializable{
     public String getDescription() {
         return this.description.get();
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getTown() {
+        return this.town.get();
+    }
+
+    /**
+     * @param town the town to set
+     */
+    public void setTown(String town) {
+        this.town.set(town);
+    }
 
     /**
      * @param description the description to set
@@ -96,19 +107,32 @@ public class TelephoneBean implements Serializable{
     public void setDescription(String description) {
         this.description.set(description);
     }
+        public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TelephoneBean)) {
+            return false;
+        }
+        TelephoneBean other = (TelephoneBean) object;
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.idTelephone.equals(other.idTelephone))) {
+            return false;
+        }
+        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.name.equals(other.name))) {
+            return false;
+        }
+        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.description.equals(other.description))) {
+            return false;
+        }
+        if ((this.getTelephon()== null && other.getTelephon()!= null) || (this.getTelephon() != null && !this.telephone.equals(other.telephone))) {
+            return false;
+        }
+        if ((this.getTown()== null && other.getTown()!= null) || (this.getTown() != null && !this.town.equals(other.town))) {
+            return false;
+        }
 
-    /**
-     * @return the venta
-     */
-    public Boolean getVenta() {
-        return this.venta.get();
+        return true;
     }
 
     /**
-     * @param venta the venta to set
+     * @return the town
      */
-    public void setVenta(Boolean venta) {
-        this.venta.set(venta);
-    }
-
 }

@@ -8,8 +8,6 @@ package jampclientside.entity;
 
 import java.io.Serializable;
 import java.util.List;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -50,11 +48,6 @@ public class ProductBean implements Serializable{
     /**
      * 
      */
-    private SimpleStringProperty venta;
-    
-    /**
-     * 
-     */
     private List<TxokoBean> txokos;
     
     public ProductBean(){
@@ -63,7 +56,6 @@ public class ProductBean implements Serializable{
      this.description = new SimpleStringProperty();
      this.price = new SimpleStringProperty();
      this.stock = new SimpleStringProperty();
-     this.venta = new SimpleStringProperty();
      this.txokos = txokos;
 
      }
@@ -77,7 +69,6 @@ public class ProductBean implements Serializable{
         this.description=new SimpleStringProperty(description);
         this.stock=new SimpleStringProperty(stock);
         this.price = new SimpleStringProperty(price);
-        this.venta = new SimpleStringProperty(venta);
     }
 
     /**
@@ -148,20 +139,6 @@ public class ProductBean implements Serializable{
     public void setDescription(String description) {
         this.description.set(description);
     }    
-
-    /**
-     * @return the venta
-     */
-    public String getVenta() {
-        return this.venta.get();
-    }
-
-    /**
-     * @param venta the venta to set
-     */
-    public void setVenta(String venta) {
-        this.venta.set(venta);
-    }
 
     /**
      * @return the txokos

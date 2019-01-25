@@ -6,6 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.TelephoneBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ReadException;
@@ -26,43 +27,43 @@ public interface TelephoneLogic {
      * @param phone
      * @throws DeleteException 
      */
-    public void deleteTelephone(TelephoneBean phone) throws DeleteException;
+    public void deleteTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
      * @param phone
      * @throws UpdateException 
      */
-    public void updateTelephone(TelephoneBean phone) throws UpdateException;
+    public void updateTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
      * @param phone
      * @throws CreateException 
      */
-    public void createTelephone(TelephoneBean phone) throws CreateException;
+    public void createTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<TelephoneBean> findAllTelephone();
+    public List<TelephoneBean> findAllTelephone()throws BusinessLogicException;
     
     /**
      * 
      * @return 
      */
-    public List<TelephoneBean> findAllTelephoneByTxoko();
+    public List<TelephoneBean> findAllTelephoneByTxoko()throws BusinessLogicException;
     /**
      * 
      * @param <error>
      * @return 
      */
-    public List<TelephoneBean> findTelephoneById(Integer idTelephone);
+    public List<TelephoneBean> findTelephoneById(Integer idTelephone)throws BusinessLogicException;
     /**
      * 
      * @return 
      */
-    public List<TelephoneBean> findTelephoneByName(String name);
+    public List<TelephoneBean> findTelephoneByName(String name)throws BusinessLogicException;
 }

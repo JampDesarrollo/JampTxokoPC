@@ -183,10 +183,10 @@
          <center>
             <TableView fx:id="tbTelephone" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="tbcolName" prefWidth="308.0" text="Nombre del telefono" />
-                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="385.0" text="Descripción del telefono" />
-                <TableColumn fx:id="tbcolNumber" prefWidth="362.0" text="Numero de telefono" />
-                <TableColumn fx:id="tbcolVenta" prefWidth="210.0" text="Telefonos disponibles en el Txoko" />
+                <TableColumn fx:id="tbcolName" prefWidth="323.0" text="Nombre del telefono" />
+                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="424.0" text="Descripción del telefono" />
+                <TableColumn fx:id="tbcolNumber" prefWidth="287.0" text="Numero de telefono" />
+                <TableColumn fx:id="tbcolTown" prefWidth="231.0" text="Ciudad" />
               </columns>
             </TableView>
          </center>

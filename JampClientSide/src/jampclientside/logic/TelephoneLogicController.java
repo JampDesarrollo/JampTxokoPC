@@ -6,6 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.TelephoneBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ReadException;
@@ -35,10 +36,10 @@ public class TelephoneLogicController implements TelephoneLogic {
     /**
      * 
      * @param phone
-     * @throws DeleteException 
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
     @Override
-    public void deleteTelephone(TelephoneBean phone) throws DeleteException {
+    public void deleteTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -48,7 +49,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @throws UpdateException 
      */
     @Override
-    public void updateTelephone(TelephoneBean phone) throws UpdateException {
+    public void updateTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -58,7 +59,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @throws CreateException 
      */
     @Override
-    public void createTelephone(TelephoneBean phone) throws CreateException {
+    public void createTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -68,7 +69,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @throws ReadException 
      */
     @Override
-    public List<TelephoneBean> findAllTelephone(){
+    public List<TelephoneBean> findAllTelephone() throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -77,7 +78,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @return 
      */
     @Override
-    public List<TelephoneBean> findAllTelephoneByTxoko() {
+    public List<TelephoneBean> findAllTelephoneByTxoko() throws BusinessLogicException  {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -87,7 +88,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @return 
      */
     @Override
-    public List<TelephoneBean> findTelephoneById(Integer idTelephone) {
+    public List<TelephoneBean> findTelephoneById(Integer idTelephone) throws BusinessLogicException  {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -97,7 +98,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      * @return 
      */
     @Override
-    public List<TelephoneBean> findTelephoneByName(String name) {
+    public List<TelephoneBean> findTelephoneByName(String name) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

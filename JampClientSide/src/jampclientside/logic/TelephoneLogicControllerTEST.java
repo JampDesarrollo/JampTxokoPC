@@ -6,9 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.TelephoneBean;
-import jampclientside.exceptions.CreateException;
-import jampclientside.exceptions.DeleteException;
-import jampclientside.exceptions.UpdateException;
+import jampclientside.exceptions.BusinessLogicException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,27 +15,27 @@ import java.util.List;
  * @author odoo
  */
 public class TelephoneLogicControllerTEST implements TelephoneLogic {
-      private ArrayList<TelephoneBean> telephones;
+      private final ArrayList<TelephoneBean> telephones;
       public TelephoneLogicControllerTEST(){
         telephones=new ArrayList();
         //Create 25 TelephoneBean fake data objects.
         for(int i=0;i<25;i++)
-            telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, i, false));
+            telephones.add(new TelephoneBean("Telefono"+i,"Telefono de Prueba"+i, "9442321"+i, "string"));
     
     }
 
     @Override
-    public void deleteTelephone(TelephoneBean phone) throws DeleteException {
+    public void deleteTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void updateTelephone(TelephoneBean phone) throws UpdateException {
+    public void updateTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createTelephone(TelephoneBean phone) throws CreateException {
+    public void createTelephone(TelephoneBean phone) throws BusinessLogicException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -5,9 +5,9 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.entity.EventBean;
+import jampclientside.entity.ProductBean;
 import jampclientside.entity.TelephoneBean;
-import jampclientside.exceptions.ReadException;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
 import jampclientside.logic.ILogicFactory;
@@ -42,12 +42,15 @@ import javafx.stage.WindowEvent;
 import messageuserbean.UserBean;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 /**
@@ -125,7 +128,7 @@ public class PC08PhoneNumbersController{
     @FXML
     private TableColumn tbcolNumber;
     @FXML
-    private TableColumn tbcolVenta;
+    private TableColumn tbcolTown;
     @FXML
     private Label requiredTel;
 
@@ -217,16 +220,74 @@ public class PC08PhoneNumbersController{
         cbSearchTel.setOnAction(this::comboBoxOption);
         //boton de busqueda
         btnSearchTel.setOnAction(this::searchButton);
+        
+        tbcolName.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+        tbcolName.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((TelephoneBean) tbTelephone.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setName(e.getNewValue());
+                    addUpdateTelephone();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        tbcolDescription.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+        tbcolDescription.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((TelephoneBean) tbTelephone.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setDescription(e.getNewValue());
+                    addUpdateTelephone();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        tbcolNumber.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+        tbcolNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((TelephoneBean) tbTelephone.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setTelephon(e.getNewValue());
+                    addUpdateTelephone();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        tbcolTown.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+        tbcolTown.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((TelephoneBean) tbTelephone.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setTown(e.getNewValue());
+                    addUpdateTelephone();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         //las columnas van a coger el valor de los atributos
+        tbTelephone.getSelectionModel().selectedItemProperty()
+            .addListener(this::handleUsersTableSelectionChanged);
         tbcolDescription.setCellValueFactory(
                 new PropertyValueFactory<>("description"));
         tbcolName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
         tbcolNumber.setCellValueFactory(
                 new PropertyValueFactory<>("telephone"));
-        tbcolVenta.setCellValueFactory(
-                new PropertyValueFactory<>("venta"));
-        tbcolVenta.setCellFactory(CheckBoxTableCell.forTableColumn(tbcolVenta));
         //Show primary window
         stage.show();       
         stage.setOnCloseRequest((WindowEvent e) -> {
@@ -243,39 +304,48 @@ public class PC08PhoneNumbersController{
      * @param event WindowEvent event
      */
     private void windowShow(WindowEvent event) {
-        LOGGER.info("Beginning Telephone window::windowShow");
-        /*
-        String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
-        lblDate.setText("Último acceso: " + date);
-        lblEmail.setText("Email: " + user.getEmail());
-        lblFullName.setText("Nombre Completo: " + user.getFullname());
-        lblLogin.setText("Login: " + user.getLogin());
-        */
-        
-        cbSearchTel.getItems().removeAll(cbSearchTel.getItems());
-        cbSearchTel.getItems().addAll("Todos los telefonos de mi txoko", "Todos los telefonos del catalogo", "Id del telefono", "Nombre del telefono");
-        cbSearchTel.getSelectionModel().selectFirst();
-        labelError.setVisible(false);
-        cbSearchTel.requestFocus();
-        txtSearchTel.setDisable(true);
-        tbTelephone.setEditable(true);
-        btnSearchTel.setDisable(true);
-        addTelephone.setDisable(true);
-        delTelephone.setDisable(true);
-
-        menuMenu.setMnemonicParsing(true);
-        menuMenu.setText("_Menu");
-        
-        menuLogOut.setMnemonicParsing(true);
-        menuLogOut.setText("_Cerrar Sesion");
-        menuLogOut.setAccelerator(
-                new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
-
-        btnLogOut2.setMnemonicParsing(true);
-        btnLogOut2.setText("_Cerrar Sesion");
-        
-        telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
-        tbTelephone.setItems(telephoneData);
+        try {
+            LOGGER.info("Beginning Telephone window::windowShow");
+            /*
+            String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
+            lblDate.setText("Último acceso: " + date);
+            lblEmail.setText("Email: " + user.getEmail());
+            lblFullName.setText("Nombre Completo: " + user.getFullname());
+            lblLogin.setText("Login: " + user.getLogin());
+            */
+            
+            cbSearchTel.getItems().removeAll(cbSearchTel.getItems());
+            cbSearchTel.getItems().addAll("Todos los telefonos de mi txoko", "Todos los telefonos del catalogo", "Id del telefono", "Nombre del telefono");
+            cbSearchTel.getSelectionModel().selectFirst();
+            labelError.setVisible(false);
+            cbSearchTel.requestFocus();
+            txtSearchTel.setDisable(true);
+            tbTelephone.setEditable(true);
+            btnSearchTel.setDisable(true);
+            addTelephone.setDisable(true);
+            delTelephone.setDisable(true);
+            addTelephone.setDisable(true);
+            addTelephone.setMnemonicParsing(true);
+            addTelephone.setText("_Añadir Telefono");
+            delTelephone.setMnemonicParsing(true);
+            delTelephone.setText("_Eliminar Telefono");
+            
+            menuMenu.setMnemonicParsing(true);
+            menuMenu.setText("_Menu");
+            
+            menuLogOut.setMnemonicParsing(true);
+            menuLogOut.setText("_Cerrar Sesion");
+            menuLogOut.setAccelerator(
+                    new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
+            
+            btnLogOut2.setMnemonicParsing(true);
+            btnLogOut2.setText("_Cerrar Sesion");
+            
+            telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+            tbTelephone.setItems(telephoneData);
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -315,8 +385,24 @@ public class PC08PhoneNumbersController{
   
         }
     }
+    /**
+     * Method that change the selection of the table
+     * @param observable
+     * @param oldValue
+     * @param newValue 
+     */
+    private void handleUsersTableSelectionChanged(ObservableValue observable,
+             Object oldValue,
+             Object newValue) {
+        if(newValue!=null){
+            delTelephone.setDisable(false);
+        }else{
+            delTelephone.setDisable(true);
+        }   
+    }
 
     public void handleAddTelephone(ActionEvent ev) {
+        try{
         Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
         dialogoAlerta.setTitle("CONFIRMACION");
         dialogoAlerta.setContentText("¿Estas seguro que deseas añadir un telefono?");
@@ -326,27 +412,21 @@ public class PC08PhoneNumbersController{
         okButton.setId("buttonAdd");
         Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
         cancelButton.setId("buttonCancel");
-        //si da en el buttonAdd que se añada una fila
-        if (result.get() == ButtonType.OK) {
-            //añadir una fila a la tabla
-            //el txoko se puede coger del label o de la base de datos
-            //añadir a la base de datos y eliminar la fila 
-            EventBean event = new EventBean();
-            //añadir fila en blanco
-            tbTelephone.getItems().add(null);
-            tbcolName.setCellValueFactory(
-                    new PropertyValueFactory<>("name"));
-            tbcolName.setCellFactory(TextFieldTableCell.forTableColumn());
-           
-            tbcolDescription.setCellValueFactory(
-                    new PropertyValueFactory<>("description"));
-            tbcolDescription.setCellFactory(TextFieldTableCell.forTableColumn());
 
-            tbcolNumber.setCellValueFactory(
-                    new PropertyValueFactory<>("telephone"));
-            tbcolNumber.setCellFactory(TextFieldTableCell.forTableColumn());
+        if (result.get() == ButtonType.OK) {
+
+            TelephoneBean event = new TelephoneBean();
+            
+            tbTelephone.getItems().add(event);
+            tbTelephone.refresh();
+
         }
 
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE,
+                    "PC08TelephoneController: Error adding telephone: {0}",
+                    e.getMessage());
+        }
     }
     
     public void handleDeleteTelephone(ActionEvent ev) {
@@ -362,14 +442,29 @@ public class PC08PhoneNumbersController{
             Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
             cancelButton.setId("buttonNotDelete");
             if (resultado.get() == ButtonType.OK) {
-                //si pulsa en en aceptar que elimine
-                //tengo que saber el txoko de la persona
-                //el txoko se puede coger del label o de la base de datos
-                // tengo que saber el id del evento
-                //eliminar de la base de datos y eliminar la fila
-                tbTelephone.getItems().remove(tbTelephone.getSelectionModel().getSelectedItem());
-                tbTelephone.refresh();
-            }
+                try {
+                    TelephoneBean selectedTelephone=((TelephoneBean)tbTelephone.getSelectionModel()
+                            .getSelectedItem());
+                    this.iLogicTelephone.deleteTelephone(selectedTelephone);
+                    
+                    tbTelephone.getItems().remove(tbTelephone.getSelectionModel().getSelectedItem());
+                    tbTelephone.refresh();
+                    
+                    dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setContentText("El telefono "+selectedTelephone.getName()+" ha sido eliminado.");
+                    dialogoAlerta.setHeaderText("Eliminar un Telefono");
+                    dialogoAlerta.showAndWait();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                    dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setContentText("No has eliminado el telefono!!");
+                    dialogoAlerta.setHeaderText("Eliminar un telefono");
+                    dialogoAlerta.showAndWait();
+                }
         } else {
 
             Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
@@ -380,21 +475,19 @@ public class PC08PhoneNumbersController{
         }
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void eventWindow(ActionEvent ev) {
         LOGGER.info("clickOn Event Menu");
         try {
             EventLogic iLogicEvent = ILogicFactory.getEventLogic();
-            //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC05EventsController.fxml"));
-            //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
-            //obtener el controlador
             PC05EventsController controller = (PC05EventsController) loader.getController();
-            //le mando el objeto logica al controlador 
             controller.setILogic(iLogicEvent);
-            //a ese controlador le paso el stage
             controller.setStage(stage);
-            //inizializo el stage
             controller.initStage(root);
             cbSearchTel.requestFocus();
         } catch (IOException ex) {
@@ -403,7 +496,10 @@ public class PC08PhoneNumbersController{
 
     }
 
-    //ir a la ventana de los telefonos
+    /**
+     * 
+     * @param ev 
+     */
     public void productWindow(ActionEvent ev) {
         LOGGER.info("clickOn Telephone Menu");
         try {
@@ -424,12 +520,14 @@ public class PC08PhoneNumbersController{
             stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
-        } catch (ReadException ex) {
-            Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
+    /**
+     * 
+     * @param ev 
+     */
     public void expenseWindow(ActionEvent ev) {
         LOGGER.info("clickOn Gastos Menu");
         try {
@@ -452,7 +550,11 @@ public class PC08PhoneNumbersController{
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
     }
-    //ventana de los usuarios
+    
+    /**
+     * 
+     * @param ev 
+     */
     public void usersWindow(ActionEvent ev) {
         LOGGER.info("clickOn User Menu");
         try {
@@ -476,7 +578,10 @@ public class PC08PhoneNumbersController{
         }
     }
     
-    //ventana del cliente FTP
+    /**
+     * 
+     * @param ev 
+     */
     public void FTPClientWindow(ActionEvent ev) {
         LOGGER.info("clickOn FTP Client btn");
         try {
@@ -498,64 +603,69 @@ public class PC08PhoneNumbersController{
         }
     }
     
+    /**
+     * 
+     * @param ev 
+     */
     public void comboBoxOption(ActionEvent ev) {
         LOGGER.info("clickOn combo box");
         if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Todos los telefonos de mi txoko")) {
-            telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephoneByTxoko());
-            if(telephoneData == null){
-               Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
-               dialogoAlerta.setTitle("INFORMACION");
-               dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-               dialogoAlerta.showAndWait(); 
-            }else{
-                tbTelephone.setItems(telephoneData);
-            } 
+            try {
+                addTelephone.setDisable(true);
+                telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephoneByTxoko());
+                if(telephoneData == null){
+                    Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                    dialogoAlerta.showAndWait();
+                }else{
+                    tbTelephone.setItems(telephoneData); 
+                }
+            } catch (BusinessLogicException ex) {
+                Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Todos los telefonos del catalogo")){
-            telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
-            if(telephoneData == null){
-               Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
-               dialogoAlerta.setTitle("INFORMACION");
-               dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-               dialogoAlerta.showAndWait(); 
-            }else{
-                tbTelephone.setItems(telephoneData);
-            }   
+            try {
+                addTelephone.setDisable(false);
+                telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+                if(telephoneData == null){
+                    Alert dialogoAlerta = new Alert(AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                    dialogoAlerta.showAndWait();
+                }else{
+                    tbTelephone.setItems(telephoneData);   
+                }
+            } catch (BusinessLogicException ex) {
+                Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Id del telefono")) {
-            //el boton de busqueda estara habilitado
+
+            addTelephone.setDisable(true);
             btnSearchTel.setDisable(false);
-            //si anteriormente hay algun texto, quitarlo
             txtSearchTel.setText("");
-            //habilitar el textfield
             txtSearchTel.setDisable(false);
-            //que se ponga el foco en el text field
             txtSearchTel.requestFocus();
             tooltipID.setText("Escribe el ID del telefono");
             txtSearchTel.setTooltip(tooltipID);
-            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
             labelError.setVisible(false);
             txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
 
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Nombre del telefono")) {
-            //el boton de busqueda estara habilitado
+
+            addTelephone.setDisable(true);
             btnSearchTel.setDisable(false);
-            //si anteriormente hay algun texto, quitarlo
             txtSearchTel.setText("");
-            //habilitar el textfield
             txtSearchTel.setDisable(false);
-            //que se ponga el foco en el text field
             txtSearchTel.requestFocus();
             tooltipName.setText("Escribe el nombre del telefono");
             txtSearchTel.setTooltip(tooltipName);
-            //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
             labelError.setVisible(false);
             txtSearchTel.setStyle("-fx-border-color: -fx-box-border;");
         }
     }
     
     public void searchButton(ActionEvent ev) {
-        //se habilitan los botones de añadir evento, eliminar evento y busqueda de la imagen
-        addTelephone.setDisable(false);
-        delTelephone.setDisable(false);
         LOGGER.info("clickOn search button");
         //que se quite lo rojo si anteriormente habia seleccionado algo y daba error
         labelError.setVisible(false);
@@ -566,16 +676,20 @@ public class PC08PhoneNumbersController{
             boolean tfIDEmpty = textEmptyOrNot();
             //si no esta vacio
             if (tfIDEmpty) {           
-                int idTelephone = Integer.parseInt(txtSearchTel.getText().trim());
-
-                telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneById(idTelephone));
-                if(telephoneData == null){
-                   Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                   dialogoAlerta.setTitle("INFORMACION");
-                   dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-                   dialogoAlerta.showAndWait(); 
-                }else{
-                    tbTelephone.setItems(telephoneData);
+                try {
+                    int idTelephone = Integer.parseInt(txtSearchTel.getText().trim());
+                    
+                    telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneById(idTelephone));
+                    if(telephoneData == null){
+                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoAlerta.setTitle("INFORMACION");
+                        dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                        dialogoAlerta.showAndWait();
+                    }else{
+                        tbTelephone.setItems(telephoneData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 txtSearchTel.setStyle("-fx-border-color: red;");
@@ -584,22 +698,25 @@ public class PC08PhoneNumbersController{
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Nombre del telefono")) {
-            //miramos si el text field esta vacio
             boolean tfNameEmpty = textEmptyOrNot();
-            //si no esta vacio
             if (tfNameEmpty) {
-                String name = txtSearchTel.getText();
-
-                telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneByName(name));
-                if(telephoneData == null){
-                   Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                   dialogoAlerta.setTitle("INFORMACION");
-                   dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-                   dialogoAlerta.showAndWait(); 
-                }else{
-                    tbTelephone.setItems(telephoneData);
+                try {
+                    String name = txtSearchTel.getText();
+                    
+                    telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneByName(name));
+                    if(telephoneData == null){
+                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoAlerta.setTitle("INFORMACION");
+                        dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                        dialogoAlerta.showAndWait();
+                    }else{
+                        tbTelephone.setItems(telephoneData);
+                    }
                 }
-            }//si esta vacio
+                catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             else {
                 txtSearchTel.setStyle("-fx-border-color: red;");
                 labelError.setText("Tienes que escribir el nombre");
@@ -627,5 +744,62 @@ public class PC08PhoneNumbersController{
             isSelected = true;
         }
         return isSelected;
+    }
+    
+    private void addUpdateTelephone() throws BusinessLogicException {
+        List<TelephoneBean> telephones = tbTelephone.getItems();
+      
+        for(TelephoneBean telephon: telephones){
+            if(!telephone.getName().trim().equals("")&& !telephone.getDescription().trim().equals("")&& 
+                    !telephone.getTelephon().trim().equals("")){             
+                    
+                    List telephoneEquals = telephoneData.stream().filter(t -> t.getId() == telephon.getId()).collect(Collectors.toList());
+                    if(telephoneEquals.size() == 0){
+                        addTelephone(telephon);
+                    }else if(telephoneEquals.get(0).equals(telephon)) {
+                        iLogicTelephone.updateTelephone(telephon);
+                    }
+            }else{
+                        LOGGER.info("CHAPUZAS");
+            }
+        }
+    }
+
+    private void addTelephone(TelephoneBean telephone) {
+            Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+            dialogoAlerta.setTitle("CONFIRMACION");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas añadir el teléfono "+telephone.getName()+"?");
+            dialogoAlerta.setHeaderText("Añadir un teléfono");
+            Optional<ButtonType> result = dialogoAlerta.showAndWait();
+            Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("buttonAdd");
+            Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+            cancelButton.setId("buttonCancel");
+        
+            if (result.get() == ButtonType.OK) {
+                
+                try {
+                    iLogicTelephone.createTelephone(telephone);
+                    
+                    tbTelephone.getItems().add(telephone);
+                    tbTelephone.refresh();
+                    
+                    dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setContentText("El teléfono "+telephone.getName()+" ha sido añadido.");
+                    dialogoAlerta.setHeaderText("Añadir un teléfono");
+                    dialogoAlerta.showAndWait();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                
+                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("El teléfono "+telephone.getName()+" no ha sido añadido.");
+                dialogoAlerta.setHeaderText("Añadir un teléfono");
+                dialogoAlerta.showAndWait();
+                
+            }
     }
 }
