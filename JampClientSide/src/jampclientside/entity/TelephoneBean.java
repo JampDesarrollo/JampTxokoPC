@@ -113,19 +113,19 @@ public class TelephoneBean implements Serializable{
             return false;
         }
         TelephoneBean other = (TelephoneBean) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.idTelephone.equals(other.idTelephone))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
             return false;
         }
-        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.name.equals(other.name))) {
+        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.getName().equals(other.getName()))) {
             return false;
         }
-        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.description.equals(other.description))) {
+        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.getDescription().equals(other.getDescription()))) {
             return false;
         }
-        if ((this.getTelephon()== null && other.getTelephon()!= null) || (this.getTelephon() != null && !this.telephone.equals(other.telephone))) {
+        if ((this.getTelephon()== null && other.getTelephon()!= null) || (this.getTelephon() != null && !this.getTelephon().equals(other.getTelephon()))) {
             return false;
         }
-        if ((this.getTown()== null && other.getTown()!= null) || (this.getTown() != null && !this.town.equals(other.town))) {
+        if ((this.getTown()== null && other.getTown()!= null) || (this.getTown() != null && !this.getTown().equals(other.getTown()))) {
             return false;
         }
 

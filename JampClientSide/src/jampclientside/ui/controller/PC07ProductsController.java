@@ -46,13 +46,23 @@ import jampclientside.logic.ProductLogic;
 import jampclientside.logic.TelephoneLogic;
 import jampclientside.logic.UserLogic;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * FXML PC07ProductsController class
@@ -91,31 +101,25 @@ public class PC07ProductsController {
      * 
      */
     @FXML
-    private Menu menu;
+    private MenuItem idMenuExpense;
     
     /**
      * 
      */
     @FXML
-    private MenuItem idMenuGastos;
+    private MenuItem idMenuEvent;
     
     /**
      * 
      */
     @FXML
-    private MenuItem idMenuEventos;
+    private MenuItem idMenuUser;
     
     /**
      * 
      */
     @FXML
-    private MenuItem idMenuUsuarios;
-    
-    /**
-     * 
-     */
-    @FXML
-    private MenuItem idMenuTel;
+    private MenuItem idMenuTelephon;
    
     /**
      * 
@@ -151,31 +155,31 @@ public class PC07ProductsController {
      * 
      */
     @FXML
-    private Menu menuGastos;
+    private Menu menuExpense;
    
     /**
      * 
      */
     @FXML
-    private Menu menuProductos;
+    private Menu menuProduct;
     
     /**
      * 
      */
     @FXML
-    private Menu menuUsuarios;
+    private Menu menuUser;
     
     /**
      * 
      */
     @FXML
-    private Menu menuTelefonos;
+    private Menu menuTelephon;
     
     /**
      * 
      */
     @FXML
-    private VBox principalPane;
+    private VBox productPane;
     
     /**
      * 
@@ -375,8 +379,6 @@ public class PC07ProductsController {
      * Initializes the controller class.
      *
      * @param root root
-     * @throws java.io.IOException InputOuput exception
-     * @throws jampclientside.exceptions.ReadException
      */
     public void initStage(Parent root){
         try {
@@ -385,15 +387,15 @@ public class PC07ProductsController {
             stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
-            stage.setResizable(true);
+            stage.setResizable(false);
             stage.setTitle("Productos");
             stage.setOnShowing(this::windowShow);
             menuLogOut.setOnAction(this::logOutAction);
             btnLogOut2.setOnAction(this::logOutAction);
-            idMenuEventos.setOnAction(this::eventWindow);
-            idMenuGastos.setOnAction(this::expenseWindow);
-            idMenuTel.setOnAction(this::telephoneWindow);
-            idMenuUsuarios.setOnAction(this::usersWindow);
+            idMenuEvent.setOnAction(this::eventWindow);
+            idMenuExpense.setOnAction(this::expenseWindow);
+            idMenuTelephon.setOnAction(this::telephoneWindow);
+            idMenuUser.setOnAction(this::usersWindow);
             idMenuFTP.setOnAction(this::usersWindow);
             addProduct.setOnAction(this::handleAddProduct);
             delProduct.setOnAction(this::handleDeleteProduct);
@@ -476,12 +478,21 @@ public class PC07ProductsController {
                 cerrarSesionAlert(cerrar);
             });
             
-            String idTxoko = "5";
+            String idTxoko = "1";
             
             productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-            tbProducts.setItems(productData);
+            if(productData.isEmpty()){
+                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("No hay ningun Producto");
+                dialogoAlerta.setHeaderText("Productos Txoko");
+                dialogoAlerta.showAndWait();
+            }else{
+                tbProducts.setItems(productData);
+                productDatacopy.addAll(productData);
+            }
             
-            productDatacopy.addAll(productData);
+
                     
             
             
@@ -498,16 +509,16 @@ public class PC07ProductsController {
     private void windowShow(WindowEvent event) {
 
             LOGGER.info("Beginning Product Window::windowShow");
-            /*
+          /*  
             String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
             
             lblDate.setText("Último acceso: " + date);
             lblEmail.setText("Email: " + user.getEmail());
             lblFullName.setText("Nombre Completo: " + user.getFullname());
             lblLogin.setText("Login: " + user.getLogin());
-            */
+           */ 
             cbSearch.getItems().removeAll(cbSearch.getItems());
-            cbSearch.getItems().addAll("Todos los productos de mi txoko", "Todos los productos del catalogo", "Id del producto", "Nombre del producto");
+            cbSearch.getItems().addAll("Todos los productos del catalogo","Todos los productos de mi txoko", "Id del producto", "Nombre del producto");
             cbSearch.getSelectionModel().selectFirst();
             labelError.setVisible(false);
             cbSearch.requestFocus();
@@ -515,11 +526,8 @@ public class PC07ProductsController {
             tbProducts.setEditable(true);
             btnSearch.setDisable(true);
             delProduct.setDisable(true);
-            addProduct.setDisable(true);
             asignProduct.setDisable(true);
             unasignProduct.setDisable(true);
-           /* tooltipAddButton.setText("Busca todos los productos para activar el boton");
-            addProduct.setTooltip(tooltipAddButton);*/
             addProduct.setMnemonicParsing(true);
             addProduct.setText("_Añadir Producto");
             delProduct.setMnemonicParsing(true);
@@ -530,16 +538,16 @@ public class PC07ProductsController {
             menuLogOut.setText("_Cerrar Sesion");
             menuLogOut.setAccelerator(
                     new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
-            idMenuEventos.setMnemonicParsing(true);
-            idMenuEventos.setText("Ir a la ventana de E_ventos");
-            idMenuEventos.setAccelerator(
+            idMenuEvent.setMnemonicParsing(true);
+            idMenuEvent.setText("Ir a la ventana de E_ventos");
+            idMenuEvent.setAccelerator(
                     new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
             
             btnLogOut2.setMnemonicParsing(true);
             btnLogOut2.setText("_Cerrar Sesion");
             
             //String idTxoko = lbllTxoko.getText();
-            String idTxoko = "5";
+            String idTxoko = "1";
             
     }
     
@@ -652,9 +660,9 @@ public class PC07ProductsController {
 
             if (result.get() == ButtonType.OK) {
 
-                List<TxokoBean> txoko = new ArrayList<TxokoBean>();
+                List<TxokoBean> txoko = new ArrayList<>();
                 TxokoBean aux = new TxokoBean();
-                String idTxoko = "5";
+                String idTxoko = "1";
                 aux.setIdTxoko(idTxoko);
                 txoko.add(aux);
                 selectedProduct.setTxokos(txoko);
@@ -664,7 +672,7 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" ha sido añadido a tu txoko.");
+                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido añadido a tu txoko.");
                 dialogoAlerta.setHeaderText("Añadir un producto al txoko");
                 dialogoAlerta.showAndWait();
  
@@ -672,11 +680,11 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("No has añadido el producto "+selectedProduct.getName()+"  a tu txoko!!");
+                dialogoAlerta.setContentText("No has añadido el producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" a tu txoko!!");
                 dialogoAlerta.setHeaderText("Añadir un producto al txoko");
                 dialogoAlerta.showAndWait();
             }
-        } catch (Exception e) {
+        } catch (BusinessLogicException e) {
             LOGGER.log(Level.SEVERE,
                     "PC07ProductsController: Error adding product: {0}",
                     e.getMessage());
@@ -703,9 +711,9 @@ public class PC07ProductsController {
 
             if (result.get() == ButtonType.OK) {
 
-                List<TxokoBean> txoko = new ArrayList<TxokoBean>();
+                List<TxokoBean> txoko = new ArrayList<>();
                 TxokoBean aux = new TxokoBean();
-                String idTxoko = "5";
+                String idTxoko = "1";
                 aux.setIdTxoko(idTxoko);
                 txoko.remove(aux);
                 selectedProduct.setTxokos(txoko);
@@ -715,7 +723,7 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" ha sido eliminado de tu txoko.");
+                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido eliminado de tu txoko.");
                 dialogoAlerta.setHeaderText("Quitar un producto del txoko");
                 dialogoAlerta.showAndWait();
  
@@ -723,11 +731,11 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("No has quitado el producto "+selectedProduct.getName()+"  de tu txoko!!");
+                dialogoAlerta.setContentText("No has quitado el producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" de tu txoko!!");
                 dialogoAlerta.setHeaderText("Quitar un producto del txoko");
                 dialogoAlerta.showAndWait();
             }
-        } catch (Exception e) {
+        } catch (BusinessLogicException e) {
             LOGGER.log(Level.SEVERE,
                     "PC07ProductsController: Error adding product: {0}",
                     e.getMessage());
@@ -764,7 +772,7 @@ public class PC07ProductsController {
                     
                     dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                     dialogoAlerta.setTitle("INFORMACION");
-                    dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" ha sido eliminado.");
+                    dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido eliminado.");
                     dialogoAlerta.setHeaderText("Eliminar un producto");
                     dialogoAlerta.showAndWait();
                     
@@ -901,71 +909,77 @@ public class PC07ProductsController {
      */
     public void comboBoxOption(ActionEvent ev){
         LOGGER.info("clickOn combo box");
-        if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos de mi txoko")) {
-            try {
-                asignProduct.setDisable(true);
-                unasignProduct.setDisable(false);
-                addProduct.setDisable(true);
-                btnSearch.setDisable(true);
-                txtSearch.setDisable(true);
-                //String idTxoko = lbllTxoko.getText();
-                String idTxoko = "1";
-                productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
-                if(productData == null){
-                    Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoAlerta.setTitle("INFORMACION");
-                    dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
-                    dialogoAlerta.showAndWait();
-                }else{
-                    tbProducts.setItems(productData); 
-                }
-            } catch (BusinessLogicException ex) {
-                Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Todos los productos del catalogo")) {
-            try {
+        switch (cbSearch.getSelectionModel().getSelectedItem()) {
+            case "Todos los productos de mi txoko":
+                try {
+                    asignProduct.setDisable(true);
+                    unasignProduct.setDisable(false);
+                    addProduct.setDisable(true);
+                    btnSearch.setDisable(true);
+                    txtSearch.setDisable(true);
+                    //String idTxoko = lbllTxoko.getText();
+                    String idTxoko = "1";
+                    productData = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
+                    if(productData == null){
+                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoAlerta.setTitle("INFORMACION");
+                        dialogoAlerta.setHeaderText("No hay productos en la lista");
+                        dialogoAlerta.showAndWait();
+                    }else{
+                        tbProducts.setItems(productData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "Todos los productos del catalogo":
+                try {
+                    asignProduct.setDisable(false);
+                    unasignProduct.setDisable(true);
+                    addProduct.setDisable(false);
+                    btnSearch.setDisable(true);
+                    txtSearch.setDisable(true);
+                    productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+                    if(productData == null){
+                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                        dialogoAlerta.setTitle("INFORMACION");
+                        dialogoAlerta.setHeaderText("No hay productos en la lista");
+                        dialogoAlerta.showAndWait();
+                    }else{
+                        tbProducts.setItems(productData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }   break;
+            case "Id del producto":
+                //tbProducts.getItems().clear();
                 asignProduct.setDisable(false);
                 unasignProduct.setDisable(true);
-                addProduct.setDisable(false);
-                btnSearch.setDisable(true);
-                txtSearch.setDisable(true);
-                productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-                if(productData == null){
-                    Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                    dialogoAlerta.setTitle("INFORMACION");
-                    dialogoAlerta.setHeaderText("No hay prodcutos en la lista");
-                    dialogoAlerta.showAndWait();
-                }else{
-                    tbProducts.setItems(productData); 
-                }
-            } catch (BusinessLogicException ex) {
-                Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
-            asignProduct.setDisable(false);
-            unasignProduct.setDisable(true);
-            addProduct.setDisable(true);
-            btnSearch.setDisable(false);
-            txtSearch.setText("");
-            txtSearch.setDisable(false);
-            txtSearch.requestFocus();
-            tooltipID.setText("Escribe el ID del producto");
-            txtSearch.setTooltip(tooltipID);
-            labelError.setVisible(false);
-            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
- 
-        } else if (cbSearch.getSelectionModel().getSelectedItem().equals("Nombre del producto")) {
-            asignProduct.setDisable(false);
-            unasignProduct.setDisable(true);
-            addProduct.setDisable(true);
-            btnSearch.setDisable(false);
-            txtSearch.setText("");
-            txtSearch.setDisable(false);
-            txtSearch.requestFocus();
-            tooltipName.setText("Escribe el nombre del producto");
-            txtSearch.setTooltip(tooltipName);
-            labelError.setVisible(false);
-            txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+                addProduct.setDisable(true);
+                btnSearch.setDisable(false);
+                txtSearch.setText("");
+                txtSearch.setDisable(false);
+                txtSearch.requestFocus();
+                tooltipID.setText("Escribe el ID del producto");
+                txtSearch.setTooltip(tooltipID);
+                labelError.setVisible(false);
+                txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+                break;
+            case "Nombre del producto":
+               // tbProducts.getItems().clear();
+                asignProduct.setDisable(false);
+                unasignProduct.setDisable(true);
+                addProduct.setDisable(true);
+                btnSearch.setDisable(false);
+                txtSearch.setText("");
+                txtSearch.setDisable(false);
+                txtSearch.requestFocus();
+                tooltipName.setText("Escribe el nombre del producto");
+                txtSearch.setTooltip(tooltipName);
+                labelError.setVisible(false);
+                txtSearch.setStyle("-fx-border-color: -fx-box-border;");
+                break;
+            default:
+                break;
         } 
     }
 
@@ -985,7 +999,7 @@ public class PC07ProductsController {
                 try {
                     String idProduct = txtSearch.getText();
                     productData = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
-                    if(productData.size()==0){
+                    if(productData.isEmpty()){
                         Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                         dialogoAlerta.setTitle("INFORMACION");
                         dialogoAlerta.setHeaderText("No hay productos en la lista");
@@ -1069,9 +1083,8 @@ public class PC07ProductsController {
               product.getStock()!=null && !product.getStock().trim().isEmpty()){             
                     
                     List productequals = productDatacopy.stream().filter(p -> p.getIdProduct().equals(product.getIdProduct())).collect(Collectors.toList());
-                    if(productequals.size()==0){
-                        iLogicProduct.createProduct(product);
-                        //addProdcut(product);
+                    if(productequals.isEmpty()){
+                        addProdcut(product);
                     }else if(!productequals.get(0).equals(product)){
                         iLogicProduct.updateProduct(product);
                     }
@@ -1086,7 +1099,7 @@ public class PC07ProductsController {
 
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
             dialogoAlerta.setTitle("CONFIRMACION");
-            dialogoAlerta.setContentText("¿Estas seguro que deseas añadir el producto "+product.getName()+"?");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas añadir el producto "+product.getName()+" "+product.getDescription()+"?");
             dialogoAlerta.setHeaderText("Añadir un producto");
             Optional<ButtonType> result = dialogoAlerta.showAndWait();
             Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
@@ -1097,24 +1110,51 @@ public class PC07ProductsController {
             if (result.get() == ButtonType.OK) {
                 
                 iLogicProduct.createProduct(product);
-                
-                tbProducts.getItems().add(product);
-                tbProducts.refresh();
  
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" ha sido añadido.");
+                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" ha sido añadido.");
                 dialogoAlerta.setHeaderText("Añadir un producto");
                 dialogoAlerta.showAndWait();
             }else{
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" no ha sido añadido.");
+                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" no ha sido añadido.");
                 dialogoAlerta.setHeaderText("Añadir un producto");
                 dialogoAlerta.showAndWait();
                 
             }
     }
+     
+    @FXML
+    private void handleImprimirAction(ActionEvent event){
+        try {
+            JasperReport report=
+                JasperCompileManager.compileReport(getClass()
+                    .getResourceAsStream("/jampclientside/ui/report/newReport1.jrxml"));
+            //Data for the report: a collection of UserBean passed as a JRDataSource 
+            //implementation 
+            JRBeanCollectionDataSource dataItems=
+                    new JRBeanCollectionDataSource((Collection<ProductBean>)this.tbProducts.getItems());
+            //Map of parameter to be passed to the report
+            Map<String,Object> parameters=new HashMap<>();
+            //Fill report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report,parameters,dataItems);
+            //Create and show the report window. The second parameter false value makes 
+            //report window not to close app.
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint,false);
+            jasperViewer.setVisible(true);
+           // jasperViewer.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        } catch (JRException ex) {
+            //If there is an error show message and
+            //log it.
+
+            LOGGER.log(Level.SEVERE,
+                        "PC07ProductsController: Error printing report: {0}",
+                        ex.getMessage());
+        }
+    }
 
 }
+

@@ -7,11 +7,7 @@ package jampclientside.logic;
 
 import jampclientside.entity.ProductBean;
 import jampclientside.exceptions.BusinessLogicException;
-import jampclientside.exceptions.CreateException;
-import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
-import jampclientside.exceptions.ReadException;
-import jampclientside.exceptions.UpdateException;
 import jampclientside.rest.ProductRESTClient;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,9 +16,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 
 /**
- *
- * Clase que implementa la interfaz de Logica. Class that implements the logic
- * interface.
+ * Class that implements the productLogic iterface
  *
  * @author Julen
  */
@@ -30,7 +24,7 @@ import javax.ws.rs.core.GenericType;
 public class ProductLogicController implements ProductLogic {
 
     //REST users web client
-    private ProductRESTClient ProductWebClient;
+    private final ProductRESTClient ProductWebClient;
     
     /**
      * Attribute to appear the information text.
@@ -49,7 +43,6 @@ public class ProductLogicController implements ProductLogic {
      * This is done by sending a DELETE request to a RESTful web service.
      * @param product The ProductBean object to be deleted.
      * @throws jampclientside.exceptions.BusinessLogicException
-     * @throws DeleteException
      */
     @Override
     public void deleteProduct(ProductBean product) throws BusinessLogicException {
@@ -67,18 +60,18 @@ public class ProductLogicController implements ProductLogic {
      * This method updates data for an existing Product. 
      * This is done by sending a PUT request to a RESTful web service.
      * @param product The PrductBean object to be updated.
-     * @throws UpdateException If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
     @Override
     public void updateProduct(ProductBean product) throws BusinessLogicException {
         try{
-            LOGGER.log(Level.INFO,"ProductImplementation: Updating user {0}.",product.getIdProduct());
+            LOGGER.log(Level.INFO,"ProductImplementation: Updating product {0}.",product.getIdProduct());
             ProductWebClient.updateProduct(product);
         }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception updating user, {0}",
+                    "ProductImplementation: Exception updating product, {0}",
                     ex.getMessage());
-            throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error updating product:\n"+ex.getMessage());
         }
     }
 
@@ -86,26 +79,26 @@ public class ProductLogicController implements ProductLogic {
      * This method adds a new created Product. This is done by sending a POST 
      * request to a RESTful web service.
      * @param product The UserBean object to be added.
-     * @throws CreateException If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
     @Override
     public void createProduct(ProductBean product) throws BusinessLogicException {
          try{
-            LOGGER.log(Level.INFO,"ProductImplementation: Creating user {0}.",product.getIdProduct());
+            LOGGER.log(Level.INFO,"ProductImplementation: Creating product {0}.",product.getIdProduct());
             
             ProductWebClient.createProduct(product);
         }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception creating user, {0}",
+                    "ProductImplementation: Exception creating product, {0}",
                     ex.getMessage());
-            throw new BusinessLogicException("ProductImplementation: Error creating user:" + ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error creating product:" + ex.getMessage());
         }
     }
        
     /**
-     * This method returns a collection of products for users.
+     * This method returns a all products.
      * @return A collection of Product.
-     * @throws ReadExcdeption If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
     @Override
     public List<ProductBean> findAllProducts() throws BusinessLogicException{
@@ -118,23 +111,23 @@ public class ProductLogicController implements ProductLogic {
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception finding all products, {0}",
                     ex.getMessage());
-            throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error finding products:\n"+ex.getMessage());
         }
         
         return productos;
     }
 
     /**
-     * 
+     * This method returns a all products by id.
      * @param idProduct
-     * @return 
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
     @Override
     public ProductBean findProductById(String idProduct) throws BusinessLogicException{
             ProductBean producto = null;
         try{
             LOGGER.info("ProductImplementation: Finding products by id from REST service (XML).");
-            //Ask webClient for all departments' data.
             producto = ProductWebClient.findProductById(ProductBean.class, idProduct);
         }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
@@ -146,10 +139,11 @@ public class ProductLogicController implements ProductLogic {
     }
 
     /**
-     * 
+     * This method returns a product by id and by txoko.
      * @param idProduct
      * @param idTxoko
-     * @return 
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
     @Override
     public ProductBean findProductByIdByTxoko(String idProduct, String idTxoko) throws BusinessLogicException {
@@ -168,10 +162,11 @@ public class ProductLogicController implements ProductLogic {
     }
 
     /**
-     * 
+     * This method returns products by name.
      * @param name
      * @param idTxoko
-     * @return 
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
     @Override
     public List<ProductBean> findProductByName(String name, String idTxoko) throws BusinessLogicException{
@@ -190,14 +185,14 @@ public class ProductLogicController implements ProductLogic {
     }
 
     /**
-     * 
+     * This method returns all products by the txoko.
      * @param idTxoko
-     * @return 
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
     @Override
     public List<ProductBean> findAllProductsByTxoko(String idTxoko) throws BusinessLogicException {
         List<ProductBean> productos = null;
-        idTxoko = "5";
         try{
             LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.

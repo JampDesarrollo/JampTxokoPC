@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
+<VBox fx:id="productPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -29,24 +29,24 @@
             </Menu>
             <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
                 <items>
-                  <MenuItem fx:id="idMenuEventos" mnemonicParsing="false" text="Ir a la ventana de Eventos" />
+                  <MenuItem fx:id="idMenuEvent" mnemonicParsing="false" text="Ir a la ventana de Eventos" />
                 </items>
             </Menu>
-            <Menu fx:id="menuGastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
+            <Menu fx:id="menuExpense" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
                <items>
-                  <MenuItem fx:id="idMenuGastos" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
+                  <MenuItem fx:id="idMenuExpense" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
                </items>
             </Menu>
-            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
+            <Menu fx:id="menuProduct" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
 
-            <Menu fx:id="menuUsuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
+            <Menu fx:id="menuUser" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
                <items>
-                  <MenuItem fx:id="idMenuUsuarios" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
+                  <MenuItem fx:id="idMenuUser" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
                </items>
             </Menu>
-            <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
+            <Menu fx:id="menuTelephon" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
                <items>
-                  <MenuItem fx:id="idMenuTel" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
+                  <MenuItem fx:id="idMenuTelephon" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
                </items>
             </Menu>
             <Menu fx:id="menuFtp" mnemonicParsing="false" style="-fx-color: #005192;" text="Cliente FTP">

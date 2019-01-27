@@ -161,19 +161,19 @@ public class ProductBean implements Serializable{
             return false;
         }
         ProductBean other = (ProductBean) object;
-        if ((this.getIdProduct() == null && other.getIdProduct() != null) || (this.getIdProduct() != null && !this.idProduct.equals(other.idProduct))) {
+        if ((this.getIdProduct() == null && other.getIdProduct() != null) || (this.getIdProduct() != null && !this.getIdProduct().equals(other.getIdProduct()))) {
             return false;
         }
-        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.name.equals(other.name))) {
+        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.getName().equals(other.getName()))) {
             return false;
         }
-        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.description.equals(other.description))) {
+        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.getDescription().equals(other.getDescription()))) {
             return false;
         }
-        if ((this.getStock() == null && other.getStock() != null) || (this.getStock() != null && !this.stock.equals(other.stock))) {
+        if ((this.getStock() == null && other.getStock() != null) || (this.getStock() != null && !this.getStock().equals(other.getStock()))) {
             return false;
         }
-        if ((this.getPrice() == null && other.getPrice() != null) || (this.getPrice() != null && !this.price.equals(other.price))) {
+        if ((this.getPrice() == null && other.getPrice() != null) || (this.getPrice() != null && !this.getPrice().equals(other.getPrice()))) {
             return false;
         }
         return true;
