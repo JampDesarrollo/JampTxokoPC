@@ -5,18 +5,26 @@
  */
 package jampclientside.logic;
 
+
 import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.BusinessLogicException;
+import static jampclientside.logic.TelephoneLogicController.collection;
+import static jampclientside.logic.TelephoneLogicController.mongoDB;
+import static jampclientside.logic.TelephoneLogicController.mongoclient;
 import java.util.List;
 import java.util.logging.Logger;
+import org.bson.Document;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
-import org.bson.Document;
+import java.util.ArrayList;
+
+
 /**
  *
  * Class that implements the logic
@@ -29,17 +37,18 @@ public class TelephoneLogicController implements TelephoneLogic {
     /**
      * 
      */
-    static MongoClient mongoclient;
+    public static MongoClient mongoclient = MongoClients.create("mongodb://localhost:27017/jamp");
     
     /**
      * 
      */
-    static MongoDatabase mongoDB;
+    public static MongoDatabase mongoDB = mongoclient.getDatabase("jamp");
     
     /**
      * 
      */
-    static MongoCollection<Document> collection;
+    public static MongoCollection<Document> collection = mongoDB.getCollection("telephones");
+
 
     /**
      * Attribute to appear the information text.
@@ -54,7 +63,7 @@ public class TelephoneLogicController implements TelephoneLogic {
      */
     @Override
     public void deleteTelephone(TelephoneBean phone) throws BusinessLogicException {
-        collection.deleteOne(Filters.eq("idTelephone",phone.getId()));
+        collection.deleteOne(Filters.eq("name",phone.getName()));
     }
 
     /**
@@ -102,16 +111,28 @@ public class TelephoneLogicController implements TelephoneLogic {
      */
     @Override
     public List<TelephoneBean> findAllTelephone() throws BusinessLogicException {
-        FindIterable<Document> fi = collection.find();
-        MongoCursor<Document> cursor = fi.iterator();
-        List<TelephoneBean> telephones = null;
+        FindIterable<Document> fi;
+        MongoCursor<Document> cursor;
+        Document itera;
+        fi = collection.find();
+        cursor = fi.iterator();
+        List<TelephoneBean> telephones = new ArrayList<>();
             try {
                 if (!cursor.hasNext()) {
                     System.out.println("No se ha encontrado el telefono");
                 }
                 int i = 0;
                 while (cursor.hasNext()) {
-                    //telephones.add(cursor.next());
+                    itera = cursor.next();
+                    TelephoneBean telephone= new TelephoneBean();
+                    telephone.setName(itera.getString("name"));
+                    telephone.setDescription(itera.getString("descripción"));
+                    telephone.setTown(itera.getString("town"));
+                   // telephone.setTelephon(itera.getString("telephone"));
+
+                    
+                    telephones.add(telephone);
+                    
                 }
             } finally {
                 cursor.close();
@@ -128,9 +149,11 @@ public class TelephoneLogicController implements TelephoneLogic {
      */
     @Override
     public TelephoneBean findTelephoneById(Integer idTelephone) throws BusinessLogicException {
-        FindIterable<Document> fi = collection.find(eq("idTelephone", idTelephone));
-        MongoCursor<Document> cursor = fi.iterator();
-        TelephoneBean telephone = null;
+        FindIterable<Document> fi;
+        MongoCursor<Document> cursor;
+        fi = collection.find();
+        cursor = fi.iterator();
+        TelephoneBean telephone = new TelephoneBean();
             try {
                 if (!cursor.hasNext()) {
                     System.out.println("No se ha encontrado el telefono");
@@ -154,9 +177,12 @@ public class TelephoneLogicController implements TelephoneLogic {
      */
     @Override
     public List<TelephoneBean> findTelephoneByName(String name) throws BusinessLogicException {
-        FindIterable<Document> fi = collection.find(eq("telephone", name));
-        MongoCursor<Document> cursor = fi.iterator();
-        List<TelephoneBean> telephones = null;
+        FindIterable<Document> fi;
+        MongoCursor<Document> cursor;
+        Document itera;
+        fi = collection.find();
+        cursor = fi.iterator();
+        List<TelephoneBean> telephones = new ArrayList<>();
             try {
                 if (!cursor.hasNext()) {
                     System.out.println("No se ha encontrado el telefono");
