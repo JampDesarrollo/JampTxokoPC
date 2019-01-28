@@ -5,10 +5,13 @@
  */
 package jampclientside.ui.controller;
 
+import jampclientside.UiApplicationProduct;
 import jampclientside.entity.TelephoneBean;
 import jampclientside.logic.TelephoneLogic;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,239 +19,220 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
+import static org.testfx.api.FxAssert.verifyThat;
+import org.testfx.framework.junit.ApplicationTest;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
+import static org.testfx.matcher.base.NodeMatchers.isInvisible;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
  *
  * @author Administrador
  */
-public class PC08PhoneNumbersControllerTest {
-    
-    public PC08PhoneNumbersControllerTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+public class PC08PhoneNumbersControllerTest extends ApplicationTest {
+     
+    /**
+     * Method start the application test
+     * 
+     * @param stage
+     * @throws Exception 
+     */
+    @Override
+    public void start(Stage stage) throws Exception {
+        new UiApplicationProduct().start(stage);//llamo a la aplicacion que me abre la ventana
     }
 
-    /**
-     * Test of getStage method, of class PC08PhoneNumbersController.
-     */
     @Test
-    public void testGetStage() {
-        System.out.println("getStage");
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        Stage expResult = null;
-        Stage result = instance.getStage();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void testA_initialStage() {
 
-    /**
-     * Test of setStage method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testSetStage() {
-        System.out.println("setStage");
-        Stage stage = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.setStage(stage);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setILogic method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testSetILogic() {
-        System.out.println("setILogic");
-        TelephoneLogic iLogicTelephone = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.setILogic(iLogicTelephone);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setUser method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testSetUser() {
-        System.out.println("setUser");
-        TelephoneBean telephone = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.setUser(telephone);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of initStage method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testInitStage() throws Exception {
-        System.out.println("initStage");
-        Parent root = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.initStage(root);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of logOutAction method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testLogOutAction() {
-        System.out.println("logOutAction");
-        ActionEvent event = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.logOutAction(event);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of cerrarSesionAlert method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testCerrarSesionAlert() {
-        System.out.println("cerrarSesionAlert");
-        int cerrar = 0;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.cerrarSesionAlert(cerrar);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of handleAddTelephone method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testHandleAddTelephone() {
-        System.out.println("handleAddTelephone");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.handleAddTelephone(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of handleDeleteTelephone method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testHandleDeleteTelephone() {
-        System.out.println("handleDeleteTelephone");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.handleDeleteTelephone(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of eventWindow method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testEventWindow() {
-        System.out.println("eventWindow");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.eventWindow(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of productWindow method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testProductWindow() {
-        System.out.println("productWindow");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.productWindow(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of expenseWindow method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testExpenseWindow() {
-        System.out.println("expenseWindow");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.expenseWindow(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of usersWindow method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testUsersWindow() {
-        System.out.println("usersWindow");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.usersWindow(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of FTPClientWindow method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testFTPClientWindow() {
-        System.out.println("FTPClientWindow");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.FTPClientWindow(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of comboBoxOption method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testComboBoxOption() {
-        System.out.println("comboBoxOption");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.comboBoxOption(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of searchButton method, of class PC08PhoneNumbersController.
-     */
-    @Test
-    public void testSearchButton() {
-        System.out.println("searchButton");
-        ActionEvent ev = null;
-        PC08PhoneNumbersController instance = new PC08PhoneNumbersController();
-        instance.searchButton(ev);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        /*clickOn("#tfUsuario");
+        write("ander");
+        clickOn("#pfContraseña");
+        write("12345678");
+        clickOn("#btnInicio");*/
+        
+        //verifyThat("#principalPane", isVisible());
+        
+        //clickOn("#menuProductos");
+        //clickOn("#idMenuProductos");
+        
+        verifyThat("#menuBar", isVisible());
+        verifyThat("#menuMenu", isVisible());
+        verifyThat("#menuEvent", isVisible());
+        verifyThat("#menuExpense", isVisible());
+        verifyThat("#menuProduct", isVisible());
+        verifyThat("#menuUser", isVisible());
+        verifyThat("#menuTelephon", isVisible());
+        verifyThat("#txtSearchTel", isDisabled());
+        //verifyThat("#tbProducts", isEditable());
+        verifyThat("#btnSearchTel", isDisabled());
+        verifyThat("#delTelephone", isDisabled());
+        verifyThat("#tbTelephone", isVisible());
+        verifyThat("#tbcolName", isVisible());
+        verifyThat("#tbcolDescription", isVisible());
+        verifyThat("#tbcolNumber", isVisible());
+        verifyThat("#tbcolTown", isVisible());
+        //verifyThat("#lblLogin", hasText("Login: ander"));
+        //verifyThat("#lblFullName", hasText("Nombre Completo: ander olivas"));
+        //verifyThat("#lblEmail", hasText("Email: anderolivas@gmail.com"));
+        
+        clickOn("#cbSearchTel");
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+        verifyThat("#tbProducts", isVisible());
+        verifyThat("#tbcolName", isVisible());
+        verifyThat("#tbcolDescription", isVisible());
+        verifyThat("#tbcolNumber", isVisible());
+        verifyThat("#tbcolTown", isVisible());
+        verifyThat("#addTelephone", isDisabled());
+        verifyThat("#btnSearchTel", isDisabled());
+        verifyThat("#txtSearchTel", isDisabled());
+        
+        clickOn("#cbSearchTel");
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+        verifyThat("#tbProducts", isVisible());
+        verifyThat("#tbcolName", isVisible());
+        verifyThat("#tbcolDescription", isVisible());
+        verifyThat("#tbcolNumber", isVisible());
+        verifyThat("#tbcolTown", isVisible());
+        verifyThat("#addTelephone", isDisabled());
+        verifyThat("#btnSearchTel", isEnabled());
+        verifyThat("#txtSearchTel", isEnabled());
+       // verifyThat("#txtSearch", hasText(""));
+        verifyThat("#labelError", isInvisible());
+                
+        clickOn("#cbSearchTel");
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+        verifyThat("#tbTelephone", isVisible());
+        verifyThat("#tbcolName", isVisible());
+        verifyThat("#tbcolDescription", isVisible());
+        verifyThat("#tbcolNumber", isVisible());
+        verifyThat("#tbcolTown", isVisible());
+        verifyThat("#addTelephone", isDisabled());
+        verifyThat("#btnSearchTel", isEnabled());
+        verifyThat("#txtSearchTel", isEnabled());
+       // verifyThat("#txtSearch", hasText(""));
+        verifyThat("#labelError", isInvisible());
     }
     
+    /**
+     * Test Method to the Log Out menu item with close selection
+     */
+    @Test
+    public void testB_logOut() {
+        clickOn("#menuMenu");
+        clickOn("#menuLogOut");
+        clickOn("#cancelButton");
+        verifyThat("#btnLogOut2", isVisible());
+        clickOn("#menuMenu");
+        clickOn("#menuLogOut");
+        clickOn("#okButton");
+        //verifyThat("#loginPane", isVisible());
+    }
+    
+    /**
+     * Test of initial state of login view before open PrincipalView.
+     */
+    @Test @Ignore
+    public void testC_secondLogin() {
+        clickOn("#tfUsuario");
+        write("julen");
+        clickOn("#pfContraseña");
+        write("12345678");
+        clickOn("#btnInicio");
+        verifyThat("#principalPane", isVisible());
+        //clickOn("#menuProductos");
+        //clickOn("#idMenuProductos");
+    }
+    
+    /**
+     * Test of menu to go to event
+     */
+    @Test
+    public void testD_goToEventPane() {
+        clickOn("#menuEvent");
+        clickOn("#idMenuEvent");
+        verifyThat("#eventPane", isVisible());
+        clickOn("#menuTelephone");
+        clickOn("#idMenuTelephone");
+        verifyThat("#telephonePane", isVisible());
+    }
+    
+    /**
+     * Test of menu to go to expense
+     */
+    @Test
+    public void testF_goToExpensePane() {
+        clickOn("#menuExpense");
+        clickOn("#idMenuExpense");
+        verifyThat("#expensePane", isVisible());
+        clickOn("#menuTelephone");
+        clickOn("#idMenuTelephone");
+        verifyThat("#telephonePane", isVisible());
+    }
+    /**
+     * Test of menu to go to user
+     */
+    @Test
+    public void testG_goToUserPane() {
+        clickOn("#menuUser");
+        clickOn("#idMenuUser");
+        verifyThat("#userPane", isVisible());
+        clickOn("#menuTelephone");
+        clickOn("#idMenuTelephone");
+        verifyThat("#telephonePane", isVisible());
+    }
+    /**
+     * Test of menu to go to telephone
+     */
+    @Test
+    public void testH_goToProductPane() {
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
+        clickOn("#menuTelephone");
+        clickOn("#idMenuTelephone");
+        verifyThat("#telephonePane", isVisible());
+    }
+    
+     /**
+     * Test of menu to go to clientFTP
+     */
+    @Test
+    public void testI_goToClientFTPPane() {
+        clickOn("#menuFtp");
+        clickOn("#idMenuFtp");
+        verifyThat("#telephonPane", isVisible());
+        clickOn("#menuTelephone");
+        clickOn("#idMenuTelephone");
+        verifyThat("#telephonePane", isVisible());
+    }
+    /**
+     * Test of menu to go to clientFTP
+     */
+    @Test
+    public void testJ_deleteProduct() {
+        clickOn("#delTelephone");
+        clickOn("Aceptar");
+        Node row = lookup(".table-row-cell").nth(2).query();
+        assertNotNull("Row is null: table has not that row. ", row);
+    }
+    
+ 
+   /**
+     * Test to bottom_right Button for close session
+     */
+    @Test
+    public void testZ_btnLogOut2() {
+        clickOn("#btnLogOut2");
+        clickOn("#cancelButton");
+        verifyThat("#btnLogOut2", isVisible());
+        clickOn("#btnLogOut2");
+        clickOn("#okButton");
+       // verifyThat("#loginPane", isVisible());
+    }
 }

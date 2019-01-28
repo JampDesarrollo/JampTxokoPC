@@ -324,7 +324,7 @@ public class PC08PhoneNumbersController{
         stage.setScene(scene);
         stage.setResizable(true);
         //Set window properties
-        stage.setTitle("Principal");
+        stage.setTitle("Telefonos");
         //Set window's events handlers
         stage.setOnShowing(this::windowShow);
         //menu item de cerrar sesion

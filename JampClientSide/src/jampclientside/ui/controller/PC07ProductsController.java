@@ -641,48 +641,75 @@ public class PC07ProductsController {
     }
     
     /**
+     * This method assigns a product to txoko.
+     * First check that the product already exists in the txoko. 
+     * If the product already exists, notify through a dialogue. 
+     * If it does not exist, give the option to add it or not through another confirmation dialog.
      * 
      * @param event 
      */
     private void handleAsignProduct(ActionEvent event) {
         try {
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
-            dialogoAlerta.setTitle("CONFIRMACION");
-            dialogoAlerta.setContentText("¿Estas seguro que deseas añadir el producto al txoko?");
-            dialogoAlerta.setHeaderText("Añadir un producto al txoko");
-            Optional<ButtonType> result = dialogoAlerta.showAndWait();
-            Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
-            okButton.setId("buttonAdd");
-            Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
-            cancelButton.setId("buttonCancel");
-            
-            ProductBean selectedProduct = ((ProductBean) tbProducts.getSelectionModel().getSelectedItem());
-
-            if (result.get() == ButtonType.OK) {
-
-                List<TxokoBean> txoko = new ArrayList<>();
-                TxokoBean aux = new TxokoBean();
-                String idTxoko = "1";
-                aux.setIdTxoko(idTxoko);
-                txoko.add(aux);
-                selectedProduct.setTxokos(txoko);
-                this.iLogicProduct.updateProduct(selectedProduct);
-
-                tbProducts.refresh();
+            int cont =0;
+            List productequals = new ArrayList<>();
+            ProductBean selectedProduct = tbProducts.getSelectionModel().getSelectedItem();
+            List<ProductBean> selectedProduct2 = new ArrayList<>();
+            selectedProduct2.add(selectedProduct);
+            String idTxoko = "1";
+            List<ProductBean> productos = iLogicProduct.findAllProductsByTxoko(idTxoko);
+      
+            for(ProductBean product: productos){       
+                        productequals = selectedProduct2.stream().filter(p -> p.getIdProduct().equals(product.getIdProduct())).collect(Collectors.toList());
+                        if(!productequals.isEmpty()){
+                            dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                            dialogoAlerta.setTitle("ERROR");
+                            dialogoAlerta.setContentText("El producto ya existe en el Txoko!!");
+                            dialogoAlerta.setHeaderText("Añadir un producto al txoko");
+                            dialogoAlerta.showAndWait();
+                            cont++;
+                            break;
+                        }           
+            }
+            if(cont == 0){
                 
-                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido añadido a tu txoko.");
+                dialogoAlerta.setTitle("CONFIRMACION");
+                dialogoAlerta.setContentText("¿Estas seguro que deseas añadir el producto al txoko?");
                 dialogoAlerta.setHeaderText("Añadir un producto al txoko");
-                dialogoAlerta.showAndWait();
- 
-            }else{
-                
-                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("No has añadido el producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" a tu txoko!!");
-                dialogoAlerta.setHeaderText("Añadir un producto al txoko");
-                dialogoAlerta.showAndWait();
+                Optional<ButtonType> result = dialogoAlerta.showAndWait();
+                Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+                okButton.setId("buttonAdd");
+                Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+                cancelButton.setId("buttonCancel");
+
+
+
+                if (result.get() == ButtonType.OK) {
+
+                    List<TxokoBean> txoko = new ArrayList<>();
+                    TxokoBean aux = new TxokoBean();
+                    idTxoko = "1";
+                    aux.setIdTxoko(idTxoko);
+                    txoko.add(aux);
+                    selectedProduct.setTxokos(txoko);
+                    this.iLogicProduct.updateProduct(selectedProduct);
+
+                    tbProducts.refresh();
+
+                    dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido añadido a tu txoko.");
+                    dialogoAlerta.setHeaderText("Añadir un producto al txoko");
+                    dialogoAlerta.showAndWait();
+
+                }else{
+
+                    dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                    dialogoAlerta.setTitle("INFORMACION");
+                    dialogoAlerta.setContentText("No has añadido el producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" a tu txoko!!");
+                    dialogoAlerta.setHeaderText("Añadir un producto al txoko");
+                    dialogoAlerta.showAndWait();
+                }
             }
         } catch (BusinessLogicException e) {
             LOGGER.log(Level.SEVERE,
@@ -691,7 +718,8 @@ public class PC07ProductsController {
         }
     }    
     
-/**
+    /**
+     * This method removes a product from txoko.
      * 
      * @param event 
      */
@@ -1012,7 +1040,7 @@ public class PC07ProductsController {
                 }
             }else {
                 txtSearch.setStyle("-fx-border-color: red;");
-                labelError.setText("Tienes que escribir el id de un evento");
+                labelError.setText("Tienes que escribir el id de un producto");
                 labelError.setVisible(true);
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
@@ -1037,7 +1065,7 @@ public class PC07ProductsController {
                 }
             }else {
                 txtSearch.setStyle("-fx-border-color: red;");
-                labelError.setText("Tienes que escribir el nombre");
+                labelError.setText("Tienes que escribir el nombre del producto");
                 labelError.setVisible(true);
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
@@ -1069,8 +1097,16 @@ public class PC07ProductsController {
         return isSelected;
     }
     
-    /**
-     * 
+    /** 
+     * This method compares the data in the table with the data in the database 
+     * to update or to create a new product. 
+     * In a list, keep all the products that are in the database and 
+     * in another list the products in the table.
+     * First check if all the fields are informed. 
+     * If yes, compare the two lists and if a product is repeated, 
+     * keep it in a third list. 
+     * If the third list contains any product, update the product, 
+     * otherwise create the product.
      * 
      */
     private void addUpdateProduct() throws BusinessLogicException {
@@ -1084,18 +1120,25 @@ public class PC07ProductsController {
                     
                     List productequals = productDatacopy.stream().filter(p -> p.getIdProduct().equals(product.getIdProduct())).collect(Collectors.toList());
                     if(productequals.isEmpty()){
-                        addProdcut(product);
+                        addProduct(product);
                     }else if(!productequals.get(0).equals(product)){
-                        iLogicProduct.updateProduct(product);
+                        updateProduct(product);
                     }
-            }else{
-                    LOGGER.info("CHAPUZAS");
             }
         }
     }
  
 
-    private void addProdcut(ProductBean product) throws BusinessLogicException {
+    /**
+     * This method is to add the selected product in the table. 
+     * First ask for the confirmation, if it is positive, add the product 
+     * and confirm it in a dialog box.
+     * If it is negative, give the confirmation in a dialog and don't add it.
+     * 
+     * @param product
+     * @throws BusinessLogicException 
+     */
+    private void addProduct(ProductBean product) throws BusinessLogicException {
 
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
             dialogoAlerta.setTitle("CONFIRMACION");
@@ -1126,7 +1169,52 @@ public class PC07ProductsController {
                 
             }
     }
-     
+    
+    /**
+     * This method is to update the selected product in the table. 
+     * First ask for the confirmation, if it is positive, update the product 
+     * and confirm it in a dialog box.
+     * If it is negative, give the confirmation in a dialog and don't update it.
+     * 
+     * @param product
+     * @throws BusinessLogicException 
+     */
+    private void updateProduct(ProductBean product) throws BusinessLogicException {
+
+            Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+            dialogoAlerta.setTitle("CONFIRMACION");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas actualizar el producto "+product.getName()+" "+product.getDescription()+"?");
+            dialogoAlerta.setHeaderText("Actualizar un producto");
+            Optional<ButtonType> result = dialogoAlerta.showAndWait();
+            Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("buttonAdd");
+            Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+            cancelButton.setId("buttonCancel");
+        
+            if (result.get() == ButtonType.OK) {
+                
+                iLogicProduct.updateProduct(product);
+ 
+                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" ha sido actualizado.");
+                dialogoAlerta.setHeaderText("Actualizar un producto");
+                dialogoAlerta.showAndWait();
+            }else{
+                
+                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" no ha sido actualizado.");
+                dialogoAlerta.setHeaderText("Actualizar un producto");
+                dialogoAlerta.showAndWait();
+                
+            }
+    }
+    
+    /**
+     * This method prints a report with the data of the products in the table.
+     * @param event 
+     */
     @FXML
     private void handleImprimirAction(ActionEvent event){
         try {

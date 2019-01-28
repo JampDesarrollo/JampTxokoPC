@@ -9,6 +9,7 @@ import jampclientside.UiApplication;
 import jampclientside.UiApplicationProduct;
 import jampclientside.logic.ProductLogic;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -49,7 +50,7 @@ public class PC07ProductsControllerTest extends ApplicationTest {
         new UiApplicationProduct().start(stage);//llamo a la aplicacion que me abre la ventana
     }
 
-    @Test
+    @Test @Ignore
     public void testA_initialStage() {
 
         /*clickOn("#tfUsuario");
@@ -135,7 +136,7 @@ public class PC07ProductsControllerTest extends ApplicationTest {
     /**
      * Test Method to the Log Out menu item with close selection
      */
-    @Test
+    @Test @Ignore
     public void testB_logOut() {
         clickOn("#menuMenu");
         clickOn("#menuLogOut");
@@ -151,7 +152,7 @@ public class PC07ProductsControllerTest extends ApplicationTest {
      * Test of initial state of login view before open PrincipalView.
      */
     @Test @Ignore
-    public void testC_initIteraction() {
+    public void testC_secondLogin() {
         clickOn("#tfUsuario");
         write("julen");
         clickOn("#pfContraseña");
@@ -165,55 +166,146 @@ public class PC07ProductsControllerTest extends ApplicationTest {
     /**
      * Test of menu to go to event
      */
-    @Test
-    public void testD_initIteraction() {
+    @Test @Ignore
+    public void testD_goToEventPane() {
         clickOn("#menuEvent");
         clickOn("#idMenuEvent");
         verifyThat("#eventPane", isVisible());
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
     }
     
     /**
      * Test of menu to go to expense
      */
-    @Test
-    public void testF_initIteraction() {
+    @Test @Ignore
+    public void testF_goToExpensePane() {
         clickOn("#menuExpense");
         clickOn("#idMenuExpense");
         verifyThat("#expensePane", isVisible());
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
     }
     /**
      * Test of menu to go to user
      */
-    @Test
-    public void testG_initIteraction() {
+    @Test @Ignore
+    public void testG_goToUserPane() {
         clickOn("#menuUser");
         clickOn("#idMenuUser");
         verifyThat("#userPane", isVisible());
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
     }
     /**
      * Test of menu to go to telephone
      */
     @Test
-    public void testH_initIteraction() {
+    public void testH_goToTelephonePane() {
         clickOn("#menuTelephon");
         clickOn("#idMenuTelephon");
         verifyThat("#telephonPane", isVisible());
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
     }
     
      /**
      * Test of menu to go to clientFTP
      */
-    @Test
-    public void testI_initIteraction() {
+    @Test @Ignore
+    public void testI_goToClientFTPPane() {
         clickOn("#menuFtp");
         clickOn("#idMenuFtp");
         verifyThat("#telephonPane", isVisible());
+        clickOn("#menuProduct");
+        clickOn("#idMenuProduct");
+        verifyThat("#productPane", isVisible());
     }
+
+    /**
+     * Test of add Button
+     */
+    @Test
+    public void testJ_addProduct() {
+        clickOn("#addProduct");
+        clickOn("Cancelar");
+        /*clickOn("#addProduct");
+        clickOn("Aceptar");
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("Row is null: table has not that row. ", row);
+        clickOn(row);
+        clickOn("#addProduct");
+        clickOn("Cancelar");
+        clickOn("#addProduct");
+        clickOn("Aceptar");*/
+    }   
     
+    /**
+     * Test of asign Button
+     */
+    @Test
+    public void testK_asignProduct() {
+        clickOn("#cbSearch");
+        type(KeyCode.DOWN);
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+        clickOn("#btnSearch");
+        verifyThat("#labelError ", hasText("Tienes que escribir el id de un producto"));
+        clickOn("#txtSearch");
+        write("4");
+        clickOn("#btnSearch");
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("Row is null: table has not that row. ", row);
+        clickOn(row);
+        clickOn("#asignProduct");
+        clickOn("Aceptar");
+        clickOn("Aceptar");
+        clickOn("#asignProduct");
+        clickOn("Cancelar");
+        clickOn("Aceptar");
+    } 
+    
+    /**
+     * Test of unasign Button
+     */
+    @Test
+    public void testL_unasignProduct() {
+        clickOn("#cbSearch");
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("Row is null: table has not that row. ", row);
+        clickOn(row);
+        clickOn("#unasignProduct");
+        clickOn("Cancelar");
+        clickOn("Aceptar");
+        clickOn("#unasignProduct");
+        clickOn("Aceptar");
+        clickOn("Aceptar");
+    } 
+    
+    /**
+     * Test of deleteButton
+     */
+    @Test @Ignore
+    public void testN_deleteProduct() {
+        Node row = lookup(".table-row-cell").nth(0).query();
+        assertNotNull("Row is null: table has not that row. ", row);
+        clickOn(row);
+        clickOn("#delProduct");
+        clickOn("Cancelar");
+        clickOn("Aceptar");
+        clickOn("#delProduct");
+        //clickOn("Aceptar");
+    }
    /**
      * Test to bottom_right Button for close session
      */
-    @Test
+    @Test @Ignore
     public void testZ_btnLogOut2() {
         clickOn("#btnLogOut2");
         clickOn("#cancelButton");
