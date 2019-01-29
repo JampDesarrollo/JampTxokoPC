@@ -5,7 +5,6 @@
  */
 package jampclientside.ui.controller;
 
-import jampclientside.entity.ProductBean;
 import jampclientside.entity.TelephoneBean;
 import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.logic.EventLogic;
@@ -60,6 +59,11 @@ import javafx.scene.control.cell.TextFieldTableCell;
  * @author Julen
  */
 public class PC08PhoneNumbersController{
+    
+    /**
+     * Maximum characters that can be inserted
+     */
+    private static final int MAX_CARACT = 8;
 
     /**
      * 
@@ -472,43 +476,6 @@ public class PC08PhoneNumbersController{
     }
 
     /**
-     * Close current view and open Login view method.
-     *
-     * @param event Action Event
-     */
-    public void logOutAction(ActionEvent event) {
-        LOGGER.info("Beginning Telephones::logout action");
-        cerrar = 2;
-        cerrarSesionAlert(cerrar);
-    }
-    
-    /**
-     * Method that show a confirm dialog to close session
-     * @param cerrar Difference for close app or close session
-     */
-    public void cerrarSesionAlert(int cerrar){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Dialogo de confirmacion");
-        alert.setContentText("Estas seguro que deseas cerrar la sesion");
-        alert.setHeaderText("Cerrar Sesion");
-        
-        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.setId("okButton");
-        
-        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.setId("cancelButton");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            if(cerrar == 1){
-                System.exit(0);
-            }else{
-                stage.hide();
-            }
-  
-        }
-    }
-    /**
      * Method that change the selection of the table
      * @param observable
      * @param oldValue
@@ -525,6 +492,9 @@ public class PC08PhoneNumbersController{
     }
 
     /**
+     * Action event handler for create button. 
+     * It validates new user data, send it to the business logic 
+     * tier and updates telephone table view with new telephone data.
      * 
      * @param ev 
      */
@@ -557,6 +527,9 @@ public class PC08PhoneNumbersController{
     }
     
     /**
+     * Action event handler for delete button. It asks user for confirmation on
+     * delete, sends delete message to the business logic tier and updates user
+     * table view.
      * 
      * @param ev 
      */
@@ -607,6 +580,7 @@ public class PC08PhoneNumbersController{
     }
 
     /**
+     * This method is to go to the eventPane
      * 
      * @param ev 
      */
@@ -628,6 +602,7 @@ public class PC08PhoneNumbersController{
     }
 
     /**
+     * This method is to go to the productPane
      * 
      * @param ev 
      */
@@ -656,6 +631,7 @@ public class PC08PhoneNumbersController{
     }
 
     /**
+     * This method is to go to the expensePane
      * 
      * @param ev 
      */
@@ -683,6 +659,7 @@ public class PC08PhoneNumbersController{
     }
     
     /**
+     * This method is to go to the userPane
      * 
      * @param ev 
      */
@@ -786,6 +763,12 @@ public class PC08PhoneNumbersController{
     }
     
     /**
+     * This method is for the search button.
+     * When you click on the button, first check that text field it isn't empty, 
+     * if it is empty, a label error appears with a message.
+     * Also check that the size does not exceed 255 characters.
+     * If the conditions are ok, the method stores the telephones in a collection,
+     * if the collection is empty, a dialogue with the message appears.
      * 
      * @param ev 
      */
@@ -799,21 +782,28 @@ public class PC08PhoneNumbersController{
             //miramos si el textfield esta vacio o no
             boolean tfIDEmpty = textEmptyOrNot();
             //si no esta vacio
-            if (tfIDEmpty) {           
-                try {
-                    int idTelephone = Integer.parseInt(txtSearchTel.getText().trim());
-                    
-                    telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneById(idTelephone));
-                    if(telephoneData == null){
-                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoAlerta.setTitle("INFORMACION");
-                        dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-                        dialogoAlerta.showAndWait();
-                    }else{
-                        tbTelephone.setItems(telephoneData);
+            if (tfIDEmpty) {                    
+                if(txtSearchTel.getText().trim().length() < MAX_CARACT){      
+                    try {
+                        int idTelephone = Integer.parseInt(txtSearchTel.getText().trim());
+
+                        telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneById(idTelephone));
+                        if(telephoneData == null){
+                            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                            dialogoAlerta.setTitle("INFORMACION");
+                            dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                            dialogoAlerta.showAndWait();
+                        }else{
+                            tbTelephone.setItems(telephoneData);
+                        }
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                }else{
+                    txtSearchTel.setStyle("-fx-border-color: red;");
+                    labelError.setText("Se ha introducido un numero superior de caracteres al permitido");
+                    labelError.setVisible(true);
+                    labelError.setStyle("-fx-text-inner-color: red;");
                 }
             } else {
                 txtSearchTel.setStyle("-fx-border-color: red;");
@@ -824,21 +814,28 @@ public class PC08PhoneNumbersController{
         } else if (cbSearchTel.getSelectionModel().getSelectedItem().equals("Nombre del telefono")) {
             boolean tfNameEmpty = textEmptyOrNot();
             if (tfNameEmpty) {
-                try {
-                    String name = txtSearchTel.getText();
-                    
-                    telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneByName(name));
-                    if(telephoneData == null){
-                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoAlerta.setTitle("INFORMACION");
-                        dialogoAlerta.setHeaderText("No hay telefonos en la lista");
-                        dialogoAlerta.showAndWait();
-                    }else{
-                        tbTelephone.setItems(telephoneData);
+                if(txtSearchTel.getText().trim().length() < MAX_CARACT){ 
+                    try {
+                        String name = txtSearchTel.getText();
+
+                        telephoneData = FXCollections.observableArrayList(iLogicTelephone.findTelephoneByName(name));
+                        if(telephoneData == null){
+                            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                            dialogoAlerta.setTitle("INFORMACION");
+                            dialogoAlerta.setHeaderText("No hay telefonos en la lista");
+                            dialogoAlerta.showAndWait();
+                        }else{
+                            tbTelephone.setItems(telephoneData);
+                        }
                     }
-                }
-                catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    txtSearchTel.setStyle("-fx-border-color: red;");
+                    labelError.setText("Se ha introducido un numero superior de caracteres al permitido");
+                    labelError.setVisible(true);
+                    labelError.setStyle("-fx-text-inner-color: red;");
                 }
             }
             else {
@@ -849,37 +846,17 @@ public class PC08PhoneNumbersController{
             }
         }
     }
-
-    /**
-     * 
-     * @return 
-     */
-    private boolean textEmptyOrNot() {
-        boolean empty = false;
-        //si no esta vacio
-        if (!this.txtSearchTel.getText().trim().equals("")) {
-            empty = true;
-        }
-        return empty;
-    }
     
-    /**
-     * 
-     * @return 
-     */
-    private boolean isSelected() {
-        boolean isSelected = false;
-        //si es diferente a vacio
-        if (!tbTelephone.getSelectionModel().getSelectedItems().isEmpty()) {
-            //hay algo seleccionado
-            isSelected = true;
-        }
-        return isSelected;
-    }
-    
-    /**
-     * 
-     * @throws BusinessLogicException 
+    /** 
+     * This method compares the data in the table with the data in the database 
+     * to update or to create a new telephone. 
+     * In a list, keep all the products that are in the database and 
+     * in another list the telephones in the table.
+     * First check if all the fields are informed. 
+     * If yes, compare the two lists and if a telephone is repeated, 
+     * keep it in a third list. 
+     * If the third list contains any telephone, update the telephone, 
+     * otherwise create the telephone. 
      */
     private void addUpdateTelephone() throws BusinessLogicException {
         List<TelephoneBean> telephones = tbTelephone.getItems();
@@ -894,15 +871,20 @@ public class PC08PhoneNumbersController{
                     if(telephoneEquals.isEmpty()){
                         addTelephone(telephone);
                     }else if(!telephoneEquals.get(0).equals(telephone)){
-                        iLogicTelephone.updateTelephone(telephone);
+                        updateTelephone(telephone);
                     }
             }
         }
     }
 
     /**
+     * This method is to add the selected telephone in the table. 
+     * First ask for the confirmation, if it is positive, add the telephone 
+     * and confirm it in a dialog box.
+     * If it is negative, give the confirmation in a dialog and don't add it.
      * 
-     * @param telephone 
+     * @param telephone
+     * @throws BusinessLogicException 
      */
     private void addTelephone(TelephoneBean telephone) {
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
@@ -937,5 +919,116 @@ public class PC08PhoneNumbersController{
                 dialogoAlerta.showAndWait();
                 
             }
+    } 
+    
+    /**
+     * This method is to update the selected telephone in the table. 
+     * First ask for the confirmation, if it is positive, update the telephone 
+     * and confirm it in a dialog box.
+     * If it is negative, give the confirmation in a dialog and don't update it.
+     * 
+     * @param telephone
+     * @throws BusinessLogicException 
+     */
+    private void updateTelephone(TelephoneBean telephone) throws BusinessLogicException {
+
+            Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
+            dialogoAlerta.setTitle("CONFIRMACION");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas actualizar el telefono "
+                    +telephone.getName()+" "+telephone.getDescription()+"?");
+            dialogoAlerta.setHeaderText("Actualizar un telefono");
+            Optional<ButtonType> result = dialogoAlerta.showAndWait();
+            Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("buttonAdd");
+            Button cancelButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.CANCEL);
+            cancelButton.setId("buttonCancel");
+        
+            if (result.get() == ButtonType.OK) {
+                
+                iLogicTelephone.updateTelephone(telephone);
+ 
+                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("El telefono "+telephone.getName()
+                        +" "+telephone.getDescription()+" ha sido actualizado.");
+                dialogoAlerta.setHeaderText("Actualizar un telefono");
+                dialogoAlerta.showAndWait();
+            }else{
+                
+                dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("El telefono "+telephone.getName()+" "
+                        +telephone.getDescription()+" no ha sido actualizado.");
+                dialogoAlerta.setHeaderText("Actualizar un telefono");
+                dialogoAlerta.showAndWait();
+                
+            }
     }
+    
+    /**
+     * This method checks if the field is empty
+     * 
+     * @return boolean, is empty, return true, if not, return false
+     */
+    private boolean textEmptyOrNot() {
+        boolean empty = false;
+        //si no esta vacio
+        if (!this.txtSearchTel.getText().trim().equals("")) {
+            empty = true;
+        }
+        return empty;
+    }
+    
+    /**
+     * This method checks if the row of the table is selected
+     * 
+     * @return boolean is selected return true, is not selected return false
+     */
+    private boolean isSelected() {
+        boolean isSelected = false;
+        //si es diferente a vacio
+        if (!tbTelephone.getSelectionModel().getSelectedItems().isEmpty()) {
+            //hay algo seleccionado
+            isSelected = true;
+        }
+        return isSelected;
+    }
+    
+    /**
+     * Close current view and open Login view method.
+     *
+     * @param event Action Event
+     */
+    public void logOutAction(ActionEvent event) {
+        LOGGER.info("Beginning Telephones::logout action");
+        cerrar = 2;
+        cerrarSesionAlert(cerrar);
+    }
+    
+    /**
+     * Method that show a confirm dialog to close session
+     * @param cerrar Difference for close app or close session
+     */
+    public void cerrarSesionAlert(int cerrar){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Dialogo de confirmacion");
+        alert.setContentText("Estas seguro que deseas cerrar la sesion");
+        alert.setHeaderText("Cerrar Sesion");
+        
+        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setId("okButton");
+        
+        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setId("cancelButton");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            if(cerrar == 1){
+                System.exit(0);
+            }else{
+                stage.hide();
+            }
+        }
+    }
+    
 }

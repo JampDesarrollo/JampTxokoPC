@@ -71,6 +71,10 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class PC07ProductsController {
 
+    /**
+     * Maximum characters that can be inserted
+     */
+    private static final int MAX_CARACT = 8;
     
     /**
      * 
@@ -387,125 +391,114 @@ public class PC07ProductsController {
      * @param root root
      */
     public void initStage(Parent root){
-        try {
-            LOGGER.info("Initializing Product Window.");
-            Scene scene = new Scene(root);
-            stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.setTitle("Productos");
-            stage.setOnShowing(this::windowShow);
-            menuLogOut.setOnAction(this::logOutAction);
-            btnLogOut2.setOnAction(this::logOutAction);
-            idMenuEvent.setOnAction(this::eventWindow);
-            idMenuExpense.setOnAction(this::expenseWindow);
-            idMenuTelephon.setOnAction(this::telephoneWindow);
-            idMenuUser.setOnAction(this::usersWindow);
-            idMenuFTP.setOnAction(this::usersWindow);
-            addProduct.setOnAction(this::handleAddProduct);
-            delProduct.setOnAction(this::handleDeleteProduct);
-            asignProduct.setOnAction(this::handleAsignProduct);
-            unasignProduct.setOnAction(this::handleUnasignProduct);
-            btnReport.setOnAction(this::handlePrintAction);
-            cbSearch.setOnAction(this::comboBoxOption);
-            btnSearch.setOnAction(this::searchButton);
-            tbProducts.getSelectionModel().selectedItemProperty()
-                    .addListener(this::handleUsersTableSelectionChanged);
-            tbcolName.setCellValueFactory(
-                    new PropertyValueFactory<>("name"));
-            tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-            tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-                @Override
-                public void handle(CellEditEvent<ProductBean,String> e) {
-                    try {
-                        ((ProductBean) tbProducts.getItems().get(
-                                e.getTablePosition().getRow())
-                                ).setName(e.getNewValue());
-                        addUpdateProduct();
-                    } catch (BusinessLogicException ex) {
-                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        LOGGER.info("Initializing Product Window.");
+        Scene scene = new Scene(root);
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Productos");
+        stage.setOnShowing(this::windowShow);
+        menuLogOut.setOnAction(this::logOutAction);
+        btnLogOut2.setOnAction(this::logOutAction);
+        idMenuEvent.setOnAction(this::eventWindow);
+        idMenuExpense.setOnAction(this::expenseWindow);
+        idMenuTelephon.setOnAction(this::telephoneWindow);
+        idMenuUser.setOnAction(this::usersWindow);
+        idMenuFTP.setOnAction(this::usersWindow);
+        addProduct.setOnAction(this::handleAddProduct);
+        delProduct.setOnAction(this::handleDeleteProduct);
+        asignProduct.setOnAction(this::handleAsignProduct);
+        unasignProduct.setOnAction(this::handleUnasignProduct);
+        btnReport.setOnAction(this::handlePrintAction);
+        cbSearch.setOnAction(this::comboBoxOption);
+        btnSearch.setOnAction(this::searchButton);
+        tbProducts.getSelectionModel().selectedItemProperty()
+                .addListener(this::handleUsersTableSelectionChanged);
+        tbcolName.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((ProductBean) tbProducts.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setName(e.getNewValue());
+                    addUpdateProduct();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            });
-            
-            tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-            tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-                @Override
-                public void handle(CellEditEvent<ProductBean,String> e) {
-                    try {
-                        ((ProductBean) tbProducts.getItems().get(
-                                e.getTablePosition().getRow())
-                                ).setDescription(e.getNewValue());
-                        addUpdateProduct();
-                    } catch (BusinessLogicException ex) {
-                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            
-            tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-            tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-                @Override
-                public void handle(CellEditEvent<ProductBean,String> e) {
-                    try {
-                        ((ProductBean) tbProducts.getItems().get(
-                                e.getTablePosition().getRow())
-                                ).setPrice(e.getNewValue());
-                        addUpdateProduct();
-                    } catch (BusinessLogicException ex) {
-                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-            tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-                @Override
-                public void handle(CellEditEvent<ProductBean,String> e) {
-                    try {
-                        ((ProductBean) tbProducts.getItems().get(
-                                e.getTablePosition().getRow())
-                                ).setStock(e.getNewValue());
-                        addUpdateProduct();
-                    } catch (BusinessLogicException ex) {
-                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            tbcolDescription.setCellValueFactory(
-                    new PropertyValueFactory<>("description"));
-            tbcolPrice.setCellValueFactory(
-                    new PropertyValueFactory<>("price"));
-            tbcolStock.setCellValueFactory(
-                    new PropertyValueFactory<>("stock"));
-            stage.show();
-            stage.setOnCloseRequest((WindowEvent e) -> {
-                int cerrar = 1;
-                e.consume();
-                cerrarSesionAlert(cerrar);
-            });
-            
-            String idTxoko = "1";
-            
-            productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-            if(productData.isEmpty()){
-                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("No hay ningun Producto");
-                dialogoAlerta.setHeaderText("Productos Txoko");
-                dialogoAlerta.showAndWait();
-            }else{
-                tbProducts.setItems(productData);
-                productDatacopy.addAll(productData);
             }
-            
-
-                    
-            
-            
-        } catch (BusinessLogicException ex) {
-            Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+        });
+        tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((ProductBean) tbProducts.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setDescription(e.getNewValue());
+                    addUpdateProduct();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((ProductBean) tbProducts.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setPrice(e.getNewValue());
+                    addUpdateProduct();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+        tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+            @Override
+            public void handle(CellEditEvent<ProductBean,String> e) {
+                try {
+                    ((ProductBean) tbProducts.getItems().get(
+                            e.getTablePosition().getRow())
+                            ).setStock(e.getNewValue());
+                    addUpdateProduct();
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        tbcolDescription.setCellValueFactory(
+                new PropertyValueFactory<>("description"));
+        tbcolPrice.setCellValueFactory(
+                new PropertyValueFactory<>("price"));
+        tbcolStock.setCellValueFactory(
+                new PropertyValueFactory<>("stock"));
+        stage.show();
+        stage.setOnCloseRequest((WindowEvent e) -> {
+            int cerrar = 1;
+            e.consume();
+            cerrarSesionAlert(cerrar);
+        });
+        String idTxoko = "1";
+        
+        /* productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+        if(productData.isEmpty()){
+        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+        dialogoAlerta.setTitle("INFORMACION");
+        dialogoAlerta.setContentText("No hay ningun Producto");
+        dialogoAlerta.setHeaderText("Productos Txoko");
+        dialogoAlerta.showAndWait();
+        }else{
+        tbProducts.setItems(productData);
+        productDatacopy.addAll(productData);
         }
+        */
 }
 
     /**
@@ -559,43 +552,6 @@ public class PC07ProductsController {
     }
     
     /**
-     * Close current view and open Login view method.
-     *
-     * @param event Action Event
-     */
-    public void logOutAction(ActionEvent event) {
-        LOGGER.info("Beginning Productos::logout action");
-        cerrar = 2;
-        cerrarSesionAlert(cerrar);
-    }
-
-    /**
-     * Method that show a confirm dialog to close session
-     * @param cerrar Difference for close app or close session
-     */
-    public void cerrarSesionAlert(int cerrar) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Dialogo de confirmacion");
-        alert.setContentText("Estas seguro que deseas cerrar la sesion");
-        alert.setHeaderText("Cerrar Sesion");
-
-        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.setId("okButton");
-
-        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelButton.setId("cancelButton");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            if (cerrar == 1) {
-                System.exit(0);
-            } else {
-                stage.hide();
-            }
-        }
-    }
-    
-    /**
      * Method that change the selection of the table
      * @param observable
      * @param oldValue
@@ -613,9 +569,9 @@ public class PC07ProductsController {
     
 
     /**
-     * Action event handler for create button. It validates new user data, send
-     * it to the business logic tier and updates user table view with new user
-     * data.
+     * Action event handler for create button. 
+     * It validates new user data, send it to the business logic tier and 
+     * updates product table view with new product data.
      *
      * @param event The ActionEvent object for the event.
      */
@@ -726,7 +682,8 @@ public class PC07ProductsController {
     }    
     
     /**
-     * This method removes a product from txoko.
+     * Action event handler for unasign button. 
+     * It asks user for confirmation on unasign product from Txoko
      * 
      * @param event 
      */
@@ -836,6 +793,7 @@ public class PC07ProductsController {
     }
 
     /**
+     * This method is to go to the eventPane
      * 
      * @param ev 
      */
@@ -857,6 +815,7 @@ public class PC07ProductsController {
     }
 
     /**
+     * This method is to go to the telephonePane
      * 
      * @param ev 
      */
@@ -878,6 +837,7 @@ public class PC07ProductsController {
     }
 
     /**
+     * This method is to go to the expensePane
      * 
      * @param ev 
      */
@@ -899,7 +859,8 @@ public class PC07ProductsController {
     }
 
     /**
-     * 
+     * This method is to go to the userPane
+     * .
      * @param ev 
      */
     public void usersWindow(ActionEvent ev) {
@@ -920,6 +881,7 @@ public class PC07ProductsController {
     }
     
     /**
+     * This method is to go to the ftpWindow
      * 
      * @param ev 
      */
@@ -1019,6 +981,12 @@ public class PC07ProductsController {
     }
 
     /**
+     * This method is for the search button.
+     * When you click on the button, first check that text field it isn't empty,
+     * if it is empty, a label error appears with a message.
+     * Also check that the size does not exceed 255 characters.
+     * If the conditions are ok, the method stores the telephones in a collection,
+     * if the collection is empty, a dialogue with the message appears.
      * 
      * @param ev 
      */
@@ -1030,20 +998,27 @@ public class PC07ProductsController {
         if (cbSearch.getSelectionModel().getSelectedItem().equals("Id del producto")) {
             productData = null;
             boolean tfIDEmpty = textEmptyOrNot();
-            if (tfIDEmpty) {           
-                try {
-                    String idProduct = txtSearch.getText();
-                    productData = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
-                    if(productData.isEmpty()){
-                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoAlerta.setTitle("INFORMACION");
-                        dialogoAlerta.setHeaderText("No hay productos en la lista");
-                        dialogoAlerta.showAndWait();
-                    }else{
-                        tbProducts.setItems(productData);
+            if (tfIDEmpty) {   
+                if(txtSearch.getText().trim().length() < MAX_CARACT){
+                    try {
+                        String idProduct = txtSearch.getText();
+                        productData = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
+                        if(productData.isEmpty()){
+                            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                            dialogoAlerta.setTitle("INFORMACION");
+                            dialogoAlerta.setHeaderText("No hay productos en la lista");
+                            dialogoAlerta.showAndWait();
+                        }else{
+                            tbProducts.setItems(productData);
+                        }
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }else{
+                    txtSearch.setStyle("-fx-border-color: red;");
+                    labelError.setText("Se ha introducido un numero superior de caracteres al permitido");
+                    labelError.setVisible(true);
+                    labelError.setStyle("-fx-text-inner-color: red;");
                 }
             }else {
                 txtSearch.setStyle("-fx-border-color: red;");
@@ -1055,20 +1030,27 @@ public class PC07ProductsController {
             productData = null;
             boolean tfNameEmpty = textEmptyOrNot();
             if (tfNameEmpty) {
-                try {
-                    String nameProduct = txtSearch.getText().trim();
-                    String idTxoko = "1";
-                    productData = FXCollections.observableArrayList(iLogicProduct.findProductByName(nameProduct, idTxoko));
-                    if(productData.isEmpty()){
-                        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-                        dialogoAlerta.setTitle("INFORMACION");
-                        dialogoAlerta.setHeaderText("No hay productos en la lista");
-                        dialogoAlerta.showAndWait();
-                    }else{
-                        tbProducts.setItems(productData); 
+                if(txtSearch.getText().trim().length() < MAX_CARACT){
+                    try {
+                        String nameProduct = txtSearch.getText().trim();
+                        String idTxoko = "1";
+                        productData = FXCollections.observableArrayList(iLogicProduct.findProductByName(nameProduct, idTxoko));
+                        if(productData.isEmpty()){
+                            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                            dialogoAlerta.setTitle("INFORMACION");
+                            dialogoAlerta.setHeaderText("No hay productos en la lista");
+                            dialogoAlerta.showAndWait();
+                        }else{
+                            tbProducts.setItems(productData); 
+                        }
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                }else{
+                    txtSearch.setStyle("-fx-border-color: red;");
+                    labelError.setText("Se ha introducido un numero superior de caracteres al permitido");
+                    labelError.setVisible(true);
+                    labelError.setStyle("-fx-text-inner-color: red;");
                 }
             }else {
                 txtSearch.setStyle("-fx-border-color: red;");
@@ -1077,31 +1059,6 @@ public class PC07ProductsController {
                 labelError.setStyle("-fx-text-inner-color: red;");
             }
         }
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    private boolean textEmptyOrNot() {
-        boolean empty = false;
-        //si no esta vacio
-        if (!this.txtSearch.getText().trim().equals("")) {
-            empty = true;
-        }
-        return empty;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    private boolean isSelected() {
-        boolean isSelected = false;
-        if (!tbProducts.getSelectionModel().getSelectedItems().isEmpty()) {
-            isSelected = true;
-        }
-        return isSelected;
     }
     
     /** 
@@ -1211,7 +1168,8 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" no ha sido actualizado.");
+                dialogoAlerta.setContentText("El producto "+product.getName()+" "
+                        +product.getDescription()+" no ha sido actualizado.");
                 dialogoAlerta.setHeaderText("Actualizar un producto");
                 dialogoAlerta.showAndWait();
                 
@@ -1220,6 +1178,7 @@ public class PC07ProductsController {
     
     /**
      * This method prints a report with the data of the products in the table.
+     * 
      * @param event 
      */
     @FXML
@@ -1250,6 +1209,70 @@ public class PC07ProductsController {
                         ex.getMessage());
         }
     }
+    
 
+    /**
+     * This method checks if the field is empty
+     * 
+     * @return boolean, is empty, return true, if not, return false
+     */
+    private boolean textEmptyOrNot() {
+        boolean empty = false;
+        //si no esta vacio
+        if (!this.txtSearch.getText().trim().equals("")) {
+            empty = true;
+        }
+        return empty;
+    }
+    
+    /**
+     * This method checks if the row of the table is selected
+     * 
+     * @return boolean is selected return true, is not selected return false
+     */
+    private boolean isSelected() {
+        boolean isSelected = false;
+        if (!tbProducts.getSelectionModel().getSelectedItems().isEmpty()) {
+            isSelected = true;
+        }
+        return isSelected;
+    }
+    
+    /**
+     * Close current view and open Login view method.
+     *
+     * @param event Action Event
+     */
+    public void logOutAction(ActionEvent event) {
+        LOGGER.info("Beginning Productos::logout action");
+        cerrar = 2;
+        cerrarSesionAlert(cerrar);
+    }
+
+    /**
+     * Method that show a confirm dialog to close session
+     * @param cerrar Difference for close app or close session
+     */
+    public void cerrarSesionAlert(int cerrar) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Dialogo de confirmacion");
+        alert.setContentText("Estas seguro que deseas cerrar la sesion");
+        alert.setHeaderText("Cerrar Sesion");
+
+        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.setId("okButton");
+
+        Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelButton.setId("cancelButton");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            if (cerrar == 1) {
+                System.exit(0);
+            } else {
+                stage.hide();
+            }
+        }
+    }
 }
 
