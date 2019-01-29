@@ -87,6 +87,13 @@ public class TelephoneBean implements Serializable{
     }
     
     /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description.set(description);
+    }
+    
+    /**
      * 
      * @return 
      */
@@ -101,12 +108,6 @@ public class TelephoneBean implements Serializable{
         this.town.set(town);
     }
 
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description.set(description);
-    }
         public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof TelephoneBean)) {

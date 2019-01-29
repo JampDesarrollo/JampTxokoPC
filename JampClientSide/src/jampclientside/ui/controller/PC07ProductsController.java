@@ -263,6 +263,12 @@ public class PC07ProductsController {
      * 
      */
     @FXML
+    private Button btnReport;
+    
+    /**
+     * 
+     */
+    @FXML
     private Button updateProduct;
     
     /**
@@ -401,6 +407,7 @@ public class PC07ProductsController {
             delProduct.setOnAction(this::handleDeleteProduct);
             asignProduct.setOnAction(this::handleAsignProduct);
             unasignProduct.setOnAction(this::handleUnasignProduct);
+            btnReport.setOnAction(this::handlePrintAction);
             cbSearch.setOnAction(this::comboBoxOption);
             btnSearch.setOnAction(this::searchButton);
             tbProducts.getSelectionModel().selectedItemProperty()
@@ -1216,7 +1223,7 @@ public class PC07ProductsController {
      * @param event 
      */
     @FXML
-    private void handleImprimirAction(ActionEvent event){
+    private void handlePrintAction(ActionEvent event){
         try {
             JasperReport report=
                 JasperCompileManager.compileReport(getClass()

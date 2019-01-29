@@ -315,117 +315,123 @@ public class PC08PhoneNumbersController{
      * @throws java.io.IOException InputOuput exception
      */
     public void initStage(Parent root) throws IOException {
-        LOGGER.info("Initializing Telephone stage.");
-        //Create a scene associated to the node graph root.
-        Scene scene = new Scene(root);
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        //Associate scene to primaryStage(Window)
-        stage.setScene(scene);
-        stage.setResizable(true);
-        //Set window properties
-        stage.setTitle("Telefonos");
-        //Set window's events handlers
-        stage.setOnShowing(this::windowShow);
-        //menu item de cerrar sesion
-        menuLogOut.setOnAction(this::logOutAction);
-        //boton de cerrar sesion
-        btnLogOut2.setOnAction(this::logOutAction);
-        //ir a la ventana de productos
-        idMenuProduct.setOnAction(this::productWindow);
-        //ir a la ventana de eventos
-        idMenuEvent.setOnAction(this::eventWindow);
-        //gastos
-        idMenuExpense.setOnAction(this::expenseWindow);
-        //ventana de los usuarios
-        idMenuUser.setOnAction(this::usersWindow);
-        //ventana de los usuarios
-        idMenuFTP.setOnAction(this::usersWindow);
-        //boton añadir evento
-        addTelephone.setOnAction(this::handleAddTelephone);
-        //boton eleminar evento
-        delTelephone.setOnAction(this::handleDeleteTelephone);
-        //dependiendo la opcion que pulse del combo box
-        cbSearchTel.setOnAction(this::comboBoxOption);
-        //boton de busqueda
-        btnSearchTel.setOnAction(this::searchButton);
-        tbcolName.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
-        tbcolName.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((TelephoneBean) tbTelephone.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setName(e.getNewValue());
-                    addUpdateTelephone();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            LOGGER.info("Initializing Telephone stage.");
+            //Create a scene associated to the node graph root.
+            Scene scene = new Scene(root);
+            stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            //Associate scene to primaryStage(Window)
+            stage.setScene(scene);
+            stage.setResizable(true);
+            //Set window properties
+            stage.setTitle("Telefonos");
+            //Set window's events handlers
+            stage.setOnShowing(this::windowShow);
+            //menu item de cerrar sesion
+            menuLogOut.setOnAction(this::logOutAction);
+            //boton de cerrar sesion
+            btnLogOut2.setOnAction(this::logOutAction);
+            //ir a la ventana de productos
+            idMenuProduct.setOnAction(this::productWindow);
+            //ir a la ventana de eventos
+            idMenuEvent.setOnAction(this::eventWindow);
+            //gastos
+            idMenuExpense.setOnAction(this::expenseWindow);
+            //ventana de los usuarios
+            idMenuUser.setOnAction(this::usersWindow);
+            //ventana de los usuarios
+            idMenuFTP.setOnAction(this::usersWindow);
+            //boton añadir evento
+            addTelephone.setOnAction(this::handleAddTelephone);
+            //boton eleminar evento
+            delTelephone.setOnAction(this::handleDeleteTelephone);
+            //dependiendo la opcion que pulse del combo box
+            cbSearchTel.setOnAction(this::comboBoxOption);
+            //boton de busqueda
+            btnSearchTel.setOnAction(this::searchButton);
+            tbcolName.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+            tbcolName.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<TelephoneBean,String> e) {
+                    try {
+                        ((TelephoneBean) tbTelephone.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setName(e.getNewValue());
+                        addUpdateTelephone();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolDescription.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
-        tbcolDescription.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((TelephoneBean) tbTelephone.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setDescription(e.getNewValue());
-                    addUpdateTelephone();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolDescription.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+            tbcolDescription.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<TelephoneBean,String> e) {
+                    try {
+                        ((TelephoneBean) tbTelephone.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setDescription(e.getNewValue());
+                        addUpdateTelephone();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolNumber.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
-        tbcolNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((TelephoneBean) tbTelephone.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setTelephon(e.getNewValue());
-                    addUpdateTelephone();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolNumber.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+            tbcolNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<TelephoneBean,String> e) {
+                    try {
+                        ((TelephoneBean) tbTelephone.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setTelephon(e.getNewValue());
+                                addUpdateTelephone();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolTown.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
-        tbcolTown.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((TelephoneBean) tbTelephone.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setTown(e.getNewValue());
-                    addUpdateTelephone();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolTown.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+            tbcolTown.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<TelephoneBean,String> e) {
+                    try {
+                        ((TelephoneBean) tbTelephone.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setTown(e.getNewValue());
+                                addUpdateTelephone();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        //las columnas van a coger el valor de los atributos
-        tbTelephone.getSelectionModel().selectedItemProperty()
-                .addListener(this::handleUsersTableSelectionChanged);
-        tbcolDescription.setCellValueFactory(
-                new PropertyValueFactory<>("description"));
-        tbcolName.setCellValueFactory(
-                new PropertyValueFactory<>("name"));
-        tbcolNumber.setCellValueFactory(
-                new PropertyValueFactory<>("telephone"));
-        //Show primary window
-        stage.show();
-        stage.setOnCloseRequest((WindowEvent e) -> {
-            cerrar = 1;
-            e.consume();
-            cerrarSesionAlert(cerrar);
+            });
+            //las columnas van a coger el valor de los atributos
+            tbTelephone.getSelectionModel().selectedItemProperty()
+                    .addListener(this::handleUsersTableSelectionChanged);
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("description"));
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            tbcolNumber.setCellValueFactory(
+                    new PropertyValueFactory<>("telephone"));
+            tbcolTown.setCellValueFactory(
+                    new PropertyValueFactory<>("town"));
+            //Show primary window
+            stage.show();
+            stage.setOnCloseRequest((WindowEvent e) -> {
+                cerrar = 1;
+                e.consume();
+                cerrarSesionAlert(cerrar);
+                
+            });
+            telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
+            tbTelephone.setItems(telephoneData);
             
-        });
-        // telephoneData = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
-        //tbTelephone.setItems(telephoneData);
-        
-//        telephoneDatacopy.addAll(telephoneData);
+            telephoneDatacopy.addAll(telephoneData);
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -890,8 +896,6 @@ public class PC08PhoneNumbersController{
                     }else if(!telephoneEquals.get(0).equals(telephone)){
                         iLogicTelephone.updateTelephone(telephone);
                     }
-            }else{
-                    LOGGER.info("CHAPUZAS");
             }
         }
     }
