@@ -64,6 +64,8 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 
+
+
 /**
  * FXML PC07ProductsController class
  *
@@ -74,7 +76,7 @@ public class PC07ProductsController {
     /**
      * Maximum characters that can be inserted
      */
-    private static final int MAX_CARACT = 8;
+    private static final int MAX_CARACT = 255;
     
     /**
      * 
@@ -391,114 +393,118 @@ public class PC07ProductsController {
      * @param root root
      */
     public void initStage(Parent root){
-        LOGGER.info("Initializing Product Window.");
-        Scene scene = new Scene(root);
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle("Productos");
-        stage.setOnShowing(this::windowShow);
-        menuLogOut.setOnAction(this::logOutAction);
-        btnLogOut2.setOnAction(this::logOutAction);
-        idMenuEvent.setOnAction(this::eventWindow);
-        idMenuExpense.setOnAction(this::expenseWindow);
-        idMenuTelephon.setOnAction(this::telephoneWindow);
-        idMenuUser.setOnAction(this::usersWindow);
-        idMenuFTP.setOnAction(this::usersWindow);
-        addProduct.setOnAction(this::handleAddProduct);
-        delProduct.setOnAction(this::handleDeleteProduct);
-        asignProduct.setOnAction(this::handleAsignProduct);
-        unasignProduct.setOnAction(this::handleUnasignProduct);
-        btnReport.setOnAction(this::handlePrintAction);
-        cbSearch.setOnAction(this::comboBoxOption);
-        btnSearch.setOnAction(this::searchButton);
-        tbProducts.getSelectionModel().selectedItemProperty()
-                .addListener(this::handleUsersTableSelectionChanged);
-        tbcolName.setCellValueFactory(
-                new PropertyValueFactory<>("name"));
-        tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-        tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((ProductBean) tbProducts.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setName(e.getNewValue());
-                    addUpdateProduct();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            LOGGER.info("Initializing Product Window.");
+            Scene scene = new Scene(root);
+            stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Productos");
+            stage.setOnShowing(this::windowShow);
+            menuLogOut.setOnAction(this::logOutAction);
+            btnLogOut2.setOnAction(this::logOutAction);
+            idMenuEvent.setOnAction(this::eventWindow);
+            idMenuExpense.setOnAction(this::expenseWindow);
+            idMenuTelephon.setOnAction(this::telephoneWindow);
+            idMenuUser.setOnAction(this::usersWindow);
+            idMenuFTP.setOnAction(this::usersWindow);
+            addProduct.setOnAction(this::handleAddProduct);
+            delProduct.setOnAction(this::handleDeleteProduct);
+            asignProduct.setOnAction(this::handleAsignProduct);
+            unasignProduct.setOnAction(this::handleUnasignProduct);
+            btnReport.setOnAction(this::handlePrintAction);
+            cbSearch.setOnAction(this::comboBoxOption);
+            btnSearch.setOnAction(this::searchButton);
+            tbProducts.getSelectionModel().selectedItemProperty()
+                    .addListener(this::handleUsersTableSelectionChanged);
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
+            tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+                @Override
+                public void handle(CellEditEvent<ProductBean,String> e) {
+                    try {
+                        ((ProductBean) tbProducts.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setName(e.getNewValue());
+                        addUpdateProduct();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-        tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((ProductBean) tbProducts.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setDescription(e.getNewValue());
-                    addUpdateProduct();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+                @Override
+                public void handle(CellEditEvent<ProductBean,String> e) {
+                    try {
+                        ((ProductBean) tbProducts.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setDescription(e.getNewValue());
+                        addUpdateProduct();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-        tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((ProductBean) tbProducts.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setPrice(e.getNewValue());
-                    addUpdateProduct();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+                @Override
+                public void handle(CellEditEvent<ProductBean,String> e) {
+                    try {
+                        ((ProductBean) tbProducts.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setPrice(e.getNewValue());
+                        addUpdateProduct();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
-        tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
-        tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
-            @Override
-            public void handle(CellEditEvent<ProductBean,String> e) {
-                try {
-                    ((ProductBean) tbProducts.getItems().get(
-                            e.getTablePosition().getRow())
-                            ).setStock(e.getNewValue());
-                    addUpdateProduct();
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+            });
+            tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
+                @Override
+                public void handle(CellEditEvent<ProductBean,String> e) {
+                    try {
+                        ((ProductBean) tbProducts.getItems().get(
+                                e.getTablePosition().getRow())
+                                ).setStock(e.getNewValue());
+                        addUpdateProduct();
+                    } catch (BusinessLogicException ex) {
+                        Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+            });
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("description"));
+            tbcolPrice.setCellValueFactory(
+                    new PropertyValueFactory<>("price"));
+            tbcolStock.setCellValueFactory(
+                    new PropertyValueFactory<>("stock"));
+            stage.show();
+            stage.setOnCloseRequest((WindowEvent e) -> {
+                int cerrar = 1;
+                e.consume();
+                cerrarSesionAlert(cerrar);
+            });
+            String idTxoko = "1";
+            
+            productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            if(productData.isEmpty()){
+                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setContentText("No hay ningun Producto");
+                dialogoAlerta.setHeaderText("Productos Txoko");
+                dialogoAlerta.showAndWait();
+            }else{
+                tbProducts.setItems(productData);
+                productDatacopy.addAll(productData);
             }
-        });
-        tbcolDescription.setCellValueFactory(
-                new PropertyValueFactory<>("description"));
-        tbcolPrice.setCellValueFactory(
-                new PropertyValueFactory<>("price"));
-        tbcolStock.setCellValueFactory(
-                new PropertyValueFactory<>("stock"));
-        stage.show();
-        stage.setOnCloseRequest((WindowEvent e) -> {
-            int cerrar = 1;
-            e.consume();
-            cerrarSesionAlert(cerrar);
-        });
-        String idTxoko = "1";
-        
-        /* productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
-        if(productData.isEmpty()){
-        Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-        dialogoAlerta.setTitle("INFORMACION");
-        dialogoAlerta.setContentText("No hay ningun Producto");
-        dialogoAlerta.setHeaderText("Productos Txoko");
-        dialogoAlerta.showAndWait();
-        }else{
-        tbProducts.setItems(productData);
-        productDatacopy.addAll(productData);
+        } catch (BusinessLogicException ex) {
+            Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
+        
 }
 
     /**
@@ -1186,7 +1192,7 @@ public class PC07ProductsController {
         try {
             JasperReport report=
                 JasperCompileManager.compileReport(getClass()
-                    .getResourceAsStream("/jampclientside/ui/report/newReport1.jrxml"));
+                    .getResourceAsStream("/jampclientside/ui/reports/products.jrxml"));
             //Data for the report: a collection of UserBean passed as a JRDataSource 
             //implementation 
             JRBeanCollectionDataSource dataItems=

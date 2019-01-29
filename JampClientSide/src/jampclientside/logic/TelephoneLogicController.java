@@ -125,10 +125,11 @@ public class TelephoneLogicController implements TelephoneLogic {
                 while (cursor.hasNext()) {
                     itera = cursor.next();
                     TelephoneBean telephone= new TelephoneBean();
+                    telephone.setId(itera.getString("id"));
                     telephone.setName(itera.getString("name"));
-                    telephone.setDescription(itera.getString("descripción"));
+                    telephone.setDescription(itera.getString("description"));
                     telephone.setTown(itera.getString("town"));
-                   // telephone.setTelephon(itera.getString("telephone"));
+                    telephone.setTelephon(itera.getString("telephone"));
 
                     
                     telephones.add(telephone);

@@ -63,7 +63,7 @@ public class PC08PhoneNumbersController{
     /**
      * Maximum characters that can be inserted
      */
-    private static final int MAX_CARACT = 8;
+    private static final int MAX_CARACT = 255;
 
     /**
      * 
@@ -861,17 +861,18 @@ public class PC08PhoneNumbersController{
     private void addUpdateTelephone() throws BusinessLogicException {
         List<TelephoneBean> telephones = tbTelephone.getItems();
       
-        for(TelephoneBean telephone: telephones){
-            if(telephone.getName()!=null && !telephone.getName().trim().isEmpty()&& 
-              telephone.getDescription()!=null && !telephone.getDescription().trim().isEmpty()&& 
-              telephone.getTelephon()!=null && !telephone.getTelephon().trim().isEmpty() && 
-              telephone.getTown()!=null && !telephone.getTown().trim().isEmpty()){             
+        for(TelephoneBean tel: telephones){
+            if(tel.getName()!=null && !tel.getName().trim().isEmpty()&& 
+              tel.getDescription()!=null && !tel.getDescription().trim().isEmpty()&& 
+              tel.getTown()!=null && !tel.getTown().trim().isEmpty() &&
+              tel.getTelephon()!=null && !tel.getTelephon().trim().isEmpty()) 
+              {             
                     
-                    List telephoneEquals = telephoneDatacopy.stream().filter(t -> t.getId().equals(telephone.getId())).collect(Collectors.toList());
+                    List telephoneEquals = telephoneDatacopy.stream().filter(t -> t.getId().equals(tel.getId())).collect(Collectors.toList());
                     if(telephoneEquals.isEmpty()){
-                        addTelephone(telephone);
-                    }else if(!telephoneEquals.get(0).equals(telephone)){
-                        updateTelephone(telephone);
+                        addTelephone(tel);
+                    }else if(!telephoneEquals.get(0).equals(tel)){
+                        updateTelephone(tel);
                     }
             }
         }

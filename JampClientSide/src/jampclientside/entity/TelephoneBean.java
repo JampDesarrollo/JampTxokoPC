@@ -14,20 +14,48 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Julen
  */
 public class TelephoneBean implements Serializable{
-    private SimpleIntegerProperty idTelephone;
+   /**
+    * 
+    */
+    private SimpleStringProperty idTelephone;
+   
+    /**
+    * 
+    */
     private SimpleStringProperty name;
+    /**
+     * 
+     */
     private SimpleStringProperty telephone;
+    
+    /**
+     * 
+     */
     private SimpleStringProperty description;
+    
+    /**
+     * 
+     */
     private SimpleStringProperty town;
 
+    /**
+     * 
+     */
     public TelephoneBean(){
-        this.idTelephone = new SimpleIntegerProperty();
+        this.idTelephone = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
         this.telephone = new SimpleStringProperty();
         this.name = new SimpleStringProperty();
         this.town = new SimpleStringProperty();
      }
-     
+    
+    /**
+     * 
+     * @param name
+     * @param description
+     * @param telephone
+     * @param town 
+     */
     public TelephoneBean(String name,
                     String description,
                     String telephone,
@@ -37,18 +65,19 @@ public class TelephoneBean implements Serializable{
         this.telephone=new SimpleStringProperty(telephone);
         this.town = new SimpleStringProperty(town);
     }
+    
     /**
      * @return the id
      */
-    public Integer getId() {
+    public String getId() {
         return this.idTelephone.get();
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
-        this.idTelephone.set(id);
+    public void setId(String idTelephone) {
+        this.idTelephone.set(idTelephone);
     }
 
     /**
@@ -133,7 +162,4 @@ public class TelephoneBean implements Serializable{
         return true;
     }
 
-    /**
-     * @return the town
-     */
 }
