@@ -242,7 +242,7 @@ public class PC08PhoneNumbersController{
      * 
      */
     @FXML
-    private TableColumn tbcolNumber;
+    private TableColumn tbcolTelephone;
     /**
      * 
      */
@@ -327,7 +327,6 @@ public class PC08PhoneNumbersController{
             stage.initModality(Modality.APPLICATION_MODAL);
             //Associate scene to primaryStage(Window)
             stage.setScene(scene);
-            stage.setResizable(true);
             //Set window properties
             stage.setTitle("Telefonos");
             //Set window's events handlers
@@ -382,14 +381,14 @@ public class PC08PhoneNumbersController{
                     }
                 }
             });
-            tbcolNumber.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
-            tbcolNumber.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
+            tbcolTelephone.setCellFactory(TextFieldTableCell.<TelephoneBean>forTableColumn());
+            tbcolTelephone.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TelephoneBean, String>>() {
                 @Override
                 public void handle(TableColumn.CellEditEvent<TelephoneBean,String> e) {
                     try {
                         ((TelephoneBean) tbTelephone.getItems().get(
                                 e.getTablePosition().getRow())
-                                ).setTelephon(e.getNewValue());
+                                ).setTelephone(e.getNewValue());
                                 addUpdateTelephone();
                     } catch (BusinessLogicException ex) {
                         Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
@@ -417,7 +416,7 @@ public class PC08PhoneNumbersController{
                     new PropertyValueFactory<>("description"));
             tbcolName.setCellValueFactory(
                     new PropertyValueFactory<>("name"));
-            tbcolNumber.setCellValueFactory(
+            tbcolTelephone.setCellValueFactory(
                     new PropertyValueFactory<>("telephone"));
             tbcolTown.setCellValueFactory(
                     new PropertyValueFactory<>("town"));
@@ -865,10 +864,10 @@ public class PC08PhoneNumbersController{
             if(tel.getName()!=null && !tel.getName().trim().isEmpty()&& 
               tel.getDescription()!=null && !tel.getDescription().trim().isEmpty()&& 
               tel.getTown()!=null && !tel.getTown().trim().isEmpty() &&
-              tel.getTelephon()!=null && !tel.getTelephon().trim().isEmpty()) 
+              tel.getTelephone()!=null && !tel.getTelephone().trim().isEmpty()) 
               {             
                     
-                    List telephoneEquals = telephoneDatacopy.stream().filter(t -> t.getId().equals(tel.getId())).collect(Collectors.toList());
+                    List telephoneEquals = telephoneDatacopy.stream().filter(t -> t.getTelephone().equals(tel.getTelephone())).collect(Collectors.toList());
                     if(telephoneEquals.isEmpty()){
                         addTelephone(tel);
                     }else if(!telephoneEquals.get(0).equals(tel)){

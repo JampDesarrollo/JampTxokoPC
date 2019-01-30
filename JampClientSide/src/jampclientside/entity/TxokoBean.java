@@ -1,11 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package jampclientside.entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Julen
+ * @author Usuario
  */
 @XmlRootElement(name = "txokos")
 public class TxokoBean {
@@ -21,6 +33,14 @@ public class TxokoBean {
     //HAY QUE PONER LA RELACION QUE TIENE CON LOS EVENTOS, LOS USUARIOS Y PRODUCTOS
 
     public TxokoBean() {
+        this.idTxoko = idTxoko;
+        this.direction = direction;
+        this.monthFee =  monthFee;
+        this.name = name;
+        this.town = town;
+        this.products = products;
+        this.users = users;
+        this.events = events;
     }
 
     public TxokoBean(String idTxoko, String direction, Float monthFee, String name, String town) {

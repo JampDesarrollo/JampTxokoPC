@@ -6,7 +6,6 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -97,14 +96,15 @@ public class TelephoneBean implements Serializable{
     /**
      * @return the telephon
      */
-    public String getTelephon() {
+    public String getTelephone() {
         return this.telephone.get();
     }
 
     /**
+     * @param telephone
      * @param telephon the telephon to set
      */
-    public void setTelephon(String telephone) {
+    public void setTelephone(String telephone) {
         this.telephone.set(telephone);
     }
 
@@ -152,7 +152,7 @@ public class TelephoneBean implements Serializable{
         if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.getDescription().equals(other.getDescription()))) {
             return false;
         }
-        if ((this.getTelephon()== null && other.getTelephon()!= null) || (this.getTelephon() != null && !this.getTelephon().equals(other.getTelephon()))) {
+        if ((this.getTelephone()== null && other.getTelephone()!= null) || (this.getTelephone() != null && !this.getTelephone().equals(other.getTelephone()))) {
             return false;
         }
         if ((this.getTown()== null && other.getTown()!= null) || (this.getTown() != null && !this.getTown().equals(other.getTown()))) {

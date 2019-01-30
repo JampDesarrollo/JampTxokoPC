@@ -98,7 +98,7 @@ public class TelephoneLogicController implements TelephoneLogic {
         
         document.put("name", phone.getName());
         document.put("description", phone.getDescription());
-        document.put("telephone", phone.getTelephon());
+        document.put("telephone", phone.getTelephone());
         document.put("town", phone.getTown());
         
         collection.insertOne(document);
@@ -129,7 +129,7 @@ public class TelephoneLogicController implements TelephoneLogic {
                     telephone.setName(itera.getString("name"));
                     telephone.setDescription(itera.getString("description"));
                     telephone.setTown(itera.getString("town"));
-                    telephone.setTelephon(itera.getString("telephone"));
+                    telephone.setTelephone(itera.getString("telephone"));
 
                     
                     telephones.add(telephone);
