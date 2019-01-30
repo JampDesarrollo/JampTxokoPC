@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author 2dam
  */
-public class ProductLogicControllerTEST implements ProductLogic{
+/*public class ProductLogicControllerTEST implements ProductLogic{
     private ArrayList<ProductBean> product;
     private static final Logger LOGGER = Logger.getLogger("package.class");  
       public ProductLogicControllerTEST(){
@@ -27,7 +27,7 @@ public class ProductLogicControllerTEST implements ProductLogic{
         product=new ArrayList();
         //Create 25 UserBean fake data objects.
         for(int i=0;i<25;i++)
-            product.add(new ProductBean("Coca", "zero", i, (float)1.0));
+            product.add(new ProductBean("Coca", "zero", i, (float)1.0, false));
     }
 
     @Override
@@ -45,15 +45,6 @@ public class ProductLogicControllerTEST implements ProductLogic{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<ProductBean> findProductById(Integer idProduct) throws ReadException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public List<ProductBean> findAllProducts(){
@@ -65,15 +56,36 @@ public class ProductLogicControllerTEST implements ProductLogic{
                     "ProductImplementation: Exception finding all products, {0}",
                     ex.getMessage());
             //throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
-        }*/
+        }
         
         return product;
     }
+    
+
+   /* @Override
+    public void isProductExist(Integer id) throws ProductExist {
+
+    }
 
     @Override
-    public void isProductExist(Integer id) throws ProductExist {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ProductBean findProductById(String idProduct) {
+
+    }
+
+    @Override
+    public ProductBean findProductByIdByTxoko(String idProduct, String idTxoko) {
+
+    }
+
+    @Override
+    public List<ProductBean> findProductByName(String name, String idTxoko) {
+
+    }
+
+    @Override
+    public List<ProductBean> findAllProductsByTxoko(String idTxoko) {
+
     }
 
 
-}
+}*/

@@ -6,9 +6,6 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -17,37 +14,70 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Julen
  */
 public class TelephoneBean implements Serializable{
-    private SimpleIntegerProperty idTelephone;
+   /**
+    * 
+    */
+    private SimpleStringProperty idTelephone;
+   
+    /**
+    * 
+    */
     private SimpleStringProperty name;
-    private SimpleIntegerProperty telephone;
+    /**
+     * 
+     */
+    private SimpleStringProperty telephone;
+    
+    /**
+     * 
+     */
     private SimpleStringProperty description;
+    
+    /**
+     * 
+     */
+    private SimpleStringProperty town;
 
+    /**
+     * 
+     */
     public TelephoneBean(){
-        this.idTelephone = new SimpleIntegerProperty();
+        this.idTelephone = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
-        this.telephone = new SimpleIntegerProperty ();
-        this.name = new SimpleStringProperty ();
+        this.telephone = new SimpleStringProperty();
+        this.name = new SimpleStringProperty();
+        this.town = new SimpleStringProperty();
      }
-     
+    
+    /**
+     * 
+     * @param name
+     * @param description
+     * @param telephone
+     * @param town 
+     */
     public TelephoneBean(String name,
                     String description,
-                    Integer telephone){
+                    String telephone,
+                    String town){
         this.name=new SimpleStringProperty(name);
         this.description=new SimpleStringProperty(description);
-        this.telephone=new SimpleIntegerProperty(telephone);
+        this.telephone=new SimpleStringProperty(telephone);
+        this.town = new SimpleStringProperty(town);
     }
+    
     /**
      * @return the id
      */
-    public Integer getId() {
+    public String getId() {
         return this.idTelephone.get();
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
-        this.idTelephone.set(id);
+    public void setId(String idTelephone) {
+        this.idTelephone.set(idTelephone);
     }
 
     /**
@@ -67,14 +97,14 @@ public class TelephoneBean implements Serializable{
     /**
      * @return the telephon
      */
-    public Integer getTelephon() {
+    public String getTelephon() {
         return this.telephone.get();
     }
 
     /**
      * @param telephon the telephon to set
      */
-    public void setTelephon(Integer telephone) {
+    public void setTelephon(String telephone) {
         this.telephone.set(telephone);
     }
 
@@ -84,12 +114,52 @@ public class TelephoneBean implements Serializable{
     public String getDescription() {
         return this.description.get();
     }
-
+    
     /**
      * @param description the description to set
      */
     public void setDescription(String description) {
         this.description.set(description);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getTown() {
+        return this.town.get();
+    }
+
+    /**
+     * @param town the town to set
+     */
+    public void setTown(String town) {
+        this.town.set(town);
+    }
+
+        public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TelephoneBean)) {
+            return false;
+        }
+        TelephoneBean other = (TelephoneBean) object;
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
+            return false;
+        }
+        if ((this.getName() == null && other.getName() != null) || (this.getName() != null && !this.getName().equals(other.getName()))) {
+            return false;
+        }
+        if ((this.getDescription()== null && other.getDescription()!= null) || (this.getDescription() != null && !this.getDescription().equals(other.getDescription()))) {
+            return false;
+        }
+        if ((this.getTelephon()== null && other.getTelephon()!= null) || (this.getTelephon() != null && !this.getTelephon().equals(other.getTelephon()))) {
+            return false;
+        }
+        if ((this.getTown()== null && other.getTown()!= null) || (this.getTown() != null && !this.getTown().equals(other.getTown()))) {
+            return false;
+        }
+
+        return true;
     }
 
 }

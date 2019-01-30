@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -20,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
+<VBox fx:id="productPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC07ProductsController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -31,24 +29,29 @@
             </Menu>
             <Menu fx:id="menuEvent" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
                 <items>
-                  <MenuItem fx:id="idMenuEventos" mnemonicParsing="false" text="Ir a la ventana de Productos" />
+                  <MenuItem fx:id="idMenuEvent" mnemonicParsing="false" text="Ir a la ventana de Eventos" />
                 </items>
             </Menu>
-            <Menu fx:id="menuGastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
+            <Menu fx:id="menuExpense" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
                <items>
-                  <MenuItem fx:id="idMenuGastos" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
+                  <MenuItem fx:id="idMenuExpense" mnemonicParsing="false" text="Ir a la ventana de Gastos" />
                </items>
             </Menu>
-            <Menu fx:id="menuProductos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos"/>
+            <Menu fx:id="menuProduct" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
 
-            <Menu fx:id="menuUsuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
+            <Menu fx:id="menuUser" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
                <items>
-                  <MenuItem fx:id="idMenuUsuarios" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
+                  <MenuItem fx:id="idMenuUser" mnemonicParsing="false" text="Ir a la ventana de Usuarios" />
                </items>
             </Menu>
-            <Menu fx:id="menuTelefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
+            <Menu fx:id="menuTelephon" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
                <items>
-                  <MenuItem fx:id="idMenuTel" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
+                  <MenuItem fx:id="idMenuTelephon" mnemonicParsing="false" text="Ir a la ventana de Teléfonos " />
+               </items>
+            </Menu>
+            <Menu fx:id="menuFtp" mnemonicParsing="false" style="-fx-color: #005192;" text="Cliente FTP">
+               <items>
+                  <MenuItem fx:id="idMenuFTP" mnemonicParsing="false" text="Ir a la ventana de FTP" />
                </items>
             </Menu>
       </menus>
@@ -98,13 +101,13 @@
          <top>
             <HBox prefHeight="151.0" prefWidth="1276.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="222.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="151.0" prefWidth="307.0">
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="225.0" text="Búsqueda por" textAlignment="RIGHT">
                            <font>
                               <Font size="14.0" />
                            </font></Label>
-                        <ComboBox fx:id="cbSearch" prefHeight="25.0" prefWidth="184.0" />
+                        <ComboBox fx:id="cbSearch" prefHeight="25.0" prefWidth="247.0" />
                      </children>
                      <HBox.margin>
                         <Insets left="100.0" />
@@ -150,7 +153,7 @@
                   </Separator>
                   <VBox alignment="TOP_CENTER" prefHeight="242.0" prefWidth="161.0" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="addProduct" mnemonicParsing="false" text="Añadir producto">
+                        <Button fx:id="addProduct" mnemonicParsing="false" prefWidth="130.0" text="Añadir producto">
                            <VBox.margin>
                               <Insets left="10.0" top="25.0" />
                            </VBox.margin>
@@ -158,37 +161,69 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
+                        <Button fx:id="delProduct" mnemonicParsing="false" text="Eliminar Producto">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
                   </VBox>
-                  <Button fx:id="delProduct" contentDisplay="CENTER" mnemonicParsing="false" text="Eliminar producto">
+                  <VBox prefHeight="151.0" prefWidth="133.0">
+                     <children>
+                        <Button fx:id="asignProduct" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="130.0" text="Añadir al Txoko">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="unasignProduct" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="130.0" text="Quitar del Txoko">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="25.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
                      <HBox.margin>
-                        <Insets left="30.0" top="25.0" />
+                        <Insets left="30.0" />
                      </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="btnReport" mnemonicParsing="false" text="Informe">
+                           <VBox.margin>
+                              <Insets left="20.0" top="55.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
                <BorderPane.margin>
                   <Insets top="30.0" />
                </BorderPane.margin>
             </HBox>
          </top>
-         <center>
-            <TableView fx:id="tbProducts" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
-              <columns>
-                <TableColumn fx:id="tbcolName" prefWidth="123.0" text="Nombre del producto" />
-                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="487.99998474121094" text="Descripción del producto" />
-                <TableColumn fx:id="tbcolPrice" prefWidth="152.0" text="Precio" />
-                <TableColumn fx:id="tbcolStock" prefWidth="206.0" text="Stock" />
-              </columns>
-            </TableView>
-         </center>
          <right>
-            <ScrollBar orientation="VERTICAL" BorderPane.alignment="CENTER" />
+            <TableView fx:id="tbProducts" editable="true" prefHeight="403.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="tbcolName" prefWidth="384.0" text="Nombre del producto" />
+                <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="446.0" text="Descripción del producto" />
+                <TableColumn fx:id="tbcolPrice" prefWidth="248.0" text="Precio" />
+                <TableColumn fx:id="tbcolStock" prefWidth="201.0" text="Stock" />
+              </columns>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </TableView>
          </right>
       </BorderPane>
   </children>
