@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package jampclientside.entity;
 
 import java.io.Serializable;
@@ -10,61 +15,52 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Usuario
  */
+@XmlRootElement(name = "event")
 public class EventBean implements Serializable {
 
-    private SimpleIntegerProperty idEvent;
+    private Integer idEvent;
     private SimpleStringProperty description;
-    private SimpleFloatProperty price;
+    private SimpleStringProperty price;
     private SimpleStringProperty name;
     private SimpleStringProperty img;
-    private SimpleObjectProperty<LocalDateTime>date;
-    private SimpleObjectProperty<TxokoBean> txoko;
-    private SimpleObjectProperty<UserBean> users;
+    private SimpleStringProperty date;
+    private List<TxokoBean> txokos;
+    private List<UserBean> users;
 
     public EventBean() {
-        this.idEvent = new SimpleIntegerProperty();
+        this.idEvent = idEvent;
         this.description = new SimpleStringProperty();
-        this.price = new SimpleFloatProperty();
+        this.price = new SimpleStringProperty();
         this.name = new SimpleStringProperty();
         this.img = new SimpleStringProperty();
-        this.date = new SimpleObjectProperty<>();
+        this.date = new SimpleStringProperty();
+        this.txokos = txokos;
+        this.users = users;
     }
 
     public EventBean(String name,
             String description,
-            LocalDateTime date,
+            String date,
             String img,
-            Float price) {
+            String price) {
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.date = new SimpleObjectProperty<>(date);
+        this.date = new SimpleStringProperty(date);
         this.img = new SimpleStringProperty(img);
-        this.price = new SimpleFloatProperty(price);
+        this.price = new SimpleStringProperty(price);
     }
-
-    /**
-     * @return the idEvent
-     */
-    public Integer getIdEvent() {
-        return this.idEvent.get();
-    }
-
-    /**
-     * @param idEvent the idEvent to set
-     */
-    public void setIdEvent(Integer idEvent) {
-        this.idEvent.set(idEvent);
-    }
-
     /**
      * @return the description
      */
@@ -82,18 +78,16 @@ public class EventBean implements Serializable {
     /**
      * @return the price
      */
-    public Float getPrice() {
+    public String getPrice() {
         return this.price.get();
     }
 
     /**
      * @param price the price to set
      */
-    public void setPrice(Float price) {
+    public void setPrice(String price) {
         this.price.set(price);
     }
-    
- 
 
     /**
      * @return the name
@@ -124,55 +118,70 @@ public class EventBean implements Serializable {
     }
 
     /**
-     * @return the txoko
-     */
-    public TxokoBean getTxoko() {
-        return this.txoko.get();
-    }
-
-    /**
-     * @param txoko the txoko to set
-     */
-    public void setTxoko(TxokoBean txoko) {
-        this.txoko.set(txoko);
-    }
-
-    /**
      * @return the users
      */
-    public UserBean getUsers() {
-        return this.users.get();
+    public List<UserBean> getUsers() {
+        return users;
     }
 
     /**
      * @param users the users to set
      */
-    public void setUsers(UserBean users) {
-        this.users.set(users);
+    public void setUsers(List<UserBean> users) {
+        this.users = users;
+    }
+
+    /**
+     * @return the txokos
+     */
+    public List<TxokoBean> getTxokos() {
+        return txokos;
+    }
+
+    /**
+     * @param txokos the txokos to set
+     */
+    public void setTxokos(List<TxokoBean> txokos) {
+        this.txokos = txokos;
+    }
+
+    /*
+    public String getDate(){
+    
+    SimpleDateFormat dateformat = new SimpleDateFormat("yyyy MM dd HH:mm:ss"); 
+    String result = dateformat.format(date);
+    return result;
+    }*/
+    /**
+     * @return the idEvent
+     */
+    public Integer getIdEvent() {
+        return idEvent;
+    }
+
+    /**
+     * @param idEvent the idEvent to set
+     */
+    public void setIdEvent(Integer idEvent) {
+        this.idEvent = idEvent;
     }
 
     /**
      * @return the date
      */
-    public LocalDateTime getDate() {
+    public String getDate() {
         return this.date.get();
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date.set(date);
     }
 
 
-    public String getDateAsString() {
-        SimpleDateFormat smp = new SimpleDateFormat("yyyy MMMMM dd");
-        String strDate = (null == date || null == date.get())
-                ? "" : smp.format(date.get());
-        
-        return strDate;
-    }
+
     
     
 }
