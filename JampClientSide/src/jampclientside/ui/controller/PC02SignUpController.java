@@ -6,9 +6,6 @@
 package jampclientside.ui.controller;
 
 
-import jampclientside.entity.UserBean;
-import jampclientside.logic.ILogic;
-import jampclientside.exceptions.UserLoginExistException;
 import jampclientside.logic.UserLogic;
 import java.io.IOException;
 import java.sql.Timestamp;

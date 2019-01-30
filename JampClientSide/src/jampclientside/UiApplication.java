@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import jampclientside.logic.UserLogic;
+import jampclientside.ui.controller.PC01LoginController;
 
 /**
  * Class that is going to launch the first window of the application, the window of
@@ -28,15 +29,15 @@ public class UiApplication extends Application {
         //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
         //UserLogic iLogicUser = UserLogic.getILogic();
         //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-        EventLogic iLogicEvent = ILogicFactory.getEventLogic();
+        UserLogic iLogicUser = ILogicFactory.getUserLogic();
         //Instanciamos el cargador
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/view/PC05Events.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/view/PC01Login.fxml"));
         //Cargamos el documento en el root
         Parent root = (Parent) loader.load();
         //Obtengo el controlador, por que luego quiero pasarle el stage, entonces primero lo tengo que tener
-        PC05EventsController controler = (PC05EventsController) loader.getController();
+        PC01LoginController controler = (PC01LoginController) loader.getController();
         //le paso el objeto de logica al controlador
-        controler.setILogic(iLogicEvent);
+        controler.setILogic(iLogicUser);
         //al metodo set stage le paso el stage, al controlador le paso el escenario
         controler.setStage(stage);
         //al metodo initstage del controlador le paso el root

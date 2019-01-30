@@ -658,7 +658,7 @@ public class PC07ProductsController {
                     List<TxokoBean> txoko = new ArrayList<>();
                     TxokoBean aux = new TxokoBean();
                     idTxoko = "1";
-                    aux.setIdTxoko(idTxoko);
+                    aux.setIdTxoko(Integer.parseInt(idTxoko));
                     txoko.add(aux);
                     selectedProduct.setTxokos(txoko);
                     this.iLogicProduct.updateProduct(selectedProduct);
@@ -712,7 +712,7 @@ public class PC07ProductsController {
                 List<TxokoBean> txoko = new ArrayList<>();
                 TxokoBean aux = new TxokoBean();
                 String idTxoko = "1";
-                aux.setIdTxoko(idTxoko);
+                aux.setIdTxoko(Integer.parseInt(idTxoko));
                 txoko.remove(aux);
                 selectedProduct.setTxokos(txoko);
                 this.iLogicProduct.updateProduct(selectedProduct);

@@ -670,7 +670,7 @@ public class PC05EventsController {
                 eventsData = FXCollections.observableArrayList(ilogic.findAllEvents(idTxoko));
                 List<TxokoBean> txoko = new ArrayList<TxokoBean>();
                 TxokoBean aux = new TxokoBean();
-                aux.setIdTxoko(idTxoko);
+                aux.setIdTxoko(Integer.parseInt(idTxoko));
                 txoko.add(aux);
                 selectedEvent.setTxokos(txoko);
                 this.ilogic.updateEvent(selectedEvent);

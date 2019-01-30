@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC03UserController">
+<VBox fx:id="userPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC03UserController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -22,11 +22,31 @@
             <MenuItem fx:id="btnLogOut" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Cerrar Sesión" />
           </items>
         </Menu>
-            <Menu fx:id="btnEvents" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos" />
-            <Menu fx:id="btnExpenses" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos" />
-            <Menu fx:id="btnProducts" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos" />
-            <Menu fx:id="btnUsers" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios" />
-            <Menu fx:id="btnPhones" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos" />
+            <Menu fx:id="eventos" mnemonicParsing="false" style="-fx-color: #005192;" text="Eventos">
+               <items>
+                  <MenuItem fx:id="btnEvents" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Eventos" />
+               </items></Menu>
+            <Menu fx:id="gastos" mnemonicParsing="false" style="-fx-color: #005192;" text="Gastos">
+               <items>
+                  <MenuItem fx:id="btnExpenses" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Gastos" />
+               </items></Menu>
+            <Menu fx:id="productos" mnemonicParsing="false" style="-fx-color: #005192;" text="Productos">
+               <items>
+                  <MenuItem fx:id="btnProducts" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Productos" />
+               </items></Menu>
+            <Menu fx:id="usuarios" mnemonicParsing="false" style="-fx-color: #005192;" text="Usuarios">
+               <items>
+                  <MenuItem fx:id="btnUsers" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Usuarios" />
+               </items></Menu>
+            <Menu fx:id="telefonos" mnemonicParsing="false" style="-fx-color: #005192;" text="Teléfonos">
+               <items>
+                  <MenuItem fx:id="btnPhones" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Teléfonos" />
+               </items></Menu>
+            <Menu fx:id="btnArchivo" mnemonicParsing="false" style="-fx-color: #005192;" text="Archivos">
+               <items>
+                  <MenuItem fx:id="btnArchivos" mnemonicParsing="false" style="-fx-text-fill: Black;" text="Ir a Archivos" />
+               </items>
+            </Menu>
       </menus>
     </MenuBar>
       <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="766.0" spacing="20.0">
@@ -78,19 +98,21 @@
                   <TableColumn fx:id="colStatus" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Status" />
                   <TableColumn fx:id="colPriv" maxWidth="100.0" prefWidth="100.0" resizable="false" text="Privilegios" />
               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
             </TableView>
          </center>
          <top>
             <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER_RIGHT">
                <children>
-                  <Label fx:id="lblError" text="Error" textFill="RED" />
+                  <Label fx:id="lblErrorUser" text="Error" textFill="RED" />
                   <Button fx:id="btnDeleteUser" mnemonicParsing="false" text="Eliminar Usuario" />
                   <Button fx:id="btnEditUser" mnemonicParsing="false" text="Modificar Usuario">
                      <HBox.margin>
-                        <Insets right="100.0" />
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnPrint" mnemonicParsing="false" text="Imprimir Informe">
+                     <HBox.margin>
+                        <Insets right="50.0" />
                      </HBox.margin>
                   </Button>
                </children>

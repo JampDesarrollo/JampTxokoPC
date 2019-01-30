@@ -6,22 +6,25 @@
 package jampclientside.entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Data Transfer Object used in UI and client side for representing User entity.
+ * It is also used as data model for a TableView in the UI.
  *
  * @author Ander
  */
-@XmlRootElement(name="users")
+@XmlRootElement(name = "user")
 public class UserBean implements Serializable {
 
+    private SimpleObjectProperty<ExpenseBean> expenses;
     /**
      *
      */
+
     private SimpleIntegerProperty idUser;
     /**
      *
@@ -44,6 +47,10 @@ public class UserBean implements Serializable {
     /**
      *
      */
+    private SimpleStringProperty password;
+    /**
+     *
+     */
 
     private SimpleObjectProperty<UserStatus> status;
     /**
@@ -56,33 +63,47 @@ public class UserBean implements Serializable {
      */
 
     private SimpleStringProperty lastAccess;
-    
-    private List<EventBean>events;
-    private SimpleObjectProperty<ExpenseBean>expenses;
 
+    /**
+     *
+     */
+    private SimpleStringProperty lastPasswordChange;
+
+    /**
+     * Empty contructor
+     */
     public UserBean() {
+        this.expenses = new SimpleObjectProperty();
+        this.txoko = new SimpleObjectProperty();
         this.idUser = new SimpleIntegerProperty();
-        this.txoko = new SimpleObjectProperty<>();
         this.login = new SimpleStringProperty();
+        this.password = new SimpleStringProperty();
         this.email = new SimpleStringProperty();
         this.fullname = new SimpleStringProperty();
         this.status = new SimpleObjectProperty<>();
         this.privilege = new SimpleObjectProperty<>();
         this.lastAccess = new SimpleStringProperty();
-        this.events = events;
-        this.expenses=new SimpleObjectProperty<>();
-       
-
+        this.lastPasswordChange = new SimpleStringProperty();
     }
 
+    /**
+     * Full constructor
+     *
+     * @param idUser id user
+     * @param login login
+     * @param email email
+     * @param fullname fullname
+     * @param status status
+     * @param privilege privilege
+     */
     public UserBean(Integer idUser, String login, String email,
             String fullname, UserStatus status, UserPrivilege privilege) {
         this.idUser = new SimpleIntegerProperty(idUser);
         this.login = new SimpleStringProperty(login);
         this.email = new SimpleStringProperty(email);
         this.fullname = new SimpleStringProperty(fullname);
-        this.status = new SimpleObjectProperty<UserStatus>(status);
-        this.privilege = new SimpleObjectProperty<UserPrivilege>(privilege);
+        this.status = new SimpleObjectProperty<>(status);
+        this.privilege = new SimpleObjectProperty<>(privilege);
     }
 
     /**
@@ -204,20 +225,6 @@ public class UserBean implements Serializable {
     }
 
     /**
-     * @return the events
-     */
-    public List<EventBean> getEvents() {
-        return events;
-    }
-
-    /**
-     * @param events the events to set
-     */
-    public void setEvents(List<EventBean> events) {
-        this.events = events;
-    }
-
-    /**
      * @return the expenses
      */
     public ExpenseBean getExpenses() {
@@ -230,6 +237,32 @@ public class UserBean implements Serializable {
     public void setExpenses(ExpenseBean expenses) {
         this.expenses.set(expenses);
     }
-    
-    
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return this.password.get();
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password.set(password);
+    }
+
+    /**
+     * @return the lastPasswordChange
+     */
+    public String getLastPasswordChange() {
+        return this.lastPasswordChange.get();
+    }
+
+    /**
+     * @param lastPasswordChange the lastPasswordChange to set
+     */
+    public void setLastPasswordChange(String lastPasswordChange) {
+        this.lastPasswordChange.set(lastPasswordChange);
+    }
 }

@@ -6,16 +6,16 @@
 package jampclientside.entity;
 
 /**
- *  
+ *  User status enumeration
  * @author ander
  */
 public enum UserStatus {
     /**
-     * 
+     * Enabled enumeration
      */
     ENABLED,
     /**
-     * 
+     * Disabled enumeration
      */
     DISABLED;
 }

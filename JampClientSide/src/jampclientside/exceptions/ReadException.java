@@ -7,7 +7,7 @@ package jampclientside.exceptions;
 
 /**
  * This class represents any error during any query in application storage.
- * @author javi
+ * @author ander
  */
 public class ReadException extends Exception {
 
