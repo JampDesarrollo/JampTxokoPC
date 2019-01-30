@@ -6,13 +6,19 @@
 package jampclientside.exceptions;
 
 /**
- *
+ * BusinessLogic exception
  * @author Ander
  */
 public class BusinessLogicException extends Exception {
+    /**
+     * empty Exception contructor
+     */
     public BusinessLogicException() {
     }
-    
+    /**
+     * Exception constructor with msg
+     * @param msg message
+     */
     public BusinessLogicException(String msg) {
         super(msg);
     }

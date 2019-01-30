@@ -7,7 +7,7 @@ package jampclientside.exceptions;
 
 /**
  * This class represents any error during user object's creation in application storage.
- * @author javi
+ * @author ander
  */
 public class CreateException extends Exception {
 

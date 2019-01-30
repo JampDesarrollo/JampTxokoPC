@@ -6,16 +6,16 @@
 package jampclientside.entity;
 
 /**
- *
+ * User privilege enumeration
  * @author ander
  */
 public enum UserPrivilege {
     /**
-     * 
+     * User privilege
      */
     USER,
     /**
-     * 
+     * Admin privilege
      */
     ADMIN;
 }

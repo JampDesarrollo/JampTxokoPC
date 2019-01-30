@@ -13,12 +13,19 @@ package jampclientside.exceptions;
  */
 public class UserNotExistException extends Exception {
 
+    /**
+     * Exception constructor with msg
+     * @param msg
+     */
     public UserNotExistException(String msg) {
 
         super(msg);
 
     }
 
+    /**
+     *  Empty exception contructor
+     */
     public UserNotExistException() {
     }
 

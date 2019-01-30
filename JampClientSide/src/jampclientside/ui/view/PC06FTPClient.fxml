@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="signUpPane" fillWidth="false" prefHeight="480.0" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC06FTPClientController">
+<VBox fx:id="ftpPane" fillWidth="false" prefHeight="540.0" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC06FTPClientController">
    <children>
       <Label alignment="TOP_LEFT" text="Cliente FTP" textAlignment="CENTER" textFill="#005192">
          <font>
@@ -33,14 +33,14 @@
          </children>
       </HBox>
       <TreeView fx:id="tView" prefHeight="301.0" prefWidth="480.0" />
-      <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="745.0" spacing="10.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="745.0" spacing="10.0">
          <children>
-            <Label fx:id="lblInfo" alignment="CENTER" text="Mensaje Informativo" textFill="#31c300">
-               <padding>
-                  <Insets right="425.0" />
-               </padding>
-            </Label>
-            <Button fx:id="btnOut" mnemonicParsing="false" text="Salir" />
+            <Label fx:id="lblInfo" minWidth="-Infinity" prefHeight="23.0" prefWidth="601.0" text="Mensaje Informativo" textFill="#31c300" />
+         </children>
+      </HBox>
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="25.0" prefWidth="724.0" spacing="10.0">
+         <children>
+            <Button fx:id="btnOut" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Salir" />
          </children>
       </HBox>
    </children>

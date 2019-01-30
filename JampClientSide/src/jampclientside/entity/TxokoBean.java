@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "txokos")
 public class TxokoBean {
 
-    private String idTxoko;
+    private Integer idTxoko;
     private String direction;
     private Float monthFee;
     private String name;
@@ -43,7 +43,7 @@ public class TxokoBean {
         this.events = events;
     }
 
-    public TxokoBean(String idTxoko, String direction, Float monthFee, String name, String town) {
+    public TxokoBean(Integer idTxoko, String direction, Float monthFee, String name, String town) {
         this.idTxoko = idTxoko;
         this.direction = direction;
         this.monthFee = monthFee;
@@ -51,7 +51,7 @@ public class TxokoBean {
         this.town = town;
     }
     
-    public TxokoBean(String idTxoko){
+    public TxokoBean(Integer idTxoko){
     this.idTxoko = idTxoko;
     
     }
@@ -86,14 +86,14 @@ public class TxokoBean {
     /**
      * @return the idTxoko
      */
-    public String getIdTxoko() {
+    public Integer getIdTxoko() {
         return idTxoko;
     }
 
     /**
      * @param idTxoko the idTxoko to set
      */
-    public void setIdTxoko(String idTxoko) {
+    public void setIdTxoko(Integer idTxoko) {
         this.idTxoko = idTxoko;
     }
 

@@ -47,7 +47,7 @@
                <graphic>
                   <ImageView fx:id="imgOjo" fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../resources/ojo.png" />
+                        <Image url="@../../../resources/ojo.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -94,7 +94,7 @@
       </Hyperlink>
       <ImageView fx:id="imLoading" fitHeight="25.0" fitWidth="25.0">
          <image>
-            <Image url="@../../../../resources/loading.gif" />
+            <Image url="@../../../resources/loading.gif" />
          </image>
       </ImageView>
    </children>

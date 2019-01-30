@@ -11,11 +11,16 @@ package jampclientside.exceptions;
  * @author ander
  */
 public class UserLoginExistException extends Exception {
-
+    /**
+     * Exception constructor with msg
+     * @param msg 
+     */
     public UserLoginExistException(String msg) {
         super(msg);
     }
-
+    /**
+     * Empty exception constructor
+     */
     public UserLoginExistException() {
 
     }
