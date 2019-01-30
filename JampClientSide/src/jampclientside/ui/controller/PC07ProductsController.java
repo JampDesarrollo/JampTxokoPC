@@ -51,11 +51,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -393,7 +396,7 @@ public class PC07ProductsController {
      * @param root root
      */
     public void initStage(Parent root){
-        try {
+      //  try {
             LOGGER.info("Initializing Product Window.");
             Scene scene = new Scene(root);
             stage = new Stage();
@@ -418,7 +421,13 @@ public class PC07ProductsController {
             btnSearch.setOnAction(this::searchButton);
             tbProducts.getSelectionModel().selectedItemProperty()
                     .addListener(this::handleUsersTableSelectionChanged);
-            tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            
+            Callback<TableColumn<ProductBean, String>, 
+            TableCell<ProductBean, String>> cellNameFactory
+                = (TableColumn<ProductBean, String> p) -> new EditingCell();
+            tbcolName.setCellFactory(cellNameFactory);  
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
             tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
                 @Override
                 public void handle(CellEditEvent<ProductBean,String> e) {
@@ -432,7 +441,13 @@ public class PC07ProductsController {
                     }
                 }
             });
-            tbcolDescription.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            
+            Callback<TableColumn<ProductBean, String>, 
+            TableCell<ProductBean, String>> cellDescriptionFactory
+                = (TableColumn<ProductBean, String> p) -> new EditingCell();
+            tbcolDescription.setCellFactory(cellDescriptionFactory);  
+            tbcolDescription.setCellValueFactory(
+                    new PropertyValueFactory<>("description"));
             tbcolDescription.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
                 @Override
                 public void handle(CellEditEvent<ProductBean,String> e) {
@@ -446,7 +461,13 @@ public class PC07ProductsController {
                     }
                 }
             });
-            tbcolPrice.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            
+            Callback<TableColumn<ProductBean, String>, 
+            TableCell<ProductBean, String>> cellPriceFactory
+                = (TableColumn<ProductBean, String> p) -> new EditingCell();
+            tbcolPrice.setCellFactory(cellPriceFactory);  
+            tbcolPrice.setCellValueFactory(
+                    new PropertyValueFactory<>("price"));
             tbcolPrice.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
                 @Override
                 public void handle(CellEditEvent<ProductBean,String> e) {
@@ -460,7 +481,13 @@ public class PC07ProductsController {
                     }
                 }
             });
-            tbcolStock.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
+            
+            Callback<TableColumn<ProductBean, String>, 
+            TableCell<ProductBean, String>> cellStockFactory
+                = (TableColumn<ProductBean, String> p) -> new EditingCell();
+            tbcolStock.setCellFactory(cellStockFactory); 
+            tbcolStock.setCellValueFactory(
+                    new PropertyValueFactory<>("stock"));
             tbcolStock.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
                 @Override
                 public void handle(CellEditEvent<ProductBean,String> e) {
@@ -474,14 +501,7 @@ public class PC07ProductsController {
                     }
                 }
             });
-            tbcolName.setCellValueFactory(
-                    new PropertyValueFactory<>("name"));
-            tbcolDescription.setCellValueFactory(
-                    new PropertyValueFactory<>("description"));
-            tbcolPrice.setCellValueFactory(
-                    new PropertyValueFactory<>("price"));
-            tbcolStock.setCellValueFactory(
-                    new PropertyValueFactory<>("stock"));
+            
             stage.show();
             stage.setOnCloseRequest((WindowEvent e) -> {
                 int cerrar = 1;
@@ -490,7 +510,7 @@ public class PC07ProductsController {
             });
             String idTxoko = "1";
             
-            productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+          /*  productData = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
             if(productData.isEmpty()){
                 Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
@@ -503,7 +523,8 @@ public class PC07ProductsController {
             }
         } catch (BusinessLogicException ex) {
             Logger.getLogger(PC07ProductsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        
         
 }
 
@@ -597,6 +618,17 @@ public class PC07ProductsController {
 
 
                 ProductBean product = new ProductBean();
+                
+                Platform.runLater(new Runnable() 
+                { 
+                    @Override 
+                    public void run() 
+                    { 
+                     tbProducts.requestFocus(); 
+                     tbProducts.getSelectionModel().selectLast();
+                     tbProducts.getFocusModel().focus(0);
+                    } 
+                }); 
 
                 tbProducts.getItems().add(product);
                 tbProducts.refresh();
@@ -1284,5 +1316,68 @@ public class PC07ProductsController {
             }
         }
     }
+
+    public class EditingCell extends TableCell<ProductBean, String> {
+        private TextField textField;
+
+            public EditingCell() {
+            }
+
+            @Override
+            public void startEdit() {
+                if (!isEmpty()) {
+                    super.startEdit();
+                    createTextField();
+                    setText(null);
+                    setGraphic(textField);
+                    textField.selectAll();
+                }
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+
+                setText((String) getItem());
+                setGraphic(null);
+            }
+
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    if (isEditing()) {
+                        if (textField != null) {
+                            textField.setText(getString());
+                        }
+                        setText(null);
+                        setGraphic(textField);
+                    } else {
+                        setText(getString());
+                        setGraphic(null);
+                    }
+                }
+            }
+
+            private void createTextField() {
+                textField = new TextField(getString());
+                textField.setMinWidth(this.getWidth() - this.getGraphicTextGap()* 2);
+                textField.focusedProperty().addListener(
+                    (ObservableValue<? extends Boolean> arg0, 
+                    Boolean arg1, Boolean arg2) -> {
+                        if (!arg2) {
+                            commitEdit(textField.getText());
+                        }
+                });
+            }
+
+            private String getString() {
+                return getItem() == null ? "" : getItem().toString();
+            }
+     }
 }
 
