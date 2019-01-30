@@ -185,7 +185,7 @@
               <columns>
                 <TableColumn fx:id="tbcolName" prefWidth="323.0" text="Nombre del telefono" />
                 <TableColumn fx:id="tbcolDescription" minWidth="1.0" prefWidth="424.0" text="Descripción del telefono" />
-                <TableColumn fx:id="tbcolNumber" prefWidth="287.0" text="Numero de telefono" />
+                <TableColumn fx:id="tbcolTelephone" prefWidth="287.0" text="Numero de telefono" />
                 <TableColumn fx:id="tbcolTown" prefWidth="231.0" text="Ciudad" />
               </columns>
             </TableView>

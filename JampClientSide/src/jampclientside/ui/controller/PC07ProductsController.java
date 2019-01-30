@@ -418,8 +418,6 @@ public class PC07ProductsController {
             btnSearch.setOnAction(this::searchButton);
             tbProducts.getSelectionModel().selectedItemProperty()
                     .addListener(this::handleUsersTableSelectionChanged);
-            tbcolName.setCellValueFactory(
-                    new PropertyValueFactory<>("name"));
             tbcolName.setCellFactory(TextFieldTableCell.<ProductBean>forTableColumn());
             tbcolName.setOnEditCommit(new EventHandler<CellEditEvent<ProductBean, String>>() {
                 @Override
@@ -476,6 +474,8 @@ public class PC07ProductsController {
                     }
                 }
             });
+            tbcolName.setCellValueFactory(
+                    new PropertyValueFactory<>("name"));
             tbcolDescription.setCellValueFactory(
                     new PropertyValueFactory<>("description"));
             tbcolPrice.setCellValueFactory(
@@ -721,7 +721,8 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido eliminado de tu txoko.");
+                dialogoAlerta.setContentText("El producto "+selectedProduct.getName()
+                        +" "+selectedProduct.getDescription()+" ha sido eliminado de tu txoko.");
                 dialogoAlerta.setHeaderText("Quitar un producto del txoko");
                 dialogoAlerta.showAndWait();
  
@@ -729,7 +730,8 @@ public class PC07ProductsController {
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("No has quitado el producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" de tu txoko!!");
+                dialogoAlerta.setContentText("No has quitado el producto "+selectedProduct.getName()
+                        +" "+selectedProduct.getDescription()+" de tu txoko!!");
                 dialogoAlerta.setHeaderText("Quitar un producto del txoko");
                 dialogoAlerta.showAndWait();
             }
@@ -770,7 +772,8 @@ public class PC07ProductsController {
                     
                     dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                     dialogoAlerta.setTitle("INFORMACION");
-                    dialogoAlerta.setContentText("El producto "+selectedProduct.getName()+" "+selectedProduct.getDescription()+" ha sido eliminado.");
+                    dialogoAlerta.setContentText("El producto "+selectedProduct.getName()
+                            +" "+selectedProduct.getDescription()+" ha sido eliminado.");
                     dialogoAlerta.setHeaderText("Eliminar un producto");
                     dialogoAlerta.showAndWait();
                     
@@ -1257,6 +1260,7 @@ public class PC07ProductsController {
 
     /**
      * Method that show a confirm dialog to close session
+     * 
      * @param cerrar Difference for close app or close session
      */
     public void cerrarSesionAlert(int cerrar) {
