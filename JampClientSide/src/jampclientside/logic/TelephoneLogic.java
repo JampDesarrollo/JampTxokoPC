@@ -6,10 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.TelephoneBean;
-import jampclientside.exceptions.CreateException;
-import jampclientside.exceptions.DeleteException;
-import jampclientside.exceptions.ReadException;
-import jampclientside.exceptions.UpdateException;
+import jampclientside.exceptions.BusinessLogicException;
 import java.util.List;
 
 
@@ -23,29 +20,48 @@ public interface TelephoneLogic {
 
     /**
      * 
-     * @param phone
-     * @throws DeleteException 
+     * @param phone 
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
-    public void deleteTelephone(TelephoneBean phone) throws DeleteException;
+    public void deleteTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
-     * @param phone
-     * @throws UpdateException 
+     * @param phone 
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
-    public void updateTelephone(TelephoneBean phone) throws UpdateException;
+    public void updateTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
-     * @param phone
-     * @throws CreateException 
+     * @param phone 
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
-    public void createTelephone(TelephoneBean phone) throws CreateException;
+    public void createTelephone(TelephoneBean phone) throws BusinessLogicException;
     
     /**
      * 
-     * @return
-     * @throws ReadException 
+     * @return 
+     * @throws jampclientside.exceptions.BusinessLogicException 
      */
-    public List<TelephoneBean> findAllTelephone();
+    public List<TelephoneBean> findAllTelephone()throws BusinessLogicException;
+    
+    /**
+     * 
+     * @param idTelephone
+     * @return 
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
+    public TelephoneBean findTelephoneById(Integer idTelephone)throws BusinessLogicException;
+    
+    /**
+     * 
+     * @param name
+     * @return 
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
+    public List<TelephoneBean> findTelephoneByName(String name)throws BusinessLogicException;
+    
+
+    
 }

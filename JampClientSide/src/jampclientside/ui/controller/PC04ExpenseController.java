@@ -6,13 +6,13 @@
 package jampclientside.ui.controller;
 
 import jampclientside.entity.ExpenseBean;
+import jampclientside.entity.UserBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.logic.EventLogic;
 import jampclientside.logic.ExpenseLogic;
-import jampclientside.logic.ILogic;
+import jampclientside.logic.FTPClientLogic;
 import jampclientside.logic.ILogicFactory;
 import java.io.IOException;
-import static java.lang.Math.E;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -40,68 +40,168 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import messageuserbean.UserBean;
 import jampclientside.logic.ProductLogic;
+import jampclientside.logic.TelephoneLogic;
+import jampclientside.logic.UserLogic;
+import java.util.HashMap;
+import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
- * FXML Controller class
+ * Opens the expenses window  showing the data of all the expenses of our txoko
  *
- * @author Ander
+ * @author Paula
  */
 public class PC04ExpenseController {
 
+    /**
+     * List to collect the data and display them in the table
+     */
+    private ObservableList<ExpenseBean> expenseData;
+    private static final Logger LOGGER = Logger.getLogger("package.class");
+    /**
+     * menu bar
+     */
     @FXML
     private Menu menu;
+    /**
+     * menu item to log out
+     */
     @FXML
     private MenuItem btnLogOut;
+    /**
+     * menu events
+     */
     @FXML
     private Menu btnEvents;
+    /**
+     * menu expenses
+     */
     @FXML
     private Menu btnExpenses;
+    /**
+     * menu produtcs
+     */
     @FXML
     private Menu btnProducts;
+    /**
+     * menu users
+     */
     @FXML
     private Menu btnUsers;
+    /**
+     * menu phones
+     */
     @FXML
     private Menu btnPhones;
+    /**
+     * label date
+     */
     @FXML
     private Label lblDate;
+    /**
+     * label login
+     */
     @FXML
     private Label lblLogin;
+    /**
+     * label full name
+     */
     @FXML
     private Label lblFullName;
+    /**
+     * label email
+     */
     @FXML
     private Label lblEmail;
+    /**
+     * label txoko
+     */
     @FXML
     private Label lblTxoko;
+    /**
+     * button to see the events of the month
+     */
     @FXML
     private Button btnSeeMonth;
+    /**
+     * button to see all the events of the txoko
+     */
     @FXML
     private Button btnSeeAll;
+    /**
+     * button to log out
+     */
     @FXML
     private Button btnLogOut2;
+    /**
+     * table view for expenses
+     */
     @FXML
     private TableView tabExpenses;
+    /**
+     * table column
+     */
     @FXML
     private TableColumn colDate;
+    /**
+     * table column
+     */
     @FXML
     private TableColumn colUser;
+    /**
+     * table column
+     */
     @FXML
     private TableColumn colType;
+    /**
+     * table column
+     */
     @FXML
     private TableColumn colDescription;
+    /**
+     * table column
+     */
     @FXML
     private TableColumn colPrice;
+    /**
+     * menu item to go to events
+     */
     @FXML
     private MenuItem idMenuEventos;
+    /**
+     * menu item to go to produtcs
+     */
     @FXML
     private MenuItem idMenuProductos;
+    /**
+     * menu item to go to user
+     */
     @FXML
     private MenuItem idMenuUsuarios;
+    /**
+     * menu item to go to telephone
+     */
     @FXML
     private MenuItem idMenuTel;
-    private ObservableList<ExpenseBean> expenseData;
-    private ObservableList<UserBean> userData;
+    /**
+     * menu FTP
+     */
+    @FXML
+    private Menu menuFTP;
+    /**
+     * menu item to go to FTP
+     */
+    @FXML
+    private MenuItem idMenuFTP;
+    @FXML
+    private Button btnInforme;
 
     /**
      * To close app or session
@@ -119,16 +219,12 @@ public class PC04ExpenseController {
     private UserBean user;
 
     /**
-     * Logger object used to log messages for application.
-     */
-    protected static final Logger LOGGER = Logger.getLogger("jampclientside.ui.controller");
-    /**
      * The Stage object associated to the Scene controlled by this controller.
      * This is an utility method reference that provides quick access inside the
      * controller to the Stage object in order to make its initialization. Note
      * that this makes Application, Controller and Stage being tightly coupled.
      */
-    protected Stage stage;
+    private Stage stage;
 
     /**
      * Gets the Stage object related to this controller.
@@ -151,7 +247,7 @@ public class PC04ExpenseController {
     /**
      * Set logic for this view controller
      *
-     * @param ILogic ilogic
+     * @param iLogic ilogic
      */
     public void setILogic(ExpenseLogic iLogic) {
         this.ilogic = iLogic;
@@ -189,13 +285,15 @@ public class PC04ExpenseController {
         btnLogOut.setOnAction(this::logOutAction);
         btnLogOut2.setOnAction(this::logOutAction);
         idMenuEventos.setOnAction(this::goEvents);
-//        idMenuProductos.setOnAction(this::goProducts);
-//        idMenuUsuarios.setOnAction(this::goUsers);
-//        idMenuTel.setOnAction(this::goPhones);
+        idMenuProductos.setOnAction(this::goProducts);
+        idMenuUsuarios.setOnAction(this::goUsers);
+        idMenuTel.setOnAction(this::goPhones);
+        idMenuFTP.setOnAction(this::FTPClientWindow);
         btnSeeAll.setOnAction(this::seeAll);
         btnSeeMonth.setOnAction(this::seeMonth);
+        btnInforme.setOnAction(this::generateInforme);
         //las columnas van a coger el valos de los atributos
-         colDate.setCellValueFactory(
+        colDate.setCellValueFactory(
                 new PropertyValueFactory<>("date"));
         colUser.setCellValueFactory(
                 new PropertyValueFactory<>("user"));
@@ -223,16 +321,13 @@ public class PC04ExpenseController {
      */
     private void windowShow(WindowEvent event) {
         LOGGER.info("Beginning PrincipalExpense::windowShow");
-        /*
-        String date = new SimpleDateFormat("HH:mm dd/MM/yyyy").format(user.getLastAccess());
-
-        lblDate.setText("Último acceso: " + date);
+        
+        lblDate.setText("Último acceso: " + user.getLastAccess());
         lblEmail.setText("Email: " + user.getEmail());
         lblFullName.setText("Nombre Completo: " + user.getFullname());
         lblLogin.setText("Login: " + user.getLogin());
-        //TODO
-        lblTxoko.setText("Txoko: ");
-         */
+        lblTxoko.setText("Txoko: " + user.getTxoko().getName());
+        
         menu.setMnemonicParsing(true);
         menu.setText("_Menu");
 
@@ -245,6 +340,8 @@ public class PC04ExpenseController {
         btnLogOut2.setText("_Cerrar Sesion");
         btnSeeAll.setDisable(false);
         btnSeeMonth.setDisable(false);
+        btnInforme.setDisable(true);
+        btnLogOut2.setDisable(false);
         tabExpenses.setEditable(false);
 
     }
@@ -288,6 +385,11 @@ public class PC04ExpenseController {
         }
     }
 
+    /**
+     * Method to go to the events window
+     *
+     * @param event event
+     */
     private void goEvents(ActionEvent event) {
         LOGGER.info("clickOn Eventos Menu");
         try {
@@ -301,23 +403,28 @@ public class PC04ExpenseController {
             PC05EventsController controller = (PC05EventsController) loader.getController();
             //le mando el objeto logica al controlador 
             controller.setILogic(eventLogic);
+            controller.setUser(user);
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
             controller.initStage(root);
-
+            this.stage.hide();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
 
     }
 
-    /*
+    /**
+     * Method to go to the products window
+     *
+     * @param event event
+     */
     private void goProducts(ActionEvent event) {
-          LOGGER.info("clickOn Productos Menu");
-          try{
-           //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-            ILogicProduct productLogic = ILogicFactory.getProductLogic();
+        LOGGER.info("clickOn Products Menu");
+        try {
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            ProductLogic productLogic = ILogicFactory.getProductLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC07Products.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -325,22 +432,29 @@ public class PC04ExpenseController {
             //obtener el controlador
             PC07ProductsController controller = (PC07ProductsController) loader.getController();
             //le mando el objeto logica al controlador 
-            controller.setILogic(productLogic);
+            controller.setILogicProduct(productLogic);
+            controller.setUser(user);
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
             controller.initStage(root);
-        }catch (IOException ex) {
+             this.stage.hide();
+        } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
 
     }
 
+    /**
+     * method to go to users window
+     *
+     * @param event event
+     */
     private void goUsers(ActionEvent event) {
-          LOGGER.info("clickOn Usuarios Menu");
-          try{
-          //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-            ILogic usersLogic = ILogicFactory.getIlogicImplementation();
+        LOGGER.info("clickOn User Menu");
+        try {
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            UserLogic userLogic = ILogicFactory.getUserLogic();
             //instancio el xml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC03User.fxml"));
             //lo cargo en el root que es de tipo parent
@@ -348,56 +462,183 @@ public class PC04ExpenseController {
             //obtener el controlador
             PC03UserController controller = (PC03UserController) loader.getController();
             //le mando el objeto logica al controlador 
-            controller.setILogic(usersLogic);
+            controller.setILogic(userLogic);
+            controller.setUser(user);
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
             controller.initStage(root);
-        }catch (IOException ex) {
+             this.stage.hide();
+        } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
     }
 
+    /**
+     * method to go to phones window
+     *
+     * @param event event
+     */
     private void goPhones(ActionEvent event) {
-          LOGGER.info("clickOn Telefonos Menu");
-         try{
-          //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
-            ILogicTelephone usersLogic = ILogicFactory.getTelephoneLogic();
+        LOGGER.info("clickOn Telephone Menu");
+        try {
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            TelephoneLogic telephoneLogic = ILogicFactory.getTelephoneLogic();
             //instancio el xml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumber.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC08PhoneNumbers.fxml"));
             //lo cargo en el root que es de tipo parent
             Parent root = (Parent) loader.load();
             //obtener el controlador
-            PC08PhoneNumberController controller = (PC08PhoneNumberController) loader.getController();
+            PC08PhoneNumbersController controller = (PC08PhoneNumbersController) loader.getController();
             //le mando el objeto logica al controlador 
-            controller.setILogic(usersLogic);
+            controller.setILogic(telephoneLogic);
+            controller.setUser(user);
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
             controller.initStage(root);
-         }catch (IOException ex) {
+             this.stage.hide();
+        } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
         }
+
     }
+
+    /**
+     * method to go to the ftp client window
+     *
+     * @param event event
+     */
+    private void FTPClientWindow(ActionEvent event) {
+        LOGGER.info("clickOn FTP Client btn");
+        try {
+            //vamos a cargar un objeto de la logica , para eso llamamos a la factoria 
+            FTPClientLogic ftpLogic = ILogicFactory.getFTPClientLogic();
+            //instancio el xml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/jampclientside/ui/view/PC06FTPClient.fxml"));
+            //lo cargo en el root que es de tipo parent
+            Parent root = (Parent) loader.load();
+            //obtener el controlador
+            PC06FTPClientController controller = (PC06FTPClientController) loader.getController();
+            //le mando el objeto logica al controlador 
+            controller.setILogic(ftpLogic);
+            //a ese controlador le paso el stage
+            controller.setStage(stage);
+            //inizializo el stage
+            controller.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Error accediendo a la ventana {0}", ex.getCause());
+        }
+
+    }
+
+    /**
+     * Method to see all the expenses of our txoko
+     *
+     * @param event event
      */
     @SuppressWarnings("empty-statement")
     private void seeAll(ActionEvent event) {
-        // ObservableList<Expense> expenses = ilogic.findExpensesAll(
-         //   Integer.parseInt(lblTxoko.getText()));
+        try {
+            String idTxoko = "1";
+            expenseData = FXCollections.observableArrayList(ilogic.findAllExpensesUsers(idTxoko));
+            tabExpenses.setItems(expenseData);
+            btnInforme.setDisable(false);
+            //si no a devuelto nada por que no hay gastos que aparezca un alert
+            if (expenseData.size() == 0) {
+                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setHeaderText("No hay ningun gasto en el txoko");
+                dialogoAlerta.showAndWait();
+            }
+        } catch (BusinessLogicException ex) {
+            expenseData = null;
+            tabExpenses.setItems(expenseData);
+            Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
+            dialogoAlerta.setTitle("ERROR");
+            dialogoAlerta.setContentText("HTTP 400 Bad Request");
+            dialogoAlerta.setHeaderText("Ver los datos");
+            dialogoAlerta.showAndWait();
+            LOGGER.log(Level.SEVERE,
+                    " Error reading ALL EXPENSE {0}",
+                    ex.getMessage());
+        }
 
-        expenseData = FXCollections.observableArrayList(ilogic.getAllExpense());
-        tabExpenses.setItems(expenseData);
-
-        // tabExpenses.setItems(expenses);
-        // tabExpenses.getColumns().addAll(colDate, colidUser, colType, colPrice, colDescription);
     }
 
+    /**
+     * Method to see all the expenses of one month
+     *
+     * @param event event
+     */
     private void seeMonth(ActionEvent event) {
-        // ObservableList<Expense> expenses = ilogic.findExpensesMonth(
-        //       Integer.parseInt(lblTxoko.getText()));
+         btnInforme.setDisable(true);
+        try {
+            String idTxoko = "1";
+            expenseData = FXCollections.observableArrayList(ilogic.findMonthExpensesUsers(idTxoko));
+            tabExpenses.setItems(expenseData);
+            if (expenseData.size() == 0) {
+                Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                dialogoAlerta.setTitle("INFORMACION");
+                dialogoAlerta.setHeaderText("No hay gastos este mes en el txoko");
+                dialogoAlerta.showAndWait();
 
-        // tabExpenses.setItems(expenses);
-        //tabExpenses.getColumns().addAll(colDate, colidUser, colType, colPrice, colDescription);
+            }
+        } catch (BusinessLogicException ex) {
+            expenseData = null;
+            tabExpenses.setItems(expenseData);
+            Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
+            dialogoAlerta.setTitle("ERROR");
+            dialogoAlerta.setContentText("HTTP 400 Bad Request");
+            dialogoAlerta.setHeaderText("Ver los datos");
+            dialogoAlerta.showAndWait();
+            LOGGER.log(Level.SEVERE,
+                    " Error reading expense BY MONTH: {0}",
+                    ex.getMessage());
+        }
+
+    }
+    /**
+     * 
+     *Method to open the report window
+     * @param ev event
+     */
+    private void generateInforme(ActionEvent event){
+    
+    
+       try {
+            JasperReport report
+                    = JasperCompileManager.compileReport(getClass()
+                            .getResourceAsStream("/jampclientside/ui/reports/newReportExpenses.jrxml"));
+            //Data for the report: a collection of UserBean passed as a JRDataSource 
+            //implementation 
+            JRBeanCollectionDataSource dataItems
+                    = new JRBeanCollectionDataSource((Collection<ExpenseBean>) this.tabExpenses.getItems());
+            //Map of parameter to be passed to the report
+            Map<String, Object> parameters = new HashMap<>();
+            //Fill report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataItems);
+            //Create and show the report window. The second parameter false value makes 
+            //report window not to close app.
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+            // jasperViewer.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        } catch (JRException ex) {
+            //If there is an error show message and
+            //log it.
+            Alert dialogoAlerta = new Alert(Alert.AlertType.ERROR);
+            dialogoAlerta.setTitle("ERROR");
+            dialogoAlerta.setContentText("Error a la hora de hacer el informe");
+            dialogoAlerta.setHeaderText("Expense error");
+            dialogoAlerta.showAndWait();
+            LOGGER.log(Level.SEVERE,
+                    " Expense error: {0}",
+                    ex.getMessage());
+
+        }
+    
+    
+    
     }
 
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="addEvent" alignment="CENTER" fillWidth="false" prefHeight="480.0" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.AddEventController">
+   <children>
+      <Label fx:id="lblInfo" text="Añade información del nuevo evento">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <TextField fx:id="tfName" alignment="CENTER" prefHeight="25.0" prefWidth="222.0" promptText="Nombre del evento">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font name="Alef Regular" size="12.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="tfDescription" alignment="CENTER" prefHeight="25.0" prefWidth="222.0" promptText="Descripción del evento">
+         <font>
+            <Font name="Alef Regular" size="12.0" />
+         </font>
+      </TextField>
+      <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="221.0" />
+      <Label fx:id="lblErrorDate" textFill="#f20909" />
+      <TextField fx:id="hora" alignment="CENTER" prefHeight="25.0" prefWidth="223.0" promptText="Hora: HH:mm:ss" />
+      <TextField fx:id="tfImg" alignment="CENTER" prefHeight="25.0" prefWidth="222.0" promptText="Nombre de la imagen del evento">
+         <font>
+            <Font name="Alef Regular" size="12.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="tfPrice" alignment="CENTER" prefHeight="25.0" prefWidth="222.0" promptText="Precio del evento">
+         <font>
+            <Font name="Alef Regular" size="12.0" />
+         </font>
+      </TextField>
+      <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="222.0" text="Añadir evento">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font name="Alef Regular" size="12.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblError" text="Todos los campos deben de estar rellenos" textFill="#f20909" />
+      <Button fx:id="btnSalir" mnemonicParsing="false" text="Salir" />
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

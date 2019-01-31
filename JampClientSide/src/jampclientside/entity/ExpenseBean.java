@@ -13,51 +13,40 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author WIN10
  */
+@XmlRootElement(name = "expense")
 public class ExpenseBean implements Serializable {
 
-    private SimpleIntegerProperty idExpense;
-    private SimpleObjectProperty<LocalDateTime> date;
+    private Integer idExpense;
+    private SimpleStringProperty date;
     private SimpleObjectProperty<UserBean> user;
     private SimpleStringProperty type;
     private SimpleStringProperty description;
     private SimpleFloatProperty price;
 
     public ExpenseBean() {
-        this.idExpense = new SimpleIntegerProperty();
-        this.date = new SimpleObjectProperty<>();
+        this.idExpense = idExpense;
+        this.date = new SimpleStringProperty();
         this.user = new SimpleObjectProperty();
         this.type = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
         this.price = new SimpleFloatProperty();
     }
 
-    public ExpenseBean(LocalDateTime date, UserBean user, String type,
+    public ExpenseBean(String date, UserBean user, String type,
             String description,
             Float price) {
-        this.date = new SimpleObjectProperty<>(date);
+        this.date = new SimpleStringProperty(date);
         this.user = new SimpleObjectProperty(user);
         this.type = new SimpleStringProperty(type);
         this.description = new SimpleStringProperty(description);
         this.price = new SimpleFloatProperty(price);
-    }
-
-    /**
-     * @return the idExpense
-     */
-    public Integer getIdExpense() {
-        return this.idExpense.get();
-    }
-
-    /**
-     * @param idExpense the idExpense to set
-     */
-    public void setIdExpense(Integer idExpense) {
-        this.idExpense.set(idExpense);
     }
 
     /**
@@ -117,16 +106,31 @@ public class ExpenseBean implements Serializable {
     }
 
     /**
+     * @return the idExpense
+     */
+    public Integer getIdExpense() {
+        return idExpense;
+    }
+
+    /**
+     * @param idExpense the idExpense to set
+     */
+    public void setIdExpense(Integer idExpense) {
+        this.idExpense = idExpense;
+    }
+
+    /**
      * @return the date
      */
-    public LocalDateTime getDate() {
+    @XmlElement(name = "dateExpense")
+    public String getDate() {
         return this.date.get();
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date.set(date);
     }
 

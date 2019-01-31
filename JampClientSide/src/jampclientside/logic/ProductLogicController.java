@@ -6,74 +6,72 @@
 package jampclientside.logic;
 
 import jampclientside.entity.ProductBean;
-import jampclientside.exceptions.CreateException;
-import jampclientside.exceptions.DeleteException;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.ProductExist;
-import jampclientside.exceptions.ReadException;
-import jampclientside.exceptions.UpdateException;
+import jampclientside.rest.ProductRESTClient;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 
 /**
- *
- * Clase que implementa la interfaz de Logica. Class that implements the logic
- * interface.
+ * Class that implements the productLogic iterface
  *
  * @author Julen
  */
-/*
+
 public class ProductLogicController implements ProductLogic {
 
     //REST users web client
-    private ProductRESTClient ProductWebClient;
+    private final ProductRESTClient ProductWebClient;
     
     /**
      * Attribute to appear the information text.
      */
-  /*  private static final Logger LOGGER
+    private static final Logger LOGGER
             = Logger.getLogger("jamp.pc.logic.IlogicImplementationProduct");
 
     /**
      * Create a ILogicImplementationroduct.
      */
-  /*  public ProductLogicController(){
-        ProductWebClient=new ProductRESTClient();
+    public ProductLogicController(){
+        ProductWebClient = new ProductRESTClient();
     }
     /**
      * This method deletes data for an existing product. 
      * This is done by sending a DELETE request to a RESTful web service.
      * @param product The ProductBean object to be deleted.
-     * @throws DeleteException
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
- /*   @Override
-    public void deleteProduct(Product product) throws DeleteException {
+    @Override
+    public void deleteProduct(ProductBean product) throws BusinessLogicException {
         try{
             LOGGER.log(Level.INFO,"ProductImplementation: Deleting product {0}.",product.getName());
-            ProductWebClient.deleteProduct(product.getIdProduct().toString());
-        }catch(Exception ex){
+            ProductWebClient.deleteProduct(product.getIdProduct());
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception deleting product, {0}",
                     ex.getMessage());
-            throw new DeleteException("ProductImplementation: Error deleting product:\n"+ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error deleting product:\n"+ex.getMessage());
         }
     }
     /**
      * This method updates data for an existing Product. 
      * This is done by sending a PUT request to a RESTful web service.
      * @param product The PrductBean object to be updated.
-     * @throws UpdateException If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
-  /*  @Override
-    public void updateProduct(Product product) throws UpdateException {
+    @Override
+    public void updateProduct(ProductBean product) throws BusinessLogicException {
         try{
-            LOGGER.log(Level.INFO,"ProductImplementation: Updating user {0}.",product.getIdProduct());
+            LOGGER.log(Level.INFO,"ProductImplementation: Updating product {0}.",product.getIdProduct());
             ProductWebClient.updateProduct(product);
-        }catch(Exception ex){
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception updating user, {0}",
+                    "ProductImplementation: Exception updating product, {0}",
                     ex.getMessage());
-            throw new UpdateException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error updating product:\n"+ex.getMessage());
         }
     }
 
@@ -81,104 +79,142 @@ public class ProductLogicController implements ProductLogic {
      * This method adds a new created Product. This is done by sending a POST 
      * request to a RESTful web service.
      * @param product The UserBean object to be added.
-     * @throws CreateException If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
- /*   @Override
-    public void createProduct(Product product) throws CreateException {
+    @Override
+    public void createProduct(ProductBean product) throws BusinessLogicException {
          try{
-            LOGGER.log(Level.INFO,"ProductImplementation: Creating user {0}.",product.getIdProduct());
+            LOGGER.log(Level.INFO,"ProductImplementation: Creating product {0}.",product.getIdProduct());
+            
             ProductWebClient.createProduct(product);
-        }catch(Exception ex){
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception creating user, {0}",
+                    "ProductImplementation: Exception creating product, {0}",
                     ex.getMessage());
-            throw new CreateException("ProductImplementation: Error creating user:" + ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error creating product:" + ex.getMessage());
         }
     }
        
     /**
-     * This method returns a collection of products for users.
+     * This method returns a all products.
      * @return A collection of Product.
-     * @throws ReadExcdeption If there is any error while processing.
+     * @throws jampclientside.exceptions.BusinessLogicException
      */
- /*   @Override
-    public List<Product> findAllProducts() throws ReadException {
-        List<Product> productos = null;
+    @Override
+    public List<ProductBean> findAllProducts() throws BusinessLogicException{
+        List<ProductBean> productos = null;
         try{
             LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
             //Ask webClient for all departments' data.
-            productos = ProductWebClient.findAllProducts(new GenericType<List<Product>>() {});
-        }catch(Exception ex){
+            productos = ProductWebClient.findAllProducts(new GenericType<List<ProductBean>>() {});
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception finding all products, {0}",
                     ex.getMessage());
-            throw new ReadException("ProductImplementation: Error finding all products:\n" + ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error finding products:\n"+ex.getMessage());
         }
         
         return productos;
     }
-  */  
-    /**
-     * This method returns a collection of products for users.
-     * @return A collection of Product.
-     * @throws ReadExcdeption If there is any error while processing.
-     */
- /*   @Override
-    public List<Product> findProductByName(String name, Integer idTxoko) throws ReadException{
-            List<Product> productos = null;
-        try{
-            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
-            //Ask webClient for all departments' data.
-            productos = ProductWebClient.findProductByName(new GenericType<List<Product>>() {});
-        }catch(Exception ex){
-            LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception finding all products, {0}",
-                    ex.getMessage());
-            throw new ReadException("ProductImplementation: Error finding products by Name:\n" + ex.getMessage());
-        }
-        return productos;
-    }
-*/
-    /**
-     * This method returns a collection of products for users.
-     * @return A collection of Product.
-     * @throws ReadExcdeption If there is any error while processing.
-     */
-  /*  @Override
-    public Product findProductsByIdByTxoko() throws ReadException {
-            Product productos = null;
-        try{
-            LOGGER.info("ProductImplementation: Finding products by id and txoko from REST service (XML).");
-            //Ask webClient for all departments' data.
-            productos = ProductWebClient.findProductByName(new GenericType<List<Product>>() {});
-        }catch(Exception ex){
-            LOGGER.log(Level.SEVERE,
-                    "ProductImplementation: Exception finding products by id and txoko, {0}",
-                    ex.getMessage());
-            throw new ReadException("ProductImplementation: Error finding products by id and txoko:\n" + ex.getMessage());
-        }
-        return productos;
-    }
 
+    /**
+     * This method returns a all products by id.
+     * @param idProduct
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
     @Override
-    public Product findProductsById(Integer idProduct) throws ReadException {
-            Product productos = null;
+    public ProductBean findProductById(String idProduct) throws BusinessLogicException{
+            ProductBean producto = null;
         try{
             LOGGER.info("ProductImplementation: Finding products by id from REST service (XML).");
-            //Ask webClient for all departments' data.
-            productos = ProductWebClient.findProductByName(new GenericType<List<Product>>() {});
-        }catch(Exception ex){
+            producto = ProductWebClient.findProductById(ProductBean.class, idProduct);
+        }catch(ClientErrorException ex){
             LOGGER.log(Level.SEVERE,
                     "ProductImplementation: Exception finding products by id, {0}",
                     ex.getMessage());
-            throw new ReadException("ProductImplementation: Error finding products by id:" + ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+        }
+        return producto;
+    }
+
+    /**
+     * This method returns a product by id and by txoko.
+     * @param idProduct
+     * @param idTxoko
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
+    @Override
+    public ProductBean findProductByIdByTxoko(String idProduct, String idTxoko) throws BusinessLogicException {
+           ProductBean producto = null;
+        try{
+            LOGGER.info("ProductImplementation: Finding products by id and txoko from REST service (XML).");
+            //Ask webClient for all departments' data.
+            producto = ProductWebClient.findProductByIdByTxoko(ProductBean.class, idProduct, idTxoko);
+        }catch(ClientErrorException ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding products by id and txoko, {0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+        }
+        return producto;
+    }
+
+    /**
+     * This method returns products by name.
+     * @param name
+     * @param idTxoko
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
+    @Override
+    public List<ProductBean> findProductByName(String name, String idTxoko) throws BusinessLogicException{
+            List<ProductBean> productos = null;
+        try{
+            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
+            //Ask webClient for all departments' data.
+            productos = ProductWebClient.findProductByName(new GenericType<List<ProductBean>>() {}, name, idTxoko);
+        }catch(ClientErrorException ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding all products, {0}",
+                    ex.getMessage());
+            throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
         }
         return productos;
     }
-    
-    @Override
-        public void isProductExist(Integer id) throws ProductExist{
-        
-        }
 
-}*/
+    /**
+     * This method returns all products by the txoko.
+     * @param idTxoko
+     * @return A product
+     * @throws jampclientside.exceptions.BusinessLogicException 
+     */
+    @Override
+    public List<ProductBean> findAllProductsByTxoko(String idTxoko) throws BusinessLogicException {
+        List<ProductBean> productos = null;
+        try{
+            LOGGER.info("ProductImplementation: Finding all product from REST service (XML).");
+            //Ask webClient for all departments' data.
+            productos = ProductWebClient.findAllProductsByTxoko(new GenericType<List<ProductBean>>() {}, idTxoko);
+        }catch(ClientErrorException ex){
+            LOGGER.log(Level.SEVERE,
+                    "ProductImplementation: Exception finding all products, {0}",
+                    ex.getMessage());
+                throw new BusinessLogicException("ProductImplementation: Error updating user:\n"+ex.getMessage());
+        }
+        
+        return productos;
+    }
+
+
+    /**
+     * 
+     * @param id
+     * @throws ProductExist 
+     */
+    @Override
+    public void isProductExist(Integer id) throws ProductExist{
+        
+    }
+}

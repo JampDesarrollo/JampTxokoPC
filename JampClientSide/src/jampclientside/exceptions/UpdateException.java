@@ -7,7 +7,7 @@ package jampclientside.exceptions;
 
 /**
  * This class represents any error during user object's update in application storage.
- * @author javi
+ * @author ander
  */
 public class UpdateException extends Exception {
 

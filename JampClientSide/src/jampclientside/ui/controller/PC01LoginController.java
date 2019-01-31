@@ -6,7 +6,6 @@
  */
 package jampclientside.ui.controller;
 
-
 import jampclientside.entity.UserBean;
 import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.PasswordNotOkException;
@@ -27,14 +26,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
  * Controller class for Login view.
  *
- * @author paula
+ * @author paula, ander
  */
 public class PC01LoginController {
 
@@ -210,27 +211,28 @@ public class PC01LoginController {
      * @param ev
      * @author ander
      */
-    public void passwForgotten(ActionEvent ev) {
-        LOGGER.info("ventana de login  contraseña olvidada");
+    private void passwForgotten(ActionEvent ev) {
+        LOGGER.info("PC01LoginController: login, contraseña olvidada");
+        imLoading.setVisible(true);
         boolean loginFilled = chkLoginFilled();
-        if (loginFilled) {
-
+        boolean loginFilledLength = chkLoginLength();
+        if (loginFilled || loginFilledLength) {
             Boolean allOk = getUserEmail();
             if (allOk) {
                 lblError.setText("Se ha restablecido su contraseña, "
                         + "compruebe su email");
-            lblError.setStyle("-fx-text-inner-color: green;");
-            lblError.setVisible(true);
+                lblError.setTextFill(Color.GREEN);
+                lblError.setVisible(true);
+                imLoading.setVisible(false);
             }
         }
     }
 
     /**
-     *
-     * @return user
+     * Method that sends an email to the user with a new password.
+     * @return Boolean if all ok.
      * @author ander
      */
-
     private Boolean getUserEmail() {
         Boolean allOk = false;
 
@@ -243,10 +245,10 @@ public class PC01LoginController {
             lblError.setText("No existe este login");
             lblError.setStyle("-fx-text-inner-color: red;");
             lblError.setVisible(true);
+            imLoading.setVisible(false);
             LOGGER.log(Level.SEVERE, " El login de usuario no existe. {0}",
-                    ex.getMessage());
+                    ex);
         }
-
 
         return allOk;
     }
@@ -258,7 +260,7 @@ public class PC01LoginController {
      * @author ander
      */
     private boolean chkLoginFilled() {
-        boolean filled = true;
+        boolean filled = false;
         //Set lblError to red
         if (tfUsuario.getText().trim().isEmpty()) {
             filled = false;
@@ -269,13 +271,40 @@ public class PC01LoginController {
         }
         //Set lblError style back to normal
         if (!tfUsuario.getText().trim().isEmpty()) {
-            filled = false;
+            filled = true;
             tfUsuario.setStyle("-fx-border-color:-fx-box-border;");
             lblError.setText("");
             lblError.setVisible(false);
         }
 
         return filled;
+    }
+    
+    /**
+     * Check login textfield length is filled correctly.
+     *
+     * @return filled
+     * @author ander
+     */
+    private boolean chkLoginLength() {
+        boolean lengthOk = false;
+        //Set lblError to red
+        if (tfUsuario.getText().trim().length()>255) {
+            lengthOk = false;
+            tfUsuario.setStyle("-fx-border-color:red;");
+            lblError.setText("Introduzca un login correcto");
+            lblError.setStyle("-fx-text-inner-color: red;");
+            lblError.setVisible(true);
+        }
+        //Set lblError style back to normal
+        if (tfUsuario.getText().trim().length()<=255) {
+            lengthOk = true;
+            tfUsuario.setStyle("-fx-border-color:-fx-box-border;");
+            lblError.setText("");
+            lblError.setVisible(false);
+        }
+
+        return lengthOk;
     }
 
     /**
@@ -295,7 +324,7 @@ public class PC01LoginController {
             //obtener el controlador
             PC02SignUpController controller = (PC02SignUpController) loader.getController();
             //le mando el objeto logica al controlador 
-            controller.setILogic(ilogic);
+            //controller.setILogic(ilogic);
             //a ese controlador le paso el stage
             controller.setStage(stage);
             //inizializo el stage
@@ -482,21 +511,23 @@ public class PC01LoginController {
      * are ok, it returns the all the user to be visible in the main window.
      *
      * @return in case that everything is ok, returns the user.
+     * @author ander
      */
     private UserBean chkUserPassword() {
         UserBean returnUser = null;
         //try {
-            byte[] encryptedPassw = EncryptPassword.encrypt(pfContraseña.getText().getBytes());
-            String ePassw = new String(encryptedPassw);
+        byte[] encryptedPassw = EncryptPassword.encrypt(pfContraseña.getText().getBytes());
+        String ePassw = DatatypeConverter.printHexBinary(encryptedPassw);
 
         try {
             //creo un nuevo usuario con contraseña y password solamente
 
-            returnUser = ilogic.findUserByLoginPassw(tfUsuario.getText(), ePassw); // el userlogin me va a devolver el usuario entero 
+            returnUser = ilogic.findUserByLoginPasswPC(tfUsuario.getText(), ePassw); // el userlogin me va a devolver el usuario entero 
         } catch (BusinessLogicException ex) {
-            Logger.getLogger(PC01LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "LoginController: finduserforlogin {0}", ex);
         }
-      /*  } catch (UserNotExistException e) {
+        //EXCEPCION NO ES ADMIN
+        /*  } catch (UserNotExistException e) {
             LOGGER.log(Level.SEVERE, "User not exist exception {0}", e.getCause());
             //se pone el foco en el usuario
             btnInicio.requestFocus();

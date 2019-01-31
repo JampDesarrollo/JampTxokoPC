@@ -5,10 +5,6 @@
  */
 package jampclientside.ui.controller;
 
-
-import jampclientside.entity.UserBean;
-import jampclientside.logic.ILogic;
-import jampclientside.exceptions.UserLoginExistException;
 import jampclientside.logic.UserLogic;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -110,17 +106,17 @@ public class PC02SignUpController {
     @FXML
     private Label lblRpasswW;
     /**
-     * 
+     *
      */
     @FXML
     private Label lblidtxokoW;
     /**
-     * 
+     *
      */
     @FXML
     private RadioButton rbUser;
     /**
-     * 
+     *
      */
     @FXML
     private RadioButton rbAdmin;
@@ -260,6 +256,7 @@ public class PC02SignUpController {
 
     /**
      * Close current view and open Login view method.
+     *
      * @param ev ActionEvent
      */
     private void back(ActionEvent ev) {
@@ -308,7 +305,8 @@ public class PC02SignUpController {
      * length are correct, if passwordlength is not less than 8 characters, if
      * the email pattern is correct andif password and repetition match. Then
      * Signs Up a new User.
-     * @param ev  ActionEvent
+     *
+     * @param ev ActionEvent
      */
     private void signUp(ActionEvent ev) {
         LOGGER.info("ventana de registro signup");
@@ -342,14 +340,14 @@ public class PC02SignUpController {
                         = (PC03UserController) loader.getController();
                 controller.setILogic(iLogic);
                 controller.setStage(stage);
-               // controller.setUser(user);
+                // controller.setUser(user);
                 //inizializo el stage
                 imgLoading.setVisible(false);
                 controller.initStage(root);
 
             }
 
-       /* } catch (UserLoginExistException e) {
+            /* } catch (UserLoginExistException e) {
             lblLoginW.setText("Ese nombre de usuario existe");
             lblLoginW.setStyle("-fx-text-inner-color: red;");
             lblLoginW.setVisible(true);
@@ -595,6 +593,9 @@ public class PC02SignUpController {
         return passwMatch;
     }
 
+    /**
+     * Focus first textfield wrong.
+     */
     private void focusFirstWrong() {
         boolean wrong = false;
         if (lblLoginW.isVisible()) {

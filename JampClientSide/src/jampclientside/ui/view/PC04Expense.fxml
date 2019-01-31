@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="principalPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC04ExpenseController">
+<VBox fx:id="principalPaneExpense" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jampclientside.ui.controller.PC04ExpenseController">
   <children>
     <MenuBar fx:id="menuBar" style="-fx-background-color: #005192;" VBox.vgrow="NEVER">
       <menus>
@@ -39,6 +39,11 @@
                <items>
                   <MenuItem fx:id="idMenuTel" mnemonicParsing="false" text="Ir a la ventana de Teléfonos" />
                </items></Menu>
+            <Menu fx:id="menuFTP" mnemonicParsing="false" style="-fx-color: #005192;" text="Archivos">
+              <items>
+                <MenuItem fx:id="idMenuFTP" mnemonicParsing="false" text="Ir a la ventana de Archivos" />
+              </items>
+            </Menu>
       </menus>
     </MenuBar>
       <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="766.0" spacing="20.0">
@@ -83,11 +88,11 @@
          <center>
             <TableView fx:id="tabExpenses" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="colDate" editable="false" maxWidth="153.0" prefWidth="153.0" resizable="false" text="Fecha" />
-                  <TableColumn fx:id="colUser" editable="false" maxWidth="300.0" minWidth="50.0" prefWidth="268.0" resizable="false" text="Usuario" />
-                  <TableColumn fx:id="colType" editable="false" maxWidth="300.0" minWidth="50.0" prefWidth="260.0" resizable="false" text="Tipo" />
-                  <TableColumn fx:id="colDescription" editable="false" maxWidth="381.0" minWidth="50.0" prefWidth="381.0" text="Descripcion" />
-                  <TableColumn fx:id="colPrice" editable="false" maxWidth="304.0" prefWidth="217.0" text="Precio" />
+                <TableColumn fx:id="colDate" editable="false" maxWidth="262.0" prefWidth="244.0" resizable="false" text="Fecha" />
+                  <TableColumn fx:id="colUser" editable="false" maxWidth="300.0" minWidth="50.0" prefWidth="236.0" resizable="false" text="Usuario" />
+                  <TableColumn fx:id="colType" editable="false" maxWidth="340.0" minWidth="50.0" prefWidth="281.0" resizable="false" text="Tipo" />
+                  <TableColumn fx:id="colDescription" editable="false" maxWidth="433.0" minWidth="50.0" prefWidth="353.0" text="Descripcion" />
+                  <TableColumn fx:id="colPrice" editable="false" maxWidth="304.0" prefWidth="165.0" text="Precio" />
               </columns>
             </TableView>
          </center>
@@ -96,6 +101,11 @@
                <children>
                   <Button fx:id="btnSeeMonth" mnemonicParsing="false" text="Ver Mes Actual" />
                   <Button fx:id="btnSeeAll" mnemonicParsing="false" text="Ver Todos">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnInforme" mnemonicParsing="false" text="Informe">
                      <HBox.margin>
                         <Insets right="100.0" />
                      </HBox.margin>

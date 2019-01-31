@@ -7,6 +7,8 @@ package jampclientside.logic;
 
 
 import jampclientside.entity.EventBean;
+import jampclientside.entity.TxokoBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.IdNotOkException;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -36,49 +39,48 @@ public class EventLogicControllerTEST implements EventLogic {
         events = new ArrayList();
         //Create 25 UserBean fake data objects.
         //generar una 
-        for (float i = 0; i < 25; i++) {
+      /*  for (float i = 0; i < 25; i++) {
             events.add(new EventBean("cumple" + i, "cumple de paula" + i,fechaActual, "zorionak" + i, +i));
         }
+        */
     }
 
     @Override
-    public void deleteEvent(Integer idEvent) throws DeleteException {
+    public void deleteEvent(EventBean event) throws BusinessLogicException{
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createEvent(EventBean event) throws CreateException {
+    public void createEvent(EventBean event) throws BusinessLogicException {
         //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<EventBean> findAllEvents(Integer idTxoko) throws ReadException {
+    public Collection<EventBean> findAllEvents(String idTxoko) throws BusinessLogicException{
         //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
 
     @Override
-    public EventBean findEventById(Integer idEvent, Integer idTxoko) throws ReadException, IdNotOkException {
+    public EventBean findEventByIdByTxoko(String idEvent, String idTxoko)throws IdNotOkException,BusinessLogicException {
         //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
 
     @Override
-    public EventBean findEventByName(String name, Integer idTxoko) throws ReadException, NameNotOkException {
+    public EventBean findEventByName(String name, String idTxoko)throws NameNotOkException,BusinessLogicException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
-
     @Override
-    public void attendEvent(Integer idEvent, Integer idUser) throws UpdateException {
-        //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+    public Collection<EventBean> getAllEvents() throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection getAllEvents() {
-        LOGGER.info("Return the events.");
-        return events;
-
+    public void updateEvent(EventBean event) throws BusinessLogicException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+   
 }

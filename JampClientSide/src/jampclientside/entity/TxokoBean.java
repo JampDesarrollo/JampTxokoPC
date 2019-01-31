@@ -9,27 +9,40 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Usuario
  */
+@XmlRootElement(name = "txoko")
 public class TxokoBean {
-
+    
+    private SimpleObjectProperty<UserBean> users;
     private SimpleIntegerProperty idTxoko;
     private SimpleStringProperty direction;
     private SimpleFloatProperty monthFee;
     private SimpleStringProperty name;
     private SimpleStringProperty town;
-    
-     public TxokoBean(Integer idTxoko, String direction, Float monthFee, String name, String town){
-     this.idTxoko = new SimpleIntegerProperty(idTxoko);
-     this.direction = new SimpleStringProperty(direction);
-     this.monthFee = new SimpleFloatProperty (monthFee);
-     this.name = new SimpleStringProperty (name);
-     this.town = new SimpleStringProperty(town);
-     }
+
+    public TxokoBean(Integer idTxoko, String direction, Float monthFee, String name, String town) {
+        this.idTxoko = new SimpleIntegerProperty(idTxoko);
+        this.direction = new SimpleStringProperty(direction);
+        this.monthFee = new SimpleFloatProperty(monthFee);
+        this.name = new SimpleStringProperty(name);
+        this.town = new SimpleStringProperty(town);
+    }
+
+    public TxokoBean() {
+        this.users = new SimpleObjectProperty<>();
+        this.idTxoko = new SimpleIntegerProperty();
+        this.direction = new SimpleStringProperty();
+        this.monthFee = new SimpleFloatProperty();
+        this.name = new SimpleStringProperty();
+        this.town = new SimpleStringProperty();
+    }
 
     /**
      * @return the idTxoko
@@ -101,5 +114,4 @@ public class TxokoBean {
         this.town.set(town);
     }
 
-     
 }

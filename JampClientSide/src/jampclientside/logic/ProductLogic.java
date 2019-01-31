@@ -6,6 +6,7 @@
 package jampclientside.logic;
 
 import jampclientside.entity.ProductBean;
+import jampclientside.exceptions.BusinessLogicException;
 import jampclientside.exceptions.CreateException;
 import jampclientside.exceptions.DeleteException;
 import jampclientside.exceptions.ProductExist;
@@ -28,21 +29,21 @@ public interface ProductLogic {
      * @param product
      * @throws DeleteException 
      */
-    public void deleteProduct(ProductBean product) throws DeleteException;
+    public void deleteProduct(ProductBean product) throws BusinessLogicException;
     
     /**
      * 
      * @param product
      * @throws UpdateException 
      */
-    public void updateProduct(ProductBean product) throws UpdateException;
+    public void updateProduct(ProductBean product) throws BusinessLogicException;
     
     /**
      * 
      * @param product
      * @throws CreateException 
      */
-    public void createProduct(ProductBean product) throws CreateException;
+    public void createProduct(ProductBean product) throws BusinessLogicException;
     
     /**
      * 
@@ -50,7 +51,16 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findProductById(Integer idProduct) throws ReadException;
+    public ProductBean findProductById(String idProduct) throws BusinessLogicException;
+    
+    /**
+     * 
+     * @param idProduct
+     * @param idTxoko
+     * @return
+     * @throws ReadException 
+     */
+    public ProductBean findProductByIdByTxoko(String idProduct, String idTxoko) throws BusinessLogicException;
     
     /**
      * 
@@ -59,14 +69,20 @@ public interface ProductLogic {
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findProductByName(String name, Integer idTxoko) throws ReadException;
+    public List<ProductBean> findProductByName(String name, String idTxoko) throws BusinessLogicException;
     
     /**
      * 
      * @return
      * @throws ReadException 
      */
-    public List<ProductBean> findAllProducts ();
+    public List<ProductBean> findAllProducts () throws BusinessLogicException;
+    
+    /**
+     * 
+     * @return 
+     */
+    public List<ProductBean> findAllProductsByTxoko(String idTxoko) throws BusinessLogicException;
 
     /**
      * 

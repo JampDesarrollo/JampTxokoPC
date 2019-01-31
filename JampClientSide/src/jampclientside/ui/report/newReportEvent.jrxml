@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0e95e5f6-eaac-45fb-9240-f1372f5de414">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="img" class="java.lang.String"/>
+	<field name="price" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="183" y="28" width="180" height="21" uuid="325993c1-9fc3-4447-8e54-98138aab3dd0"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TODOS LOS EVENTOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="41" width="100" height="20" uuid="9d98a218-dddf-4990-9d92-8f9138acbf84"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="41" width="100" height="20" uuid="40676a9f-54d7-4f5c-b7e7-53c7708394a6"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="41" width="100" height="20" uuid="035ed0e7-52b6-4da2-aaa0-55830659a014"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="41" width="100" height="20" uuid="6386cb07-f03d-40a1-a818-ea9e62c38aae"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[IMG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="477" y="41" width="78" height="20" uuid="cfc5a482-4134-4da6-9226-21ce97179b87"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PRICE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="100" height="50" uuid="298e200e-b3b1-4fc5-81dd-2fefd1419d0d"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="10" width="100" height="50" uuid="91fb673e-7eb7-4315-ba38-6efdbd89e50c"/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="10" width="100" height="20" uuid="af68b7c6-e9a3-4fcc-b437-37a24c84ddfc"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="10" width="100" height="20" uuid="35c49e11-4638-4b87-bb6a-efad5745a30b"/>
+				<textFieldExpression><![CDATA[$F{img}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="10" width="78" height="20" uuid="cee103f2-9c64-4c04-abf7-78d54a4c8314"/>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
