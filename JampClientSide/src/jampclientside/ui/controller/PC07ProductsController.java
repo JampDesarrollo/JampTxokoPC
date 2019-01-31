@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -327,7 +328,7 @@ public class PC07ProductsController {
     /**
      * 
      */
-    private final List<ProductBean> productDatacopy = new ArrayList<>();
+    private List<ProductBean> productDatacopy = new ArrayList<>();
     /**
      * 
      */
@@ -595,9 +596,17 @@ public class PC07ProductsController {
            
             if (result.get() == ButtonType.OK) {
 
-
                 ProductBean product = new ProductBean();
-
+                Platform.runLater(new Runnable() 
+                { 
+                    @Override 
+                    public void run() 
+                    { 
+                     tbProducts.requestFocus(); 
+                     tbProducts.getSelectionModel().selectLast();
+                     tbProducts.getFocusModel().focus(0);
+                    } 
+                }); 
                 tbProducts.getItems().add(product);
                 tbProducts.refresh();
  
@@ -1084,21 +1093,50 @@ public class PC07ProductsController {
      */
     private void addUpdateProduct() throws BusinessLogicException {
         List<ProductBean> productos = tbProducts.getItems();
-      
+        boolean productDatacopyRefresh = false;
         for(ProductBean product: productos){
             if(product.getName()!=null && !product.getName().trim().isEmpty()&& 
               product.getDescription()!=null && !product.getDescription().trim().isEmpty()&& 
               product.getPrice()!=null && !product.getPrice().trim().isEmpty() && 
-              product.getStock()!=null && !product.getStock().trim().isEmpty()){             
+              product.getStock()!=null && !product.getStock().trim().isEmpty()){    
                     
+                    //product.setIdProduct(product.getIdProduct()-1);
                     List productequals = productDatacopy.stream().filter(p -> p.getIdProduct().equals(product.getIdProduct())).collect(Collectors.toList());
                     if(productequals.isEmpty()){
                         addProduct(product);
+                        tbProducts.refresh();
+                        productDatacopyRefresh = true; 
+                        productequals.remove(this);
                     }else if(!productequals.get(0).equals(product)){
                         updateProduct(product);
+                        tbProducts.refresh();
+                        productDatacopyRefresh = true;
+                        productequals.remove(this);
                     }
             }
         }
+        if(productDatacopyRefresh){
+            productos = tbProducts.getItems();
+            switch (cbSearch.getSelectionModel().getSelectedIndex()) {
+                case 1:
+                    String idTxoko = "1";
+                    productDatacopy = FXCollections.observableArrayList(iLogicProduct.findAllProductsByTxoko(idTxoko));
+                    break;
+                case 2:
+                    String idProduct = txtSearch.getText();
+                    productDatacopy = FXCollections.observableArrayList(iLogicProduct.findProductById(idProduct));
+                    break;
+                case 3:
+                    String nameProduct = txtSearch.getText().trim();
+                    idTxoko = "1";
+                    productDatacopy = FXCollections.observableArrayList(iLogicProduct.findProductByName(nameProduct, idTxoko));
+                    break;
+                default:
+                    productDatacopy = FXCollections.observableArrayList(iLogicProduct.findAllProducts());
+            }
+        }
+        
+        
     }
  
 
@@ -1129,14 +1167,16 @@ public class PC07ProductsController {
  
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" ha sido añadido.");
+                dialogoAlerta.setContentText("El producto "+product.getName()
+                        +" "+product.getDescription()+" ha sido añadido.");
                 dialogoAlerta.setHeaderText("Añadir un producto");
                 dialogoAlerta.showAndWait();
             }else{
                 
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" no ha sido añadido.");
+                dialogoAlerta.setContentText("El producto "+product.getName()
+                        +" "+product.getDescription()+" no ha sido añadido.");
                 dialogoAlerta.setHeaderText("Añadir un producto");
                 dialogoAlerta.showAndWait();
                 
@@ -1156,7 +1196,8 @@ public class PC07ProductsController {
 
             Alert dialogoAlerta = new Alert(Alert.AlertType.CONFIRMATION);
             dialogoAlerta.setTitle("CONFIRMACION");
-            dialogoAlerta.setContentText("¿Estas seguro que deseas actualizar el producto "+product.getName()+" "+product.getDescription()+"?");
+            dialogoAlerta.setContentText("¿Estas seguro que deseas actualizar el producto "
+                    +product.getName()+" "+product.getDescription()+"?");
             dialogoAlerta.setHeaderText("Actualizar un producto");
             Optional<ButtonType> result = dialogoAlerta.showAndWait();
             Button okButton = (Button) dialogoAlerta.getDialogPane().lookupButton(ButtonType.OK);
@@ -1170,7 +1211,8 @@ public class PC07ProductsController {
  
                 dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 dialogoAlerta.setTitle("INFORMACION");
-                dialogoAlerta.setContentText("El producto "+product.getName()+" "+product.getDescription()+" ha sido actualizado.");
+                dialogoAlerta.setContentText("El producto "+product.getName()
+                        +" "+product.getDescription()+" ha sido actualizado.");
                 dialogoAlerta.setHeaderText("Actualizar un producto");
                 dialogoAlerta.showAndWait();
             }else{

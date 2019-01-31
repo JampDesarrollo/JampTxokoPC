@@ -277,7 +277,7 @@ public class PC08PhoneNumbersController{
     /**
      * 
      */
-    private final List<TelephoneBean> telephoneDatacopy = new ArrayList<>();
+    private List<TelephoneBean> telephoneDatacopy = new ArrayList<>();
 
     /**
      * 
@@ -307,8 +307,8 @@ public class PC08PhoneNumbersController{
      * 
      * @param telephone 
      */
-    public void setUser(TelephoneBean telephone) {
-        this.telephone = telephone;
+    public void setUser(UserBean user) {
+        this.user = user;
 
     }
 
@@ -859,20 +859,36 @@ public class PC08PhoneNumbersController{
      */
     private void addUpdateTelephone() throws BusinessLogicException {
         List<TelephoneBean> telephones = tbTelephone.getItems();
-      
+        boolean telephoneDatacopyRefresh = false;
         for(TelephoneBean tel: telephones){
             if(tel.getName()!=null && !tel.getName().trim().isEmpty()&& 
               tel.getDescription()!=null && !tel.getDescription().trim().isEmpty()&& 
               tel.getTown()!=null && !tel.getTown().trim().isEmpty() &&
               tel.getTelephone()!=null && !tel.getTelephone().trim().isEmpty()) 
-              {             
-                    
+              {                  
                     List telephoneEquals = telephoneDatacopy.stream().filter(t -> t.getTelephone().equals(tel.getTelephone())).collect(Collectors.toList());
                     if(telephoneEquals.isEmpty()){
                         addTelephone(tel);
-                    }else if(!telephoneEquals.get(0).equals(tel)){
+                        telephoneDatacopyRefresh = true;
+                    }else if(telephoneEquals.get(0).equals(tel)){
                         updateTelephone(tel);
+                        telephoneDatacopyRefresh = true;
                     }
+            }
+        }
+        if(telephoneDatacopyRefresh){
+            telephones = tbTelephone.getItems();
+            switch (cbSearchTel.getSelectionModel().getSelectedIndex()) {
+                case 1:
+                    Integer idTelephone = Integer.parseInt(txtSearchTel.getText().trim());
+                    telephoneDatacopy = FXCollections.observableArrayList(iLogicTelephone.findTelephoneById(idTelephone));
+                    break;
+                case 2:
+                    String nameTelephone = txtSearchTel.getText().trim();
+                    telephoneDatacopy = FXCollections.observableArrayList(iLogicTelephone.findTelephoneByName(nameTelephone));
+                    break;
+                default:
+                    telephoneDatacopy = FXCollections.observableArrayList(iLogicTelephone.findAllTelephone());
             }
         }
     }
@@ -907,6 +923,7 @@ public class PC08PhoneNumbersController{
                     dialogoAlerta.setContentText("El teléfono "+telephone.getName()+" ha sido añadido.");
                     dialogoAlerta.setHeaderText("Añadir un teléfono");
                     dialogoAlerta.showAndWait();
+                    
                 } catch (BusinessLogicException ex) {
                     Logger.getLogger(PC08PhoneNumbersController.class.getName()).log(Level.SEVERE, null, ex);
                 }

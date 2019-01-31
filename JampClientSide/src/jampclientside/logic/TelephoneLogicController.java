@@ -22,6 +22,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.regex;
 import java.util.ArrayList;
 
 
@@ -130,8 +131,7 @@ public class TelephoneLogicController implements TelephoneLogic {
                     telephone.setDescription(itera.getString("description"));
                     telephone.setTown(itera.getString("town"));
                     telephone.setTelephone(itera.getString("telephone"));
-
-                    
+                   
                     telephones.add(telephone);
                     
                 }
@@ -151,6 +151,7 @@ public class TelephoneLogicController implements TelephoneLogic {
     @Override
     public TelephoneBean findTelephoneById(Integer idTelephone) throws BusinessLogicException {
         FindIterable<Document> fi;
+        Document itera;
         MongoCursor<Document> cursor;
         fi = collection.find();
         cursor = fi.iterator();
@@ -159,9 +160,14 @@ public class TelephoneLogicController implements TelephoneLogic {
                 if (!cursor.hasNext()) {
                     System.out.println("No se ha encontrado el telefono");
                 }
-                int i = 0;
                 while (cursor.hasNext()) {
-                    //telephones.add(cursor.next());
+                    itera = cursor.next();
+                    telephone.setId(itera.getString("id"));
+                    telephone.setName(itera.getString("name"));
+                    telephone.setDescription(itera.getString("description"));
+                    telephone.setTown(itera.getString("town"));
+                    telephone.setTelephone(itera.getString("telephone"));
+                    
                 }
             } finally {
                 cursor.close();
@@ -181,16 +187,24 @@ public class TelephoneLogicController implements TelephoneLogic {
         FindIterable<Document> fi;
         MongoCursor<Document> cursor;
         Document itera;
-        fi = collection.find();
+        fi = collection.find(regex("name", "Pol"));
         cursor = fi.iterator();
         List<TelephoneBean> telephones = new ArrayList<>();
             try {
                 if (!cursor.hasNext()) {
                     System.out.println("No se ha encontrado el telefono");
                 }
-                int i = 0;
                 while (cursor.hasNext()) {
-                    //telephones.add(cursor.next());
+                    itera = cursor.next();
+                    TelephoneBean telephone= new TelephoneBean();
+                    telephone.setId(itera.getString("id"));
+                    telephone.setName(itera.getString("name"));
+                    telephone.setDescription(itera.getString("description"));
+                    telephone.setTown(itera.getString("town"));
+                    telephone.setTelephone(itera.getString("telephone"));
+                   
+                    telephones.add(telephone);
+                    
                 }
             } finally {
                 cursor.close();
